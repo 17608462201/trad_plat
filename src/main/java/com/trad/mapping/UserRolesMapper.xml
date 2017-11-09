@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.trad.dao.UserRolesMapper" >
+  <resultMap id="BaseResultMap" type="com.trad.bean.UserRoles" >
+    <result column="role_id" property="roleId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+       <association property="roles" javaType="com.trad.bean.Roles">  
+            <id column="role_id" property="roleId" jdbcType="INTEGER" />
+		    <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+		    <result column="role_desc" property="roleDesc" jdbcType="VARCHAR" />
+		    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        </association>    
+        <association property="user" javaType="com.trad.bean.User">  
+            <id column="user_id" property="userId" jdbcType="INTEGER" />
+		   <result column="user_name" property="userName" jdbcType="VARCHAR" />
+		   <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+		   <result column="real_name" property="realName" jdbcType="VARCHAR" />
+		   <result column="email" property="email" jdbcType="VARCHAR" />
+		   <result column="phone" property="phone" jdbcType="VARCHAR" />
+		   <result column="sex" property="sex" jdbcType="CHAR" />
+		   <result column="live_address" property="liveAddress" jdbcType="VARCHAR" />
+		   <result column="emcy_contract" property="emcyContract" jdbcType="VARCHAR" />
+		   <result column="contract_mobile" property="contractMobile" jdbcType="VARCHAR" />
+		   <result column="job" property="job" jdbcType="VARCHAR" />
+		   <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		   <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        </association>   
+  </resultMap>
+
+  <delete id="deleteById" parameterType="java.lang.Integer" >
+    delete from t_user_roles
+    where role_id = #{0} and user_id = #{1}
+  </delete>
+  
+  <delete id="deleteByRoleId" parameterType="java.lang.Integer" >
+    delete from t_user_roles
+    where role_id = #{0}
+  </delete>
+  
+  <insert id="insert" parameterType="com.trad.bean.UserRoles" >
+    insert into t_user_roles (role_id, user_id, create_time, 
+      update_time)
+    values (#{roleId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.trad.bean.UserRoles" >
+    insert into t_user_roles
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="roleId != null" >
+        role_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="roleId != null" >
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+</mapper>

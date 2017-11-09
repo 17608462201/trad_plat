@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.trad.dao.RolePermissionMapper" >
+  <resultMap id="rolePermissionBaseMap" type="com.trad.bean.RolePermission" >
+    <result column="role_id" property="roleId" jdbcType="INTEGER" />
+    <result column="tree_id" property="treeId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+     <association property="roles" javaType="com.trad.bean.Roles">  
+            <id column="role_id" property="roleId" jdbcType="INTEGER" />
+		    <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+		    <result column="role_desc" property="roleDesc" jdbcType="VARCHAR" />
+		    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        </association>  
+        <association property="tree" javaType="com.trad.bean.Tree">  
+            <id column="tree_id" property="treeId" jdbcType="INTEGER" />
+		    <result column="tree_name" property="treeName" jdbcType="VARCHAR" />
+		    <result column="tree_desc" property="treeDesc" jdbcType="VARCHAR" />
+		    <result column="parent_id" property="parentId" jdbcType="VARCHAR" />
+		    <result column="url" property="url" jdbcType="VARCHAR" />
+		    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		    <result column="ordernum" property="ordernum" jdbcType="VARCHAR" />
+		    <result column="icon" property="icon" jdbcType="VARCHAR" />
+        </association>  
+  </resultMap>
+  <insert id="insert" parameterType="com.trad.bean.RolePermission" >
+    insert into t_role_permission (role_id, tree_id,create_time,update_time)
+    values (#{roleId,jdbcType=INTEGER}, #{treeId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <delete id="deleteById" parameterType="java.lang.Integer" >
+    delete from t_role_permission
+    where role_id = #{0} and tree_id = #{1}
+  </delete>
+  
+  <delete id="deleteRolePerByRoleId" parameterType="java.lang.Integer" >
+    delete from t_role_permission
+    where role_id = #{0}
+  </delete>
+  
+  <insert id="insertSelective" parameterType="com.trad.bean.RolePermission" >
+    insert into t_role_permission
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="roleId != null" >
+        role_id,
+      </if>
+      <if test="treeId != null" >
+        tree_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="roleId != null" >
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="treeId != null" >
+        #{treeId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+</mapper>
