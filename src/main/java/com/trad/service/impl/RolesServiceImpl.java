@@ -20,13 +20,13 @@ public class RolesServiceImpl implements RolesService{
 	private UserRolesMapper userRolesDao;
 
 	@Override
-	public int count() {
-		return rolesDao.count();
+	public int count(String filter) {
+		return rolesDao.count(filter);
 	}
 
 	@Override
-	public List<Roles> queryByPaged(int start, int end) {
-		return rolesDao.queryByPaged(start, end);
+	public List<Roles> queryByPaged(String filter,int start, int end) {
+		return rolesDao.queryByPaged(filter,start, end);
 	}
 
 	@Override
@@ -67,6 +67,16 @@ public class RolesServiceImpl implements RolesService{
 	@Override
 	public int deleteByPrimaryKey(Integer roleId) {
 		return rolesDao.deleteByPrimaryKey(roleId);
+	}
+
+	@Override
+	public int insert(Roles record) {
+		return rolesDao.insert(record);
+	}
+
+	@Override
+	public List<Roles> queryAll() {
+		return rolesDao.queryAll();
 	}
 	
 }

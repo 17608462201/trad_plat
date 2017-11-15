@@ -1,6 +1,9 @@
 package com.trad.dao;
 
 import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.trad.bean.Tree;
 
 public interface TreeMapper {
@@ -19,4 +22,10 @@ public interface TreeMapper {
     List<Tree> getTreeListById(int parentId); 
     
     List<Tree> getTreeList();
+    
+    List<Tree> getAllTree();
+    
+    int count(@Param("filter")String filter);
+    
+    public List<Tree> queryByPaged(@Param("filter")String filter,Integer start,Integer end);
 }

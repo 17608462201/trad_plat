@@ -10,11 +10,13 @@
 <%@ include file="/pages/common/header.jsp" %>
 <form class="layui-form" action="${ctx }/register/doReg" method="post">
  <div style="padding-top: 50px;"></div>
-      <div class="layui-col-xs6" align="right">
+          <c:if test="${showPic ne 'N' }">
+            <div class="layui-col-xs6" align="right">
 		      <div class="grid-demo grid-demo-bg1">
 		          <img title="logo"   src="${ctx }/res/images/login/xct.jpg" >
 		      </div>
 		    </div>
+		    </c:if>
 		    <div class="layui-col-xs6" align="left">
 		      <fieldset class="layui-elem-field" style="width: 500px;height: 650px;">
 					 <legend><i class="layui-icon" style="font-size: 30px;">&#xe613;用户注册</i> </legend>
@@ -94,12 +96,14 @@
 				              <input type="text" name="liveAddress" required  lay-verify="liveAddress" placeholder="请输入住址" autocomplete="off" class="layui-input">
 					    </div>
 					  </div>
+					  <c:if test="${showPic ne 'N' }">
 					  <div class="layui-form-item">
 					    <div class="layui-input-block">
 					      <button class="layui-btn" lay-submit lay-filter="myForm">立即提交</button>
 					      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
 					    </div>
 					  </div>
+					  </c:if>
              </div>
 		</fieldset>
    </div>

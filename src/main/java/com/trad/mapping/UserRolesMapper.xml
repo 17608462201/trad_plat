@@ -39,7 +39,10 @@
     delete from t_user_roles
     where role_id = #{0}
   </delete>
-  
+  <delete id="deleteByUserId" parameterType="java.lang.Integer" >
+    delete from t_user_roles
+    where user_id = #{0}
+  </delete>
   <insert id="insert" parameterType="com.trad.bean.UserRoles" >
     insert into t_user_roles (role_id, user_id, create_time, 
       update_time)

@@ -1,6 +1,7 @@
 package com.trad.bean;
 
 import java.util.Date;
+import java.util.List;
 
 public class Tree {
     private Integer treeId;
@@ -21,10 +22,12 @@ public class Tree {
     
     private String icon;
     
-    private RolePermission rolePer;
+    private List<RolePermission> rolePers;
     
     private boolean checked;
 
+    private String roleNames;
+    
 	public Integer getTreeId() {
 		return treeId;
 	}
@@ -89,14 +92,6 @@ public class Tree {
 		this.icon = icon;
 	}
 
-	public RolePermission getRolePer() {
-		return rolePer;
-	}
-
-	public void setRolePer(RolePermission rolePer) {
-		this.rolePer = rolePer;
-	}
-
 	public String getOrdernum() {
 		return ordernum;
 	}
@@ -112,6 +107,21 @@ public class Tree {
 	public void setChecked(boolean checked) {
 		this.checked = checked;
 	}
-	
 
+	public List<RolePermission> getRolePers() {
+		return rolePers;
+	}
+
+	public void setRolePers(List<RolePermission> rolePers) {
+		this.rolePers = rolePers;
+	}
+
+	public String isRoleNames() {
+		return roleNames;
+	}
+
+	public void setRoleNames(String roleNames) {
+		this.roleNames = roleNames;
+	}
+	
 }

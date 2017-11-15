@@ -10,4 +10,6 @@ public interface UserRolesMapper {
     int deleteById(Integer roleId,Integer userId);
     
     int deleteByRoleId(Integer roleId);
+    
+    int deleteByUserId(Integer userId);
 }

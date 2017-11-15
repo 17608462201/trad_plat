@@ -32,6 +32,10 @@ public class RegisterController {
 	
 	@RequestMapping("/init")
 	public String init(HttpServletRequest request,Model model){
+		String showPic = request.getParameter("showPic");
+		if(!StringUtils.isEmpty(showPic)){
+			model.addAttribute("showPic", showPic);
+		}
 		return "register";
 	}
 	

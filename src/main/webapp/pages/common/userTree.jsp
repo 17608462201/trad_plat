@@ -10,7 +10,7 @@
 <%@ include file="/pages/common/header.jsp" %>
 <form class="layui-form"  method="post">  
       <c:forEach items="${userTree }" var="tree">
-		  <fieldset class="layui-elem-field" style="width: 780px;height: 150px;">
+		  <fieldset class="layui-elem-field" style="width: 780px;height: 120px;">
 	        <legend><i class="layui-icon" style="font-size: 30px;">&#xe613;${tree.groupName }</i> </legend>
 	                <table>
 	                       <c:forEach items="${tree.users }" var="user" varStatus="index">

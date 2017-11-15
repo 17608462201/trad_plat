@@ -36,6 +36,8 @@ public class User {
     
     private boolean checked ;
     
+    private String roleNames;
+    
     public Integer getUserId() {
         return userId;
     }
@@ -162,6 +164,14 @@ public class User {
 
 	public void setChecked(boolean checked) {
 		this.checked = checked;
+	}
+
+	public String getRoleNames() {
+		return roleNames;
+	}
+
+	public void setRoleNames(String roleNames) {
+		this.roleNames = roleNames;
 	}
 	
 }

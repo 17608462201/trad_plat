@@ -44,6 +44,41 @@ public class TreeServiceImpl implements TreeService{
 		return rolePerDao.deleteRolePerByRoleId(roleId);
 	}
 
+	@Override
+	public int count(String filter) {
+		return treeDao.count(filter);
+	}
+
+	@Override
+	public List<Tree> queryByPaged(String filter,int start, int end) {
+		return treeDao.queryByPaged(filter,start, end);
+	}
+
+	@Override
+	public List<Tree> getAllTree() {
+		return treeDao.getAllTree();
+	}
+
+	@Override
+	public int deleteByPrimaryKey(Integer treeId) {
+		return treeDao.deleteByPrimaryKey(treeId);
+	}
+
+	@Override
+	public int deleteTreePerm(Integer treeId) {
+		return rolePerDao.deleteRolePerByTreeId(treeId);
+	}
+
+	@Override
+	public int saveTree(Tree tree) {
+		return treeDao.insertSelective(tree);
+	}
+
+	@Override
+	public int updateByPrimaryKeySelective(Tree tree) {
+		return treeDao.updateByPrimaryKeySelective(tree);
+	}
+
 
 	 
 }

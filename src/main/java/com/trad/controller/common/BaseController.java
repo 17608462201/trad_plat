@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alibaba.fastjson.JSONObject;
@@ -42,38 +43,39 @@ public class BaseController {
 	@RequestMapping("/getUserTree")
 	 public String getUserTree(HttpServletRequest request,Model model){  
 		String roleId  = request.getParameter("roleId");
-		List<Roles> roleList = rolesService.getUserTree(Integer.parseInt(roleId));
-		List<Integer> roleUserList = new ArrayList<>();
-		//根据角色ID获取该角色用户组数据
-		if(roleList !=null && roleList.size()>0){
-			for(Roles role :roleList){
-				List<UserRoles> userRoles = role.getUserRoles();
-				if(userRoles !=null && userRoles.size()>0){
-					for(UserRoles userRole : userRoles){
-						User user = userRole.getUser();
-						roleUserList.add(user.getUserId());
+		List<UserGroup> groupList = userGroupService.getAllGroup();
+		if(!StringUtils.isEmpty(roleId)){
+			List<Roles> roleList = rolesService.getUserTree(Integer.parseInt(roleId));
+			List<Integer> roleUserList = new ArrayList<>();
+			//根据角色ID获取该角色用户组数据
+			if(roleList !=null && roleList.size()>0){
+				for(Roles role :roleList){
+					List<UserRoles> userRoles = role.getUserRoles();
+					if(userRoles !=null && userRoles.size()>0){
+						for(UserRoles userRole : userRoles){
+							User user = userRole.getUser();
+							roleUserList.add(user.getUserId());
+						}
 					}
 				}
 			}
-		}
-		//获取用户组数据
-		List<UserGroup> groupList = userGroupService.getAllGroup();
-		//标记当前选中的用户数据
-		if(groupList !=null && groupList.size()>0){
-			for(UserGroup group :groupList){
-				if(group.getUsers() !=null && group.getUsers().size()>0){
-					for(User u : group.getUsers()){
-						for(Integer userId : roleUserList){
-							if(u.getUserId().equals(userId)){
-								u.setChecked(true);
-								break;
+			//标记当前选中的用户数据
+			if(groupList !=null && groupList.size()>0){
+				for(UserGroup group :groupList){
+					if(group.getUsers() !=null && group.getUsers().size()>0){
+						for(User u : group.getUsers()){
+							for(Integer userId : roleUserList){
+								if(u.getUserId().equals(userId)){
+									u.setChecked(true);
+									break;
+								}
 							}
-						}
-				}
-				}
+					  }
+			     }
+			  }
+		   }
 		}
-		}
-		model.addAttribute("userTree", groupList);
+	   model.addAttribute("userTree", groupList);
        return  "/common/userTree"; 
 	}
 	
@@ -82,27 +84,27 @@ public class BaseController {
 		try{
 			List<TreeVo> treeVoList = null;
 			String roleId  = request.getParameter("roleId");
-			List<Roles> roleList = rolesService.getMenuTree(roleId);
 			List<Tree> trees = treeService.getTreeList();
-			//根据角色ID获取该角色用户组数据
-			if(trees !=null && trees.size()>0 && roleList !=null && roleList.size()>0){
-				    Roles role = roleList.get(0);
-					List<RolePermission> rolePers = role.getRolePers();
-					if(rolePers !=null && rolePers.size()>0){
-						for(RolePermission rolePer : rolePers){
-							Tree tree= rolePer.getTree();
-							 for(Tree tr : trees){
-								 if(tr.getTreeId().equals(tree.getTreeId())){
-									 tr.setChecked(true);
+			if(!StringUtils.isEmpty(roleId)){
+				List<Roles> roleList = rolesService.getMenuTree(roleId);
+				//根据角色ID获取该角色用户组数据
+				if(trees !=null && trees.size()>0 && roleList !=null && roleList.size()>0){
+					    Roles role = roleList.get(0);
+						List<RolePermission> rolePers = role.getRolePers();
+						if(rolePers !=null && rolePers.size()>0){
+							for(RolePermission rolePer : rolePers){
+								Tree tree= rolePer.getTree();
+								 for(Tree tr : trees){
+									 if(tr.getTreeId().equals(tree.getTreeId())){
+										 tr.setChecked(true);
+									 }
 								 }
-							 }
+							}
 						}
-					}
-					
-			    //根据用户菜单获取用户权限树,不需要url
-			    treeVoList = TreeUtil.queryTreeVoList(trees,false);
+			    }
 			}
-			
+			 //根据用户菜单获取用户权限树,不需要url
+		    treeVoList = TreeUtil.queryTreeVoList(trees,false);
              
 			logger.info("获取到的该用户菜单树为："+JSONObject.toJSON(treeVoList));
 			model.addAttribute("treeValue", JSONObject.toJSONString(treeVoList));

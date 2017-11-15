@@ -10,4 +10,6 @@ public interface RolePermissionMapper {
     int deleteById(Integer roleId,Integer treeId);
     
     int deleteRolePerByRoleId(Integer roleId);
+    
+    int deleteRolePerByTreeId(Integer treeId);
 }

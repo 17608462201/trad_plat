@@ -40,6 +40,11 @@
     where role_id = #{0}
   </delete>
   
+  <delete id="deleteRolePerByTreeId" parameterType="java.lang.Integer" >
+    delete from t_role_permission
+    where tree_id = #{0}
+  </delete>
+  
   <insert id="insertSelective" parameterType="com.trad.bean.RolePermission" >
     insert into t_role_permission
     <trim prefix="(" suffix=")" suffixOverrides="," >

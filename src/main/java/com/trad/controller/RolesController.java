@@ -1,5 +1,9 @@
 package com.trad.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
+import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -7,6 +11,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -15,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.trad.bean.RolePermission;
 import com.trad.bean.Roles;
 import com.trad.bean.UserRoles;
 import com.trad.bean.common.LayuiTable;
@@ -30,81 +37,205 @@ public class RolesController {
 	private RolesService rolesService;
 	@Resource
 	private TreeService treeService;
+	Logger logger = LoggerFactory.getLogger(RolesController.class);
+
 	
 	@RequestMapping("/list")
 	@ResponseBody
 	 public String list(@RequestParam(value="page",defaultValue="1") int page, @RequestParam(value = "limit",defaultValue = "4") int limit,HttpServletRequest request,Model model){  
-       PageStatus pageSta = new PageStatus();
-       int count = rolesService.count();
-       pageSta.setCount(count);
-       pageSta.setPage(page);
-       pageSta.setLimit(limit);
-       List<Roles> rolesList = rolesService.queryByPaged(pageSta.getStartNum(), pageSta.getEndNum());
-       if(rolesList !=null && rolesList.size()>0){
-    	   for(Roles role : rolesList){
-    		   List<UserRoles> userList = role.getUserRoles();
-    		   StringBuffer userNamesBuffer = new StringBuffer();
-    		   if(userList !=null && userList.size()>0){
-    			   for(UserRoles ur : userList){
-    				   userNamesBuffer.append(ur.getUser().getRealName()+",");
-    			   }
-    		   }
-    		   String userNames = userNamesBuffer.toString();
-    		   if(!StringUtils.isEmpty(userNames)){
-    			   role.setUserNames(userNames.substring(0,userNames.length()-1));
-    		   }
-    	   }
-       }
-       LayuiTable returnMsg =  new LayuiTable();
-       returnMsg.setData(rolesList);
-       returnMsg.setCount(count);
-       return JSONObject.toJSONString(returnMsg);
-	}
+		LayuiTable returnMsg =  new LayuiTable();
+		try{
+			  String filter = request.getParameter("filter");
+		      if(!StringUtils.isEmpty(filter)){
+		    	  filter = URLDecoder.decode(filter,"UTF-8");
+		    	  filter = "%"+filter+"%";
+		    	  logger.info("传入的filter={}",filter);	
+		      }
+		   PageStatus pageSta = new PageStatus();
+	       int count = rolesService.count(filter);
+	       pageSta.setCount(count);
+	       pageSta.setPage(page);
+	       pageSta.setLimit(limit);
+	     //mysql limit 后面是数据条数
+	       List<Roles> pageRoleList = rolesService.queryByPaged(filter,pageSta.getStartNum(), limit);
+	       List<Roles> roleList = rolesService.queryAll();
+	       List<Roles> resultList = new ArrayList<>();
+	       if(pageRoleList !=null && pageRoleList.size()>0 && roleList !=null && roleList.size()>0){
+	    	   for(int i=0;i<pageRoleList.size();i++){
+	    		   for(Roles role : roleList){
+	    			   //当此时的roleId与遍历id相等时，则生成treeNames,userNames
+	    			   if(pageRoleList.get(i).getRoleId() == role.getRoleId()){
+	    				   List<UserRoles> userRoles = role.getUserRoles();
+	    	    		   List<RolePermission> rolePers = role.getRolePers();
+	    	    		   StringBuffer userNamesBuffer = new StringBuffer();
+	    	    		   StringBuffer  treeNamesBuffer = new StringBuffer();
+	    	    		   //生产用户名组合
+	    	    		   if(userRoles !=null && userRoles.size()>0){
+	    	    			   for(UserRoles ur : userRoles){
+	    	    				   if(ur.getUser() != null && !StringUtils.isEmpty(ur.getUser().getRealName())){
+	    	    					   userNamesBuffer.append(ur.getUser().getRealName()+",");
+	    	    				   }
+	    	    			   }
+	    	    		   }
+	    	    		   //生产菜单树组合
+	    	    		   if(rolePers !=null && rolePers.size()>0){
+	    	    			   for(RolePermission rp : rolePers){
+	    	    				   if(rp.getTree() != null && !StringUtils.isEmpty(rp.getTree().getTreeName())){
+	    	    					   treeNamesBuffer.append(rp.getTree().getTreeName()+",");
+	    	    				   }
+	    	    			   }
+	    	    		   }
+	    	    		   String userNames = userNamesBuffer.toString();
+	    	    		   String treeNames = treeNamesBuffer.toString();
+	    	    		   if(!StringUtils.isEmpty(userNames)){
+	    	    			   role.setUserNames(userNames.substring(0,userNames.length()-1));
+	    	    		   }
+	    	    		   
+	    	    		   if(!StringUtils.isEmpty(treeNames)){
+	    	    			   role.setTreeNames(treeNames.substring(0,treeNames.length()-1));
+	    	    		   }
+	    	    		   resultList.add(role);
+	    			   }
+	    		   }
+	    	   }
+	       }
+	       returnMsg.setData(resultList);
+	       returnMsg.setCount(count);
+		}catch(UnsupportedEncodingException e){
+	    	  e.printStackTrace();
+	      }catch (Exception e) {
+	    	  e.printStackTrace();
+		}
+	      return JSONObject.toJSONString(returnMsg);
+		}
 	
 	@RequestMapping("/init")
-	 public String queryAll(HttpServletRequest request,Model model){  
+	 public String init(HttpServletRequest request,Model model){  
        return  "permission/role"; 
+	}
+	
+	@RequestMapping("/add")
+	 public String edit(HttpServletRequest request,Model model){
+      return  "permission/roleEdit"; 
 	}
 	
 	@RequestMapping("/modify")
 	@ResponseBody
 	 public String detail(HttpServletRequest request, HttpServletResponse response,Model model){
-	  String nRoleID =request.getParameter("nRoleID");
-	  String nRoleName = request.getParameter("nRoleName");
-	  if(StringUtils.isEmpty(nRoleID) || StringUtils.isEmpty(nRoleName)){
-		   return ReplyCode.INSIDEERROR;
-	  }
-	  Roles record = new Roles();
-	  record.setRoleId(Integer.parseInt(nRoleID));
-	  record.setRoleDesc(nRoleName);
-	  record.setRoleName(nRoleName);
-	  int count = rolesService.updateByPrimaryKeySelective(record);
-	  if(count == 1){
-		  return ReplyCode.SUCCESS;
-	  }else{
-		  return ReplyCode.INSIDEERROR;
-	  }
+		
+		try {
+	          String nRoleID =request.getParameter("nRoleID");
+			  String nRoleFiled =request.getParameter("nRoleFiled");
+			  String nRoleValue = request.getParameter("nRoleValue");
+			  logger.info("传入的nRoleID={},nRoleFiled={}，nRoleName={}",nRoleID,nRoleFiled,nRoleValue);
+			  if(StringUtils.isEmpty(nRoleID) || StringUtils.isEmpty(nRoleFiled) || StringUtils.isEmpty(nRoleValue)){
+				   return ReplyCode.INSIDEERROR;
+			  }
+			  Roles record = new Roles();
+			  Field treeFiled = record.getClass().getDeclaredField(nRoleFiled);
+			  treeFiled.setAccessible(true);  
+			  treeFiled.set(record,nRoleValue);
+			  record.setRoleId(Integer.parseInt(nRoleID));
+			  record.setUpdateTime(new Date());
+			  int count = rolesService.updateByPrimaryKeySelective(record);
+			  if(count == 1){
+				  return ReplyCode.SUCCESS;
+			  }
+	} catch (NoSuchFieldException e) {
+		logger.error("设置反射字段出错！");
+		e.printStackTrace();
+	} catch (SecurityException e) {
+		logger.error("设置反射字段出错！");
+		e.printStackTrace();
+	} catch (IllegalArgumentException e) {
+		logger.error("设置反射字段出错！");
+		e.printStackTrace();
+	} catch (IllegalAccessException e) {
+		logger.error("设置反射字段出错！");
+		e.printStackTrace();
+	}catch (Exception e) {
+		logger.error("修改tree信息出错！");
+		e.printStackTrace();
 	}
+	return ReplyCode.INSIDEERROR;
+}
 	
 	@RequestMapping("/deleteRoles")
 	@ResponseBody
 	 public String deleteRoles(HttpServletRequest request,Model model){
       try{
-    	  String roleId = request.getParameter("roleId");
-    	  if(!StringUtils.isEmpty(roleId)){
-    		  Integer roleIdInt = Integer.parseInt(roleId);
-    		  //删除角色表
-    		  rolesService.deleteByPrimaryKey(roleIdInt);
-    		  //删除用户角色表
-    		  rolesService.delUserRolesByRoleId(roleIdInt);
-    		  //删除角色菜单表
-    		  treeService.deleteRolePerByRoleId(roleIdInt);
+    	  String roleIds = request.getParameter("roleIds");
+    	  if(!StringUtils.isEmpty(roleIds)){
+    		  String [] roleIdsStr = roleIds.split(",");
+    		  //批量删除角色信息
+    		  for(String roleId : roleIdsStr){
+    			  Integer roleIdInt = Integer.parseInt(roleId);
+        		  //删除角色表
+        		  rolesService.deleteByPrimaryKey(roleIdInt);
+        		  //删除用户角色表
+        		  rolesService.delUserRolesByRoleId(roleIdInt);
+        		  //删除角色菜单表
+        		  treeService.deleteRolePerByRoleId(roleIdInt);
+    		  }
     	  }
 		  return ReplyCode.SUCCESS;
 	  }catch(Exception e){
 		  e.printStackTrace();
 		  return ReplyCode.INSIDEERROR;
 	  }
+	}
+	
+	@RequestMapping("/saveNewRole")
+	 public String saveNewRole(HttpServletRequest request,Model model){
+		String roleName = request.getParameter("roleName");
+		String roleDesc = request.getParameter("roleDesc"); 
+		String roleUsers = request.getParameter("roleUsers");
+		String roleMenus = request.getParameter("roleMenus"); 
+		try{
+			Roles roles = new Roles();
+			roles.setRoleName(roleName);
+			roles.setRoleDesc(roleDesc);
+			roles.setCreateTime(new Date());
+			roles.setUpdateTime(new Date());
+			int insertId = rolesService.insert(roles);
+			if(insertId == 1){
+				//更新选中结果
+				  if(!StringUtils.isEmpty(roleUsers)){
+					  String [] ids = roleUsers.split(",");
+					  for(String id : ids){
+						  if(!StringUtils.isEmpty(id)){
+							  UserRoles ur = new UserRoles();
+							  ur.setCreateTime(new Date());
+							  ur.setUpdateTime(new Date());
+							  ur.setUserId(Integer.parseInt(id));
+							  ur.setRoleId(roles.getRoleId());
+							  //保存数据库数据
+							  rolesService.insertUserRoles(ur);
+						  }
+					  }
+				  }
+				  
+				  //更新选中结果
+				  if(!StringUtils.isEmpty(roleMenus)){
+					  String [] uids = roleMenus.split(",");
+					  for(String id : uids){
+						  if(!StringUtils.isEmpty(id)){
+							  RolePermission rp = new RolePermission();
+							  rp.setRoleId(roles.getRoleId());
+							  rp.setTreeId(Integer.parseInt(id));
+							  rp.setCreateTime(new Date());
+							  rp.setUpdateTime(new Date());
+							  //保存数据库数据
+							  treeService.insertRolePermission(rp);
+						  }
+					  }
+				  }
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			return "roleEdit";
+		}
+		return "redirect:/roles/init";
 	}
 	
 	@RequestMapping("/saveRoleUser")

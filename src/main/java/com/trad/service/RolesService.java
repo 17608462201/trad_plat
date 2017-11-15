@@ -8,9 +8,11 @@ import com.trad.bean.UserRoles;
 public interface RolesService {
 	public int updateByPrimaryKeySelective(Roles record);
 	//获取角色总数
-	public int count();
+	public int count(String filter);
+	//插入选中信息
+	int insert(Roles record);
 	//分页查询数据
-	public List<Roles> queryByPaged(int start,int end);
+	public List<Roles> queryByPaged(String filter,int start,int end);
 	 //根据roleId集合查找Roles集合，参数类似1,2,3
 	public List<Roles> queryRoleById(String roleIds);
 	//获取角色所属用户信息
@@ -25,4 +27,6 @@ public interface RolesService {
 	int delUserRolesByRoleId(Integer roleId);
 	
 	int deleteByPrimaryKey(Integer roleId);
+	
+	public List<Roles> queryAll();
 }

@@ -1,12 +1,15 @@
 package  com.trad.service.impl;
 
 import java.util.List;
+
 import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import com.trad.bean.Roles;
+
 import com.trad.bean.User;
 import com.trad.dao.UserMapper;
+import com.trad.dao.UserRolesMapper;
 import com.trad.service.UserService;
 import com.trad.util.DataConvertUtil;
 import com.trad.util.SercurityUtils;
@@ -15,6 +18,8 @@ import com.trad.util.SercurityUtils;
 public class UserServiceImpl implements UserService{
 	@Resource  
     private UserMapper userDao;
+	@Resource
+	private UserRolesMapper userRolesDao;
 
 	@Override
 	public User getUserLogin(String sUserName, String sPassword) {
@@ -33,16 +38,6 @@ public class UserServiceImpl implements UserService{
 		return null;
 	}
 
-	@Override
-	public List<Roles> getRoleByUser(int nUserID) {
-		return null;
-	}
-	
-	
-
-	@Override
-	public void addUserRole(int nUserID, int nRoleID) {
-	}
 
 	@Override
 	public int insertUser(User user) {
@@ -57,6 +52,40 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public User selectUserRole(Integer userId) {
 		return userDao.selectUserRole(userId);
+	}
+
+	@Override
+	public int count(String filter) {
+		return userDao.count(filter);
+	}
+
+	@Override
+	public List<User> queryByPaged(String filter,int start, int end) {
+		return userDao.queryByPaged(filter,start, end);
+	}
+
+
+	@Override
+	public List<User> getAllUser(){
+		return userDao.getAllUser();
+	}
+
+
+	@Override
+	public int deleteByPrimaryKey(Integer userId) {
+		return userDao.deleteByPrimaryKey(userId);
+	}
+
+
+	@Override
+	public int deleteUserRole(Integer userId) {
+		return userRolesDao.deleteByUserId(userId);
+	}
+
+
+	@Override
+	public int updateByPrimaryKeySelective(User record) {
+		return userDao.updateByPrimaryKeySelective(record);
 	}
 	
 }

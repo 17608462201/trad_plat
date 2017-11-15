@@ -51,23 +51,37 @@
     from t_user
     where user_name = #{userName,jdbcType=VARCHAR} and password = #{password,jdbcType=VARCHAR}
   </select>
+  <select id="queryByPaged" resultMap="BaseResultMap" parameterType="java.lang.Integer" > 
+    select  
+    <include refid="Base_Column_List" />
+     from t_user 
+      <if test="filter != null and filter != ''" >
+        where user_name like #{filter,jdbcType=VARCHAR} or  real_name like #{filter,jdbcType=VARCHAR} or  phone like #{filter,jdbcType=VARCHAR}  or  live_address like #{filter,jdbcType=VARCHAR}
+      </if>
+     LIMIT #{1} , #{2}
+  </select>
+  <select id="count" resultType="java.lang.Integer">
+    select count(1) cnt  from t_user
+    <if test="filter != null and filter != ''" >
+        where user_name like #{filter,jdbcType=VARCHAR} or  real_name like #{filter,jdbcType=VARCHAR}  or  phone like #{filter,jdbcType=VARCHAR}  or  live_address like #{filter,jdbcType=VARCHAR}
+      </if>
+  </select>
   <select id="checkUserName" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from t_user
     where user_name = #{userName,jdbcType=VARCHAR}
   </select>
-  <select id="getAllUser" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from t_user
-    where user_name = #{userName,jdbcType=VARCHAR}
+  <select id="getAllUser"  resultMap="BaseResultMap">
+         select u.*,ur.*,ro.*   
+         FROM t_user u LEFT JOIN t_user_roles ur ON u.user_id = ur.user_id
+         LEFT JOIN t_roles ro ON ur.role_id = ro .role_id 
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from t_user
     where user_id = #{userId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.trad.bean.User" >
+  <insert id="insert" parameterType="com.trad.bean.User" useGeneratedKeys="true" keyProperty="userId">
     insert into t_user (user_id, user_name, PASSWORD, 
       real_name, email, phone, 
       sex, live_address, emcy_contract, 
@@ -79,7 +93,7 @@
       #{contractMobile,jdbcType=VARCHAR}, #{job,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP},#{groupId,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.trad.bean.User" >
+  <insert id="insertSelective" parameterType="com.trad.bean.User"  useGeneratedKeys="true" keyProperty="userId">
     insert into t_user
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="userId != null" >

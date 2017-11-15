@@ -19,6 +19,8 @@ public class Roles {
     private List<RolePermission> rolePers;
     
     private String userNames;
+    
+    private String treeNames;
 
     public Integer getRoleId() {
         return roleId;
@@ -82,6 +84,14 @@ public class Roles {
 
 	public void setUserNames(String userNames) {
 		this.userNames = userNames;
+	}
+
+	public String getTreeNames() {
+		return treeNames;
+	}
+
+	public void setTreeNames(String treeNames) {
+		this.treeNames = treeNames;
 	}
 	
 }

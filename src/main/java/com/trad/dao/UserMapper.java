@@ -2,6 +2,8 @@ package com.trad.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.trad.bean.User;
 
 public interface UserMapper {
@@ -24,4 +26,8 @@ public interface UserMapper {
     User selectUserRole(Integer userId);
     
     List<User> getAllUser();
+    
+    int count(@Param("filter")String filter);
+    
+    public List<User> queryByPaged(@Param("filter")String filter,Integer start,Integer end);
 }

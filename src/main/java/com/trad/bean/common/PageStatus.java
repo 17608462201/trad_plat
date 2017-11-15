@@ -19,9 +19,6 @@ public class PageStatus {
 		if(page<1){
 			page=1;
 		}
-		if(page>count){
-			page=count;
-		}
 		return page;
 	}
 
@@ -61,10 +58,6 @@ public class PageStatus {
 	}
 
 	public int getEndNum() {
-		if(endNum == 0){
-			//自动计算需要查询的条数
-			endNum =(getPage())*limit;
-		}
 		return endNum;
 	}
 
