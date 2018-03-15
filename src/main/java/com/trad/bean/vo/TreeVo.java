@@ -1,4 +1,4 @@
-package com.trad.bean;
+package com.trad.bean.vo;
 
 import java.util.List;
 

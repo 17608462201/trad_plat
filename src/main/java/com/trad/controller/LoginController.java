@@ -24,13 +24,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.trad.bean.RolePermission;
 import com.trad.bean.Roles;
 import com.trad.bean.Tree;
-import com.trad.bean.TreeVo;
 import com.trad.bean.User;
 import com.trad.bean.UserRoles;
+import com.trad.bean.vo.TreeVo;
 import com.trad.service.RolesService;
 import com.trad.service.UserService;
 import com.trad.util.Constant;
 import com.trad.util.CookieHelper;
+import com.trad.util.SessionHelper;
 import com.trad.util.TreeUtil;
 import com.trad.util.VerifyCodeUtil;
 
@@ -137,6 +138,8 @@ public class LoginController{
 							User userRoles = userService.selectUserRole(record.getUserId());
 							if(userRoles ==null || userRoles.getUserRoles() == null || userRoles.getUserRoles().size()<=0){
 								logger.error("查询出的当前用户的菜单为空,请检查菜单配置！");
+								request.setAttribute("failedText", "查询出的当前用户的菜单为空,请检查菜单配置！");
+								return "/login/init";
 							}
 							List<TreeVo> treeVoList =  getTreeVo(userRoles.getUserRoles());
 							logger.info("获取到的该用户菜单树为："+JSONObject.toJSON(treeVoList));
@@ -162,6 +165,12 @@ public class LoginController{
 			logger.error("登陆出错！");
 			e.printStackTrace();
 		}
+		return "redirect:/login/init";
+	}
+	
+	@RequestMapping("/loginOut")
+	public String loginOut(HttpServletRequest request,Model model){
+		new SessionHelper(request).clearSession();
 		return "redirect:/login/init";
 	}
 	

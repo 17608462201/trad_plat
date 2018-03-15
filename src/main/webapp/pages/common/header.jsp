@@ -33,6 +33,7 @@
     <%-- 是否需要皮肤样式--%>
     <c:if test="${requestScope.INCLUDE_SKIN ne false}">
           <link rel="stylesheet" href="${ctx }/res/layui/css/layui.css">
+          <!-- 修改公共样式，解决checkbox不居中问题 -->
     </c:if>
     <%-- 是否需要引入公用的js--%>
     <c:if test="${requestScope.INCLUDE_COMMON ne false}">

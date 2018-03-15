@@ -15,24 +15,32 @@
     <result column="job" property="job" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
-    <result column="group_id" property="groupId" jdbcType="VARCHAR" />
+    <result column="group_id" property="groupId" jdbcType="INTEGER" />
+    <result column="create_per" property="createPer" jdbcType="VARCHAR" />
+    <result column="update_per" property="updatePer" jdbcType="VARCHAR" />
+    <result column="pic_path" property="picPath" jdbcType="VARCHAR" />
+    <result column="record_status" property="recordStatus" jdbcType="VARCHAR" />
     <collection property="userRoles" ofType="com.trad.bean.UserRoles">  
         <result column="role_id" property="roleId" jdbcType="INTEGER" />
 	    <result column="user_id" property="userId" jdbcType="INTEGER" />
 	    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
 	    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	    <result column="create_per" property="createPer" jdbcType="VARCHAR" />
+        <result column="update_per" property="updatePer" jdbcType="VARCHAR" />
         <association property="roles" javaType="com.trad.bean.Roles">  
             <id column="role_id" property="roleId" jdbcType="INTEGER" />
 		    <result column="role_name" property="roleName" jdbcType="VARCHAR" />
 		    <result column="role_desc" property="roleDesc" jdbcType="VARCHAR" />
 		    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
 		    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		    <result column="create_per" property="createPer" jdbcType="VARCHAR" />
+            <result column="update_per" property="updatePer" jdbcType="VARCHAR" />
         </association> 
     </collection>  
   </resultMap>
   <sql id="Base_Column_List" >
     user_id, user_name, PASSWORD, real_name, email, phone, sex, live_address, emcy_contract, 
-    contract_mobile, job, create_time, update_time,group_id
+    contract_mobile, job, create_time, update_time,group_id,create_per,update_per,pic_path,record_status
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -43,13 +51,15 @@
   <select id="selectUserRole" resultMap="BaseResultMap" parameterType="java.lang.Integer" >  
     select u.*,ur.*,ro.*   
     FROM t_user u JOIN t_user_roles ur ON u.user_id = ur.user_id
-    JOIN t_roles ro ON ur.role_id = ro .role_id where u.user_id = #{userId,jdbcType=INTEGER} 
+    JOIN t_roles ro ON ur.role_id = ro .role_id where u.record_status='1' and ro.record_status='1'  and
+    u.user_id = #{userId,jdbcType=INTEGER} 
 </select>
   <select id="selectByNameAndPass" parameterType="com.trad.bean.User" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from t_user
-    where user_name = #{userName,jdbcType=VARCHAR} and password = #{password,jdbcType=VARCHAR}
+    where record_status='1' and 
+     user_name = #{userName,jdbcType=VARCHAR} and password = #{password,jdbcType=VARCHAR}
   </select>
   <select id="queryByPaged" resultMap="BaseResultMap" parameterType="java.lang.Integer" > 
     select  
@@ -70,7 +80,7 @@
     select 
     <include refid="Base_Column_List" />
     from t_user
-    where user_name = #{userName,jdbcType=VARCHAR}
+    where record_status ='1' and user_name = #{userName,jdbcType=VARCHAR}
   </select>
   <select id="getAllUser"  resultMap="BaseResultMap">
          select u.*,ur.*,ro.*   
@@ -81,17 +91,21 @@
     delete from t_user
     where user_id = #{userId,jdbcType=INTEGER}
   </delete>
+  <delete id="deleteUsers" parameterType="java.lang.Integer" >
+    delete from t_user
+    where group_id = #{groupId,jdbcType=INTEGER}
+  </delete>
   <insert id="insert" parameterType="com.trad.bean.User" useGeneratedKeys="true" keyProperty="userId">
     insert into t_user (user_id, user_name, PASSWORD, 
       real_name, email, phone, 
       sex, live_address, emcy_contract, 
       contract_mobile, job, create_time, 
-      update_time,group_id)
+      update_time,group_id,create_per,update_per,pic_path,record_status)
     values (#{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
       #{realName,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
       #{sex,jdbcType=CHAR}, #{liveAddress,jdbcType=VARCHAR}, #{emcyContract,jdbcType=VARCHAR}, 
       #{contractMobile,jdbcType=VARCHAR}, #{job,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP},#{groupId,jdbcType=VARCHAR})
+      #{updateTime,jdbcType=TIMESTAMP},#{groupId,jdbcType=INTEGER},#{createPer,jdbcType=VARCHAR},#{updatePer,jdbcType=VARCHAR},#{picPath,jdbcType=VARCHAR},#{recordStatus,jdbcType=VARCHAR}  )
   </insert>
   <insert id="insertSelective" parameterType="com.trad.bean.User"  useGeneratedKeys="true" keyProperty="userId">
     insert into t_user
@@ -138,6 +152,18 @@
         <if test="groupId != null" >
         group_id,
       </if>
+      <if test="createPer != null" >
+        create_per,
+      </if>
+      <if test="updatePer != null" >
+        update_per,
+      </if>
+      <if test="picPath != null" >
+        pic_path,
+      </if>
+      <if test="recordStatus != null" >
+        record_status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="userId != null" >
@@ -180,7 +206,19 @@
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="groupId != null" >
-        #{groupId,jdbcType=VARCHAR},
+        #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="createPer != null" >
+        #{createPer,jdbcType=VARCHAR},
+      </if>
+      <if test="updatePer != null" >
+        #{updatePer,jdbcType=VARCHAR},
+      </if>
+      <if test="picPath != null" >
+        #{picPath,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null" >
+        #{recordStatus,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -224,7 +262,19 @@
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="groupId != null" >
-        group_id = #{groupId,jdbcType=VARCHAR},
+        group_id = #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="createPer != null" >
+        create_per = #{createPer,jdbcType=VARCHAR},
+      </if>
+      <if test="updatePer != null" >
+        update_per = #{updatePer,jdbcType=VARCHAR},
+      </if>
+      <if test="picPath != null" >
+        pic_path = #{picPath,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null" >
+        record_status = #{recordStatus,jdbcType=VARCHAR},
       </if>
     </set>
     where user_id = #{userId,jdbcType=INTEGER}
@@ -243,7 +293,11 @@
       job = #{job,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      group_id = #{groupId,jdbcType=VARCHAR}
+      group_id = #{groupId,jdbcType=INTEGER},
+      create_per = #{createPer,jdbcType=VARCHAR},
+	  update_per = #{updatePer,jdbcType=VARCHAR},
+	  pic_path = #{picPath,jdbcType=VARCHAR},
+	  record_status = #{recordStatus,jdbcType=VARCHAR}
     where user_id = #{userId,jdbcType=INTEGER}
   </update>
 </mapper>

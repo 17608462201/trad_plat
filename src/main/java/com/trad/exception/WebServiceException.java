@@ -6,22 +6,18 @@ public class WebServiceException extends Throwable{
 
 	public WebServiceException() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public WebServiceException(String message, Throwable cause) {
 		super(message, cause);
-		// TODO Auto-generated constructor stub
 	}
 
 	public WebServiceException(String message) {
 		super(message);
-		// TODO Auto-generated constructor stub
 	}
 
 	public WebServiceException(Throwable cause) {
 		super(cause);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override

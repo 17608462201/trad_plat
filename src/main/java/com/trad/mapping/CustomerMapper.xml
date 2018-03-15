@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.trad.dao.CustomerMapper" >
+  <resultMap id="BaseResultMap" type="com.trad.bean.Customer" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="source" property="source" jdbcType="VARCHAR" />
+    <result column="manager" property="manager" jdbcType="VARCHAR" />
+    <result column="credentials" property="credentials" jdbcType="VARCHAR" />
+    <result column="credentials_num" property="credentialsNum" jdbcType="VARCHAR" />
+    <result column="birthday" property="birthday" jdbcType="TIMESTAMP" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="marry" property="marry" jdbcType="VARCHAR" />
+    <result column="record" property="record" jdbcType="VARCHAR" />
+    <result column="house_type" property="houseType" jdbcType="VARCHAR" />
+    <result column="live_type" property="liveType" jdbcType="VARCHAR" />
+    <result column="live_address" property="liveAddress" jdbcType="VARCHAR" />
+    <result column="loan_times" property="loanTimes" jdbcType="VARCHAR" />
+    <result column="loan_suc_times" property="loanSucTimes" jdbcType="VARCHAR" />
+    <result column="payment_status" property="paymentStatus" jdbcType="VARCHAR" />
+    <result column="loan_status" property="loanStatus" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="create_per" property="createPer" jdbcType="VARCHAR" />
+    <result column="update_per" property="updatePer" jdbcType="VARCHAR" />
+    <result column="record_status" property="recordStatus" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.trad.bean.Customer" extends="BaseResultMap" >
+    <result column="sum_money" property="sumMoney" jdbcType="VARBINARY" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, code, name, mobile, province, city, area, source, manager, credentials, credentials_num, 
+    birthday, sex, address, marry, record, house_type, live_type, live_address, loan_times, 
+    loan_suc_times, payment_status, loan_status, create_time, update_time,create_per,update_per,record_status
+  </sql>
+  <sql id="Blob_Column_List" >
+    sum_money
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_customer
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+    <select id="count" resultType="java.lang.Integer">
+    select count(1) cnt  from t_customer
+    <if test="filter != null and filter != ''" >
+        where name like #{filter,jdbcType=VARCHAR}
+      </if>
+  </select>
+  <select id="queryByPaged" resultMap="BaseResultMap" parameterType="java.lang.Integer" > 
+    select  
+    <include refid="Base_Column_List" />
+     from t_customer
+     <if test="filter != null and filter != ''" >
+        where name like #{filter,jdbcType=VARCHAR}
+      </if>
+     LIMIT #{1} , #{2}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_customer
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.trad.bean.Customer"  useGeneratedKeys="true" keyProperty="id">
+    insert into t_customer (id, code, name, 
+      mobile, province, city, 
+      area, source, manager, 
+      credentials, credentials_num, birthday, 
+      sex, address, marry, 
+      record, house_type, live_type, 
+      live_address, loan_times, loan_suc_times, 
+      payment_status, loan_status, create_time, 
+      update_time, sum_money,create_per,update_per,record_status)
+    values (#{id,jdbcType=INTEGER}, #{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{mobile,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{area,jdbcType=VARCHAR}, #{source,jdbcType=VARCHAR}, #{manager,jdbcType=VARCHAR}, 
+      #{credentials,jdbcType=VARCHAR}, #{credentialsNum,jdbcType=VARCHAR}, #{birthday,jdbcType=TIMESTAMP}, 
+      #{sex,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{marry,jdbcType=VARCHAR}, 
+      #{record,jdbcType=VARCHAR}, #{houseType,jdbcType=VARCHAR}, #{liveType,jdbcType=VARCHAR}, 
+      #{liveAddress,jdbcType=VARCHAR}, #{loanTimes,jdbcType=VARCHAR}, #{loanSucTimes,jdbcType=VARCHAR}, 
+      #{paymentStatus,jdbcType=VARCHAR}, #{loanStatus,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{sumMoney,jdbcType=VARBINARY},#{createPer,jdbcType=VARCHAR},
+      #{updatePer,jdbcType=VARCHAR},#{recordStatus,jdbcType=VARCHAR} )
+  </insert>
+  <insert id="insertSelective" parameterType="com.trad.bean.Customer" >
+    insert into t_customer
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="area != null" >
+        area,
+      </if>
+      <if test="source != null" >
+        source,
+      </if>
+      <if test="manager != null" >
+        manager,
+      </if>
+      <if test="credentials != null" >
+        credentials,
+      </if>
+      <if test="credentialsNum != null" >
+        credentials_num,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="marry != null" >
+        marry,
+      </if>
+      <if test="record != null" >
+        record,
+      </if>
+      <if test="houseType != null" >
+        house_type,
+      </if>
+      <if test="liveType != null" >
+        live_type,
+      </if>
+      <if test="liveAddress != null" >
+        live_address,
+      </if>
+      <if test="loanTimes != null" >
+        loan_times,
+      </if>
+      <if test="loanSucTimes != null" >
+        loan_suc_times,
+      </if>
+      <if test="paymentStatus != null" >
+        payment_status,
+      </if>
+      <if test="loanStatus != null" >
+        loan_status,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="sumMoney != null" >
+        sum_money,
+      </if>
+      <if test="createPer != null" >
+        create_per,
+      </if>
+      <if test="updatePer != null" >
+        update_per,
+      </if>
+      <if test="recordStatus != null" >
+        record_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null" >
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="manager != null" >
+        #{manager,jdbcType=VARCHAR},
+      </if>
+      <if test="credentials != null" >
+        #{credentials,jdbcType=VARCHAR},
+      </if>
+      <if test="credentialsNum != null" >
+        #{credentialsNum,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="marry != null" >
+        #{marry,jdbcType=VARCHAR},
+      </if>
+      <if test="record != null" >
+        #{record,jdbcType=VARCHAR},
+      </if>
+      <if test="houseType != null" >
+        #{houseType,jdbcType=VARCHAR},
+      </if>
+      <if test="liveType != null" >
+        #{liveType,jdbcType=VARCHAR},
+      </if>
+      <if test="liveAddress != null" >
+        #{liveAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="loanTimes != null" >
+        #{loanTimes,jdbcType=VARCHAR},
+      </if>
+      <if test="loanSucTimes != null" >
+        #{loanSucTimes,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentStatus != null" >
+        #{paymentStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="loanStatus != null" >
+        #{loanStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sumMoney != null" >
+        #{sumMoney,jdbcType=VARBINARY},
+      </if>
+      <if test="createPer != null" >
+        #{createPer,jdbcType=VARCHAR},
+      </if>
+      <if test="updatePer != null" >
+        #{updatePer,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null" >
+        #{recordStatus,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.trad.bean.Customer" >
+    update t_customer
+    <set >
+      <if test="code != null and code != ''" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null and name != ''" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null and mobile != ''" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null and province != ''" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null and city != ''" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null and area != ''" >
+        area = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null and source != ''" >
+        source = #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="manager != null and manager != ''" >
+        manager = #{manager,jdbcType=VARCHAR},
+      </if>
+      <if test="credentials != null and credentials != ''" >
+        credentials = #{credentials,jdbcType=VARCHAR},
+      </if>
+      <if test="credentialsNum != null and credentialsNum != ''" >
+        credentials_num = #{credentialsNum,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null and birthday != ''" >
+        birthday = #{birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sex != null and sex != ''" >
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null and address != ''" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="marry != null and marry != ''" >
+        marry = #{marry,jdbcType=VARCHAR},
+      </if>
+      <if test="record != null and record != ''" >
+        record = #{record,jdbcType=VARCHAR},
+      </if>
+      <if test="houseType != null and houseType != ''" >
+        house_type = #{houseType,jdbcType=VARCHAR},
+      </if>
+      <if test="liveType != null and liveType != ''" >
+        live_type = #{liveType,jdbcType=VARCHAR},
+      </if>
+      <if test="liveAddress != null and liveAddress != ''" >
+        live_address = #{liveAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="loanTimes != null and loanTimes != ''" >
+        loan_times = #{loanTimes,jdbcType=VARCHAR},
+      </if>
+      <if test="loanSucTimes != null and loanSucTimes != ''" >
+        loan_suc_times = #{loanSucTimes,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentStatus != null and paymentStatus != ''" >
+        payment_status = #{paymentStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="loanStatus != null and loanStatus != ''" >
+        loan_status = #{loanStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null and createTime != ''" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null and updateTime != ''" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sumMoney != null and sumMoney != ''" >
+        sum_money = #{sumMoney,jdbcType=VARBINARY},
+      </if>
+      <if test="createPer != null and createPer != ''" >
+        create_per = #{createPer,jdbcType=VARCHAR},
+      </if>
+      <if test="updatePer != null and updatePer != ''" >
+        update_per = #{updatePer,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null and recordStatus != ''" >
+        record_status = #{recordStatus,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.trad.bean.Customer" >
+    update t_customer
+    set code = #{code,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      area = #{area,jdbcType=VARCHAR},
+      source = #{source,jdbcType=VARCHAR},
+      manager = #{manager,jdbcType=VARCHAR},
+      credentials = #{credentials,jdbcType=VARCHAR},
+      credentials_num = #{credentialsNum,jdbcType=VARCHAR},
+      birthday = #{birthday,jdbcType=TIMESTAMP},
+      sex = #{sex,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      marry = #{marry,jdbcType=VARCHAR},
+      record = #{record,jdbcType=VARCHAR},
+      house_type = #{houseType,jdbcType=VARCHAR},
+      live_type = #{liveType,jdbcType=VARCHAR},
+      live_address = #{liveAddress,jdbcType=VARCHAR},
+      loan_times = #{loanTimes,jdbcType=VARCHAR},
+      loan_suc_times = #{loanSucTimes,jdbcType=VARCHAR},
+      payment_status = #{paymentStatus,jdbcType=VARCHAR},
+      loan_status = #{loanStatus,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      sum_money = #{sumMoney,jdbcType=VARBINARY},
+      create_per = #{createPer,jdbcType=VARCHAR},
+	  update_per = #{updatePer,jdbcType=VARCHAR},
+	  record_status = #{recordStatus,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.trad.bean.Customer" >
+    update t_customer
+    set code = #{code,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      area = #{area,jdbcType=VARCHAR},
+      source = #{source,jdbcType=VARCHAR},
+      manager = #{manager,jdbcType=VARCHAR},
+      credentials = #{credentials,jdbcType=VARCHAR},
+      credentials_num = #{credentialsNum,jdbcType=VARCHAR},
+      birthday = #{birthday,jdbcType=TIMESTAMP},
+      sex = #{sex,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      marry = #{marry,jdbcType=VARCHAR},
+      record = #{record,jdbcType=VARCHAR},
+      house_type = #{houseType,jdbcType=VARCHAR},
+      live_type = #{liveType,jdbcType=VARCHAR},
+      live_address = #{liveAddress,jdbcType=VARCHAR},
+      loan_times = #{loanTimes,jdbcType=VARCHAR},
+      loan_suc_times = #{loanSucTimes,jdbcType=VARCHAR},
+      payment_status = #{paymentStatus,jdbcType=VARCHAR},
+      loan_status = #{loanStatus,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_per = #{createPer,jdbcType=VARCHAR},
+	  update_per = #{updatePer,jdbcType=VARCHAR},
+	  record_status = #{recordStatus,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,69 +1,65 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%  
-//页面标题设置
-	request.setAttribute("pageTitle","角色列表");  
+    //页面标题设置
+	request.setAttribute("pageTitle","角色列表");
+    //设置查询标题
+    request.setAttribute("QUERY_TILE","支持角色名搜索内容");  
 	//如果不需要公用的css,请使用下面代码 (默认是为true)
 	//request.setAttribute("INCLUDE_SKIN",false);
 	//如果不需要公用的js,请使用下面代码 (默认是为true)
 	//request.setAttribute("INCLUDE_COMMON",false);
+	//如果不需要公用的css,请使用下面代码 (默认是为true)
+	//request.setAttribute("INCLUDE_CSS",false);
 %>
 <%@ include file="/pages/common/header.jsp" %>
-<div style="margin-top: 10px;"></div>  
-  <div class="layui-row">
-    <div class="layui-col-xs6">
-		      <div class="grid-demo grid-demo-bg1">
-		      <div class="layui-form-item">
-		    <div class="layui-input-inline"style="width: 250px;padding-left: 5px;">
-		        <input type="text" id="filter" name="filter" value="" lay-verify="" placeholder="支持角色名搜索内容" autocomplete="off" class="layui-input">
-		    </div>
-		    <div class="layui-input-inline">
-		        <button class="layui-btn" id="search" name="search">
-		            <i class="layui-icon"></i>搜索
-		        </button>
-		    </div>
-     </div>
-    </div>
-    </div>
-    <div class="layui-col-xs6">
-      <div class="grid-demo">
-       <div class="layui-form-item">
-  	 		<button class="layui-btn" id="add">
-			  <i class="layui-icon"></i>添加
-			</button>
-			<button class="layui-btn layui-btn-danger" id="delete">
-			  <i class="layui-icon"></i>删除
-			</button>
-			<button class="layui-btn" id="refresh">
-			  <i class="layui-icon">ဂ</i>刷新
-			</button>
-      </div>
-    </div>
-  </div>
-  </div>
-<table class="layui-table" lay-data="{width: 1300, height:500,url:'${ctx }/roles/list', page:true, limit:10, id:'tables'}" lay-filter="role_filter">
+<%@ include file="/pages/common/listHeader.jsp" %>
+<table class="layui-table" lay-data="{height:478,url:'${ctx }/roles/list', page:true, limit:10, id:'tables'}" lay-filter="role_filter">
   <thead>
     <tr>
       <th lay-data="{checkbox:true, fixed: true}"></th>
       <th lay-data="{field:'roleId', width:80,sort: true}">角色ID</th>
-      <th lay-data="{field:'roleDesc', width:200, sort: true,edit: 'text'}">角色名</th>
-      <th lay-data="{field:'userNames', width:300, sort: true}">角色用户</th>
+      <th lay-data="{field:'roleDesc', width:100, sort: true,edit: 'text'}">角色名</th>
+      <th lay-data="{field:'userNames', width:200, sort: true}">角色用户</th>
       <th lay-data="{field:'treeNames', width:400, sort: true}">角色菜单</th>
-     <th lay-data="{fixed: 'right', width:260, align:'center', toolbar: '#barDemo'}"></th>
+      <th lay-data="{field:'recordStatus', width:100,templet: '#checkboxTpl', unresize: true}">是否有效</th>
+     <th lay-data="{fixed: 'right', width:160, align:'center', toolbar: '#barDemo'}"></th>
     </tr>
   </thead>
 </table>
- 
+ <script type="text/html" id="checkboxTpl">
+  <input type="checkbox" {{ d.recordStatus == 1 ? 'checked' : '' }} name="recordStatus" lay-skin="switch" lay-filter="validFilter" lay-text="是|否">
+</script>
 <script type="text/html" id="barDemo">
-  <a class="layui-btn layui-btn-mini" lay-event="roleUser">角色用户</a>
-  <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="roleTree">角色菜单</a>
+  <a class="layui-btn layui-btn-xs" lay-event="roleUser">角色用户</a>
+  <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="roleTree">角色菜单</a>
 </script>
 <script>
 layui.use('table', function(){
-  var table = layui.table;
+  var table = layui.table
+  ,form = layui.form;
   //监听表格复选框选择
   table.on('checkbox(role_filter)', function(obj){
   });
   
+  //监听是否有效操作
+  form.on('switch(validFilter)', function(obj){
+    var tds = $(obj.elem).parent().parent().parent().children();
+    var roleId = tds[1].innerText.replace(/[\r\n]/g, "");
+    var dataVal = '';
+   	if(this.checked){
+   		dataVal = '1';
+   	}else{
+   	    dataVal = '0';
+   	}
+   	
+    $.post("${ctx}/roles/modify",{"nRoleID":roleId,"nRoleFiled":this.name,"nRoleValue":dataVal},function(obj){
+  		 if(obj == "200"){
+  			 layer.msg("设置角色是否有效成功！");
+  		 }else{
+  			 layer.msg("设置角色是否有效失败！");
+  		 }
+    });
+});
 //监听单元格编辑
   table.on('edit(role_filter)', function(obj){
 	data = obj.data; //得到所在行所有键值
@@ -116,7 +112,7 @@ layui.use('table', function(){
 	  layer.open({
           type: 2 //此处以iframe举例
           ,title: '角色管理'
-          ,area: ['890px', '600px']
+          ,area: ['890px', '500px']
           ,shade: 0
           ,maxmin: true
           ,offset: [
@@ -130,7 +126,13 @@ layui.use('table', function(){
           	 var roleName = body.find('input[name="roleName"]').val();
           	 var roleUsers = body.find('input[name="roleUsers"]').val();
           	 var roleMenus = body.find('input[name="roleMenus"]').val();
-          	  $.post("${ctx}/roles/saveNewRole",{"roleName":roleName,"roleDesc":roleDesc,"roleUsers":roleUsers,"roleMenus":roleMenus},function(obj){
+          	var recordStatus = body.find('input[name="recordStatus"]').val();
+          	 if(recordStatus != undefined && recordStatus =='on'){
+          		recordStatus = '1';
+          	 }else{
+          		recordStatus = '0'
+          	 }
+          	  $.post("${ctx}/roles/saveNewRole",{"roleName":roleName,"roleDesc":roleDesc,"roleUsers":roleUsers,"roleMenus":roleMenus,"recordStatus":recordStatus},function(obj){
           		  layer.closeAll();
           		  window.location.href ='${ctx }/roles/init';
        	     });
@@ -156,13 +158,13 @@ layui.use('table', function(){
     	layer.open({
             type: 2 //此处以iframe举例
             ,title: '用户选择'
-            ,area: ['800px', '550px']
+            ,area: ['800px', '500px']
             ,shade: 0
             ,maxmin: true
             ,offset: [
                10
             ] 
-            ,content: '${ctx}/base/getUserTree?roleId='+data.roleId
+            ,content: '${ctx}/common/getUserTree?roleId='+data.roleId
             ,btn: ['确认', '关闭']
             ,yes: function(){
             	 var body = layer.getChildFrame('body', 0);
@@ -195,13 +197,13 @@ layui.use('table', function(){
     	layer.open({
             type: 2 //此处以iframe举例
             ,title: '用户菜单选择'
-            ,area: ['600px', '550px']
+            ,area: ['600px', '500px']
             ,shade: 0
             ,maxmin: true
             ,offset: [
                10
             ] 
-            ,content: '${ctx}/base/getMenuTree?roleId='+data.roleId
+            ,content: '${ctx}/common/getMenuTree?roleId='+data.roleId
             ,btn: ['确认', '关闭']
             ,yes: function(){
             	 var body = layer.getChildFrame('body', 0);

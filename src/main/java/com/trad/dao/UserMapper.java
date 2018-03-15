@@ -30,4 +30,6 @@ public interface UserMapper {
     int count(@Param("filter")String filter);
     
     public List<User> queryByPaged(@Param("filter")String filter,Integer start,Integer end);
+    
+    int deleteUsers(Integer groupId);
 }

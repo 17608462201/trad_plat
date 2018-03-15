@@ -74,6 +74,8 @@ public class RegisterController {
 			user.setPassword(encryptPass);
 			user.setCreateTime(new Date());
 			user.setUpdateTime(new Date());
+			user.setUpdatePer(user.getRealName());
+			user.setCreatePer(user.getRealName());
 			userSer.insertUser(user);
 			session.setAttribute("viewer", "success");
 			result = "redirect:/login/init";

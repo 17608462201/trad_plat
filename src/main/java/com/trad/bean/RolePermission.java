@@ -15,6 +15,25 @@ public class RolePermission {
     
     private Tree tree;
 
+    private String createPer;
+    
+    private String updatePer;
+    
+    public String getCreatePer() {
+        return createPer;
+    }
+
+    public void setCreatePer(String createPer) {
+        this.createPer = createPer == null ? null : createPer.trim();
+    }
+	
+	public String getUpdatePer() {
+        return updatePer;
+    }
+
+    public void setUpdatePer(String updatePer) {
+        this.updatePer = updatePer == null ? null : updatePer.trim();
+    }
     public Integer getRoleId() {
         return roleId;
     }

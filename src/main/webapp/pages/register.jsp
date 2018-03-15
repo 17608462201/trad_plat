@@ -6,10 +6,12 @@
 	//request.setAttribute("INCLUDE_SKIN",false);
 	//如果不需要公用的js,请使用下面代码 (默认是为true)
 	//request.setAttribute("INCLUDE_COMMON",false);
+	//如果不需要公用的css,请使用下面代码 (默认是为true)
+	//request.setAttribute("INCLUDE_CSS",false);
 %>
 <%@ include file="/pages/common/header.jsp" %>
 <form class="layui-form" action="${ctx }/register/doReg" method="post">
- <div style="padding-top: 50px;"></div>
+ <div style="padding-top: 30px;"></div>
           <c:if test="${showPic ne 'N' }">
             <div class="layui-col-xs6" align="right">
 		      <div class="grid-demo grid-demo-bg1">
@@ -18,9 +20,9 @@
 		    </div>
 		    </c:if>
 		    <div class="layui-col-xs6" align="left">
-		      <fieldset class="layui-elem-field" style="width: 500px;height: 650px;">
+		      <fieldset class="layui-elem-field" style="width: 500px;height: 620px;">
 					 <legend><i class="layui-icon" style="font-size: 30px;">&#xe613;用户注册</i> </legend>
-					  <div style="height: 50px;" id="showText" ></div>
+					  <div style="height: 30px;" id="showText" ></div>
 				      <div class="layui-form-item">
 				           <label class="layui-form-label">用户名：</label>
 				           <div class="layui-input-inline">
@@ -41,14 +43,14 @@
 					    <div class="layui-form-item">
 					    <label class="layui-form-label">确认密码：</label>
 					    <div class="layui-input-inline">
-					      <input type="password" name="password2" required lay-verify="required" id="password2" onchange="validatePass();" placeholder="请确认密码" autocomplete="off" class="layui-input">
+					      <input type="password" name="password2" lay-verify="required" id="password2" onchange="validatePass();" placeholder="请确认密码" autocomplete="off" class="layui-input">
 					    </div>
 					    <div class="layui-form-mid layui-word-aux">两次密码必须一致！</div>
 					  </div>
 					  <div class="layui-form-item">
 						    <label class="layui-form-label">所属小组</label>
 						    <div class="layui-input-inline">
-						      <select name="groupId" required lay-verify="required"  id="groupId">
+						      <select name="groupId" id="groupId">
 						        <option value="">请选择小组</option>
 						      </select>
 						    </div>
@@ -93,9 +95,15 @@
 				      <div class="layui-form-item">
 					    <label class="layui-form-label">住址：</label>
 					    <div class="layui-input-block">
-				              <input type="text" name="liveAddress" required  lay-verify="liveAddress" placeholder="请输入住址" autocomplete="off" class="layui-input">
+				              <input type="text" name="liveAddress" placeholder="请输入住址" autocomplete="off" class="layui-input">
 					    </div>
 					  </div>
+					   <div class="layui-form-item">
+					<label class="layui-form-label">是否有效：</label>
+					<div class="layui-input-inline">
+					  <input type="checkbox" checked="" name="recordStatus" lay-skin="switch" lay-filter="switchTest" lay-text="是|否">
+					</div>
+			      </div>
 					  <c:if test="${showPic ne 'N' }">
 					  <div class="layui-form-item">
 					    <div class="layui-input-block">
@@ -111,7 +119,7 @@
  
 <script>
 //Demo
-layui.use('form', function(){
+layui.use(['form'], function(){
   var form = layui.form;
   form.verify({
 		//value：表单的值、item：表单的DOM对象

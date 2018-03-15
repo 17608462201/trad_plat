@@ -2,10 +2,12 @@ package com.trad.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.trad.bean.UserGroup;
 
 public interface UserGroupMapper {
-    int deleteByPrimaryKey(String id);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(UserGroup record);
 
@@ -19,5 +21,9 @@ public interface UserGroupMapper {
     
     List<UserGroup> queryAll();
     
-    List<UserGroup> getAllGroup();
+    List<UserGroup> getAllGroup(@Param("groupId")Integer groupId);
+    
+    int count(@Param("filter")String filter);
+    
+    public List<UserGroup> queryByPaged(@Param("filter")String filter,Integer start,Integer end);
 }

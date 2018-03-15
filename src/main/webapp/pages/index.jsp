@@ -6,6 +6,8 @@
 	//request.setAttribute("INCLUDE_SKIN",false);
 	//如果不需要公用的js,请使用下面代码 (默认是为true)
 	//request.setAttribute("INCLUDE_COMMON",false);
+	//如果不需要公用的css,请使用下面代码 (默认是为true)
+	//request.setAttribute("INCLUDE_CSS",false);
 %>
 <%@ include file="/pages/common/header.jsp" %>
 <div class="layui-layout layui-layout-admin">
@@ -36,7 +38,7 @@
           <dd><a >安全设置</a></dd>
         </dl>
       </li>
-      <li class="layui-nav-item"><a href="">退了</a></li>
+      <li class="layui-nav-item"><a href="${ctx }/login/loginOut">退了</a></li>
     </ul>
   </div>
   
@@ -61,7 +63,7 @@
   
   <div class="layui-body">
     <!-- 内容主体区域 -->
-    <div style="padding: 15px;"><iframe src="" id="myBody" height="100%" width="100%"></iframe></div>
+    <div style="padding: 15px;"><iframe src="" id="myBody" height="100%" width="100%" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes"></iframe></div>
   </div>
   <div class="layui-footer">
     © 汉融贷金服
@@ -98,5 +100,16 @@ function changeFrameUrl(obj,url){
 	$(obj).css({"background-color": "#009688","color": "#fff"});
 	$(".layui-nav-child a").not(obj).css({"background-color": ""});
 }
+//iframe 嵌套html出现双滚动条
+function ajustFrame(){
+	var ht = $(window).height();//获取浏览器窗口的整体高度；
+	var topHeader = $(".warp_header").height();//获取头部高度，定义一个变量名为topHeader
+	$(".sidebar").height(ht);
+	$("#rightFrame").height(ht);
+	$(".sidebar").height(ht-topHeader);//计算左边高度：窗口高度-头部高度
+	$("#rightFrame").height(ht-topHeader);//计算右边高度：窗口高度-头部高度
+  }
+	
+
 </script>
 <%@ include file="/pages/common/footer.jsp"%>

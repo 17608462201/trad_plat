@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.trad.dao.ProductProcedureMapper" >
+  <resultMap id="BaseResultMap" type="com.trad.bean.ProductProcedure" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="pay_type" property="payType" jdbcType="CHAR" />
+    <result column="produce_mon" property="produceMon" jdbcType="REAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="create_per" property="createPer" jdbcType="VARCHAR" />
+    <result column="update_per" property="updatePer" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, product_id, name, pay_type, produce_mon, create_time, update_time, create_per, 
+    update_per
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_product_procedure
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_product_procedure
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.trad.bean.ProductProcedure" >
+    insert into t_product_procedure (ID, product_id, name, 
+      pay_type, produce_mon, create_time, 
+      update_time, create_per, update_per
+      )
+    values (#{id,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{payType,jdbcType=CHAR}, #{produceMon,jdbcType=REAL}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{createPer,jdbcType=VARCHAR}, #{updatePer,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.trad.bean.ProductProcedure" >
+    insert into t_product_procedure
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="productId != null" >
+        product_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="payType != null" >
+        pay_type,
+      </if>
+      <if test="produceMon != null" >
+        produce_mon,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="createPer != null" >
+        create_per,
+      </if>
+      <if test="updatePer != null" >
+        update_per,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null" >
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null" >
+        #{payType,jdbcType=CHAR},
+      </if>
+      <if test="produceMon != null" >
+        #{produceMon,jdbcType=REAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createPer != null" >
+        #{createPer,jdbcType=VARCHAR},
+      </if>
+      <if test="updatePer != null" >
+        #{updatePer,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.trad.bean.ProductProcedure" >
+    update t_product_procedure
+    <set >
+      <if test="productId != null" >
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null" >
+        pay_type = #{payType,jdbcType=CHAR},
+      </if>
+      <if test="produceMon != null" >
+        produce_mon = #{produceMon,jdbcType=REAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createPer != null" >
+        create_per = #{createPer,jdbcType=VARCHAR},
+      </if>
+      <if test="updatePer != null" >
+        update_per = #{updatePer,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.trad.bean.ProductProcedure" >
+    update t_product_procedure
+    set product_id = #{productId,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      pay_type = #{payType,jdbcType=CHAR},
+      produce_mon = #{produceMon,jdbcType=REAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_per = #{createPer,jdbcType=VARCHAR},
+      update_per = #{updatePer,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

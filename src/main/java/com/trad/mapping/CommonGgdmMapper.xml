@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.trad.dao.CommonGgdmMapper" >
+  <resultMap id="BaseResultMap" type="com.trad.bean.CommonGgdm" >
+    <id column="dmjbh" property="dmjbh" jdbcType="VARCHAR" />
+    <id column="dm" property="dm" jdbcType="VARCHAR" />
+    <result column="dmnr" property="dmnr" jdbcType="VARCHAR" />
+    <result column="create_per" property="createPer" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_per" property="updatePer" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="fdm" property="fdm" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="order_num" property="orderNum" jdbcType="INTEGER" />
+    <result column="is_valid" property="isValid" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    dmjbh, dm, dmnr, create_per, create_time, update_per, update_time, fdm, remark, order_num, 
+    is_valid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.trad.bean.CommonGgdmKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_common_ggdm
+    where dmjbh = #{dmjbh,jdbcType=VARCHAR}
+      and dm = #{dm,jdbcType=VARCHAR}
+  </select>
+  <select id="queryByPaged" resultMap="BaseResultMap" parameterType="java.lang.Integer" > 
+    select  
+    <include refid="Base_Column_List" />
+     from t_common_ggdm 
+     <if test="filter != null and filter != ''" >
+        where dmjbh like #{filter,jdbcType=VARCHAR} or  dmnr like #{filter,jdbcType=VARCHAR} or  dm like #{filter,jdbcType=VARCHAR}
+      </if>
+     LIMIT #{1} , #{2}
+  </select>
+  <select id="queryByDmjbh" resultMap="BaseResultMap" > 
+    select  
+    <include refid="Base_Column_List" />
+     from t_common_ggdm where is_valid ='1'  and dmjbh in 
+      <foreach item="item" index="index" collection="array" 
+               open="(" separator="," close=")">
+              #{item}
+      </foreach> order by dmjbh asc
+  </select>
+  <select id="count" resultType="java.lang.Integer">
+    select count(1) cnt  from t_common_ggdm
+      <if test="filter != null and filter !='' ">
+        where dmjbh like #{filter,jdbcType=VARCHAR} or  dmnr like #{filter,jdbcType=VARCHAR} or  dm like #{filter,jdbcType=VARCHAR}
+      </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.trad.bean.CommonGgdmKey" >
+    delete from t_common_ggdm
+    where dmjbh = #{dmjbh,jdbcType=VARCHAR}
+      and dm = #{dm,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.trad.bean.CommonGgdm" >
+    insert into t_common_ggdm (dmjbh, dm, dmnr, 
+      create_per, create_time, update_per, 
+      update_time, fdm, remark, 
+      order_num, is_valid)
+    values (#{dmjbh,jdbcType=VARCHAR}, #{dm,jdbcType=VARCHAR}, #{dmnr,jdbcType=VARCHAR}, 
+      #{createPer,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updatePer,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{fdm,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{orderNum,jdbcType=INTEGER}, #{isValid,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.trad.bean.CommonGgdm" >
+    insert into t_common_ggdm
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="dmjbh != null" >
+        dmjbh,
+      </if>
+      <if test="dm != null" >
+        dm,
+      </if>
+      <if test="dmnr != null" >
+        dmnr,
+      </if>
+      <if test="createPer != null" >
+        create_per,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updatePer != null" >
+        update_per,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="fdm != null" >
+        fdm,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="orderNum != null" >
+        order_num,
+      </if>
+      <if test="isValid != null" >
+        is_valid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dmjbh != null" >
+        #{dmjbh,jdbcType=VARCHAR},
+      </if>
+      <if test="dm != null" >
+        #{dm,jdbcType=VARCHAR},
+      </if>
+      <if test="dmnr != null" >
+        #{dmnr,jdbcType=VARCHAR},
+      </if>
+      <if test="createPer != null" >
+        #{createPer,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatePer != null" >
+        #{updatePer,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fdm != null" >
+        #{fdm,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNum != null" >
+        #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="isValid != null" >
+        #{isValid,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.trad.bean.CommonGgdm" >
+    update t_common_ggdm
+    <set >
+      <if test="dmnr != null" >
+        dmnr = #{dmnr,jdbcType=VARCHAR},
+      </if>
+      <if test="createPer != null" >
+        create_per = #{createPer,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatePer != null" >
+        update_per = #{updatePer,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fdm != null" >
+        fdm = #{fdm,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNum != null" >
+        order_num = #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="isValid != null" >
+        is_valid = #{isValid,jdbcType=CHAR},
+      </if>
+    </set>
+    where dmjbh = #{dmjbh,jdbcType=VARCHAR}
+      and dm = #{dm,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.trad.bean.CommonGgdm" >
+    update t_common_ggdm
+    set dmnr = #{dmnr,jdbcType=VARCHAR},
+      create_per = #{createPer,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_per = #{updatePer,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      fdm = #{fdm,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      order_num = #{orderNum,jdbcType=INTEGER},
+      is_valid = #{isValid,jdbcType=CHAR}
+    where dmjbh = #{dmjbh,jdbcType=VARCHAR}
+      and dm = #{dm,jdbcType=VARCHAR}
+  </update>
+</mapper>

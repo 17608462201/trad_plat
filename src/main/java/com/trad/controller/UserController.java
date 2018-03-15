@@ -1,7 +1,6 @@
 package com.trad.controller;
 
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Field;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,12 +20,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
-import com.trad.bean.Roles;
 import com.trad.bean.User;
 import com.trad.bean.UserRoles;
 import com.trad.bean.common.LayuiTable;
 import com.trad.bean.common.PageStatus;
+import com.trad.exception.TradBusinessException;
 import com.trad.service.UserService;
+import com.trad.util.CommonUtils;
 import com.trad.util.ReplyCode;
 
 @Controller
@@ -109,9 +109,7 @@ public class UserController {
 				   return ReplyCode.INSIDEERROR;
 			  }
 			  User record = new User();
-			  Field treeFiled = record.getClass().getDeclaredField(nUserFiled);
-			  treeFiled.setAccessible(true);  
-			  treeFiled.set(record,nUserValue);
+			  CommonUtils.getInstance().setField(record, nUserFiled, nUserValue);
 			  record.setUserId(Integer.parseInt(nUserID));
 			  record.setUpdateTime(new Date());
 			  int count = userSer.updateByPrimaryKeySelective(record);
@@ -119,19 +117,22 @@ public class UserController {
 				  return ReplyCode.SUCCESS;
 			  }
 	} catch (NoSuchFieldException e) {
-		logger.error("设置反射字段出错！");
+		logger.error("无法从找到传入参数对应的field！");
 		e.printStackTrace();
 	} catch (SecurityException e) {
-		logger.error("设置反射字段出错！");
+		logger.error("该映射不是安全的映射！");
 		e.printStackTrace();
 	} catch (IllegalArgumentException e) {
-		logger.error("设置反射字段出错！");
+		logger.error("设置值传入的参数不合法！");
 		e.printStackTrace();
 	} catch (IllegalAccessException e) {
-		logger.error("设置反射字段出错！");
+		logger.error("set方法不可访问！");
+		e.printStackTrace();
+	}catch (TradBusinessException e) {
+		logger.error("传入的对象为空或者methodName为空！");
 		e.printStackTrace();
 	}catch (Exception e) {
-		logger.error("修改tree信息出错！");
+		logger.error("修改user信息出错！");
 		e.printStackTrace();
 	}
 	return ReplyCode.INSIDEERROR;
@@ -139,7 +140,7 @@ public class UserController {
 
 	@RequestMapping("/deleteUsers")
 	@ResponseBody
-	 public String deleteRoles(HttpServletRequest request,Model model){
+	 public String deleteUsers(HttpServletRequest request,Model model){
       try{
     	  String userIds = request.getParameter("userIds");
     	  if(!StringUtils.isEmpty(userIds)){
@@ -153,6 +154,49 @@ public class UserController {
     			  userSer.deleteUserRole(userIdInt);
     		  }
     	  }
+		  return ReplyCode.SUCCESS;
+	  }catch(Exception e){
+		  e.printStackTrace();
+		  return ReplyCode.INSIDEERROR;
+	  }
+	}
+	
+	
+	@RequestMapping("/updateUserGroup")
+	@ResponseBody
+	 public String updateUserGroup(HttpServletRequest request,Model model){
+	  String groupId = request.getParameter("groupId");
+	  String userIdsCheck = request.getParameter("userIdsCheck");
+	  String userIdsUnCheck = request.getParameter("userIdsUnCheck");
+	  try{
+		  if(!StringUtils.isEmpty(groupId)){
+			  //更新选中结果
+			  if(!StringUtils.isEmpty(userIdsCheck)){
+				  String [] ids = userIdsCheck.split(",");
+				  for(String id : ids){
+					  if(!StringUtils.isEmpty(id)){
+						  User user = new User();
+						  user.setGroupId(Integer.parseInt(groupId));
+						  user.setUserId(Integer.parseInt(id));
+						  //保存数据库数据
+						  userSer.updateByPrimaryKeySelective(user);
+					  }
+				  }
+			  }
+			  //更新未选中结果
+			  if(!StringUtils.isEmpty(userIdsUnCheck)){
+				  String [] uids = userIdsUnCheck.split(",");
+				  for(String id : uids){
+					  if(!StringUtils.isEmpty(id)){
+						  User user = new User();
+						  user.setGroupId(0);
+						  user.setUserId(Integer.parseInt(id));
+						  //保存数据库数据
+						  userSer.updateByPrimaryKeySelective(user);
+					  }
+				  }
+			  }
+		  }
 		  return ReplyCode.SUCCESS;
 	  }catch(Exception e){
 		  e.printStackTrace();

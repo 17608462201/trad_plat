@@ -1,47 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%  
-//页面标题设置
+     //页面标题设置
 	request.setAttribute("pageTitle","菜单列表");  
+	//设置查询标题
+	request.setAttribute("QUERY_TILE","支持菜单名称/描述搜索内容");  
 	//如果不需要公用的css,请使用下面代码 (默认是为true)
 	//request.setAttribute("INCLUDE_SKIN",false);
 	//如果不需要公用的js,请使用下面代码 (默认是为true)
 	//request.setAttribute("INCLUDE_COMMON",false);
+	//如果不需要公用的css,请使用下面代码 (默认是为true)
+	//request.setAttribute("INCLUDE_CSS",false);
 %>
 <%@ include file="/pages/common/header.jsp" %>
-<div style="margin-top: 10px;"></div>
- <div class="layui-row">
-    <div class="layui-col-xs6">
-		      <div class="grid-demo grid-demo-bg1">
-		      <div class="layui-form-item">
-		    <div class="layui-input-inline"style="width: 250px;padding-left: 5px;">
-		        <input type="text" id="filter" name="filter" value="" lay-verify="" placeholder="支持菜单名称/描述搜索内容" autocomplete="off" class="layui-input">
-		    </div>
-		    <div class="layui-input-inline">
-		        <button class="layui-btn" id="search" name="search">
-		            <i class="layui-icon"></i>搜索
-		        </button>
-		    </div>
-     </div>
-    </div>
-    </div>
-    <div class="layui-col-xs6">
-      <div class="grid-demo">
-       <div class="layui-form-item">
-  	 		<button class="layui-btn" id="add">
-			  <i class="layui-icon"></i>添加
-			</button>
-			<button class="layui-btn layui-btn-danger" id="delete">
-			  <i class="layui-icon"></i>删除
-			</button>
-			<button class="layui-btn" id="refresh">
-			  <i class="layui-icon">ဂ</i>刷新
-			</button>
-      </div>
-    </div>
-  </div>
-  </div>
-  
-<table class="layui-table" lay-data="{width: 1110, height:500,url:'${ctx }/tree/list', page:true, limit:10, id:'tables'}" lay-filter="tree_filter">
+<%@ include file="/pages/common/listHeader.jsp" %>
+<table class="layui-table" lay-data="{height:478,url:'${ctx }/tree/list', page:true, limit:10, id:'tables'}" lay-filter="tree_filter">
   <thead>
     <tr>
       <th lay-data="{checkbox:true, fixed: true}"></th>
@@ -50,22 +22,42 @@
       <th lay-data="{field:'treeDesc', width:200, sort: true,edit: 'text'}">菜单描述</th>
       <th lay-data="{field:'parentId', width:100, sort: true,edit: 'text'}">父菜单ID</th>
       <th lay-data="{field:'url', width:300, sort: true,edit: 'text'}">菜单地址</th>
-      <th lay-data="{field:'roleNames', width:200, sort: true}">菜单角色</th>
+      <th lay-data="{field:'roleNames', width:110, sort: true}">菜单角色</th>
+      <th lay-data="{field:'recordStatus', width:100,templet: '#checkboxTpl', unresize: true}">是否有效</th>
      <!-- <th lay-data="{fixed: 'right', width:100, align:'center', toolbar: '#barDemo'}"></th> -->
     </tr>
   </thead>
 </table>
- <!--  
-<script type="text/html" id="barDemo">
-  <a class="layui-btn layui-btn-mini" lay-event="userRoles">用户角色</a>
+ <script type="text/html" id="checkboxTpl">
+  <input type="checkbox" {{ d.recordStatus == 1 ? 'checked' : '' }} name="recordStatus" lay-skin="switch" lay-filter="validFilter" lay-text="是|否">
 </script>
--->
 <script>
 layui.use('table', function(){
-  var table = layui.table;
+  var table = layui.table
+  ,form = layui.form;
   //监听表格复选框选择
   table.on('checkbox(tree_filter)', function(obj){
   });
+  
+  //监听是否有效操作
+  form.on('switch(validFilter)', function(obj){
+    var tds = $(obj.elem).parent().parent().parent().children();
+    var treeId = tds[1].innerText.replace(/[\r\n]/g, "");
+    var dataVal = '';
+   	if(this.checked){
+   		dataVal = '1';
+   	}else{
+   	    dataVal = '0';
+   	}
+   	
+    $.post("${ctx}/tree/modify",{"nTreeID":treeId,"nTreeFiled":this.name,"nTreeValue":dataVal},function(obj){
+  		 if(obj == "200"){
+  			 layer.msg("设置菜单树是否有效成功！");
+  		 }else{
+  			 layer.msg("设置菜单树是否有效失败！");
+  		 }
+    });
+});
   
 //监听单元格编辑
   table.on('edit(tree_filter)', function(obj){
@@ -123,7 +115,7 @@ layui.use('table', function(){
 	          ,shade: 0
 	          ,maxmin: true
 	          ,offset: [
-	               80
+	               10
 	          ] 
 	          ,content: '${ctx}/tree/add'
 	          ,btn: ['保存', '关闭']
@@ -132,8 +124,15 @@ layui.use('table', function(){
 	          	 var treeName = body.find('input[name="treeName"]').val();
 	          	 var treeDesc = body.find('input[name="treeDesc"]').val();
 	          	 var parentId = body.find('input[name="parentId"]').val();
+	          	 var ordernum = body.find('input[name="ordernum"]').val();
 	          	 var url = body.find('input[name="url"]').val();
-	          	 var jsonObj = {"treeName":treeName,"treeDesc":treeDesc,"parentId":parentId,"url":url};
+	          	var recordStatus = body.find('input[name="recordStatus"]').val();
+	          	 if(recordStatus != undefined && recordStatus =='on'){
+	          		recordStatus = '1';
+	          	 }else{
+	          		recordStatus = '0'
+	          	 }
+	          	 var jsonObj = {"treeName":treeName,"treeDesc":treeDesc,"parentId":parentId,"url":url,"ordernum":ordernum,"recordStatus":recordStatus};
 	          	  $.post("${ctx}/tree/saveTree",jsonObj,function(text){
 	          		  if(text=='200'){
 	          			layer.closeAll();

@@ -8,6 +8,8 @@
 	//request.setAttribute("INCLUDE_SKIN",false);
 	//如果不需要公用的js,请使用下面代码 (默认是为true)
 	//request.setAttribute("INCLUDE_COMMON",false);
+	//如果不需要公用的css,请使用下面代码 (默认是为true)
+	//request.setAttribute("INCLUDE_CSS",false);
 	//如果用户未登录，则检测cookie是否存在，如果存在将cookie推送到登录界面
  	   Cookie[] cookies=request.getCookies();
  	   int num = 0;

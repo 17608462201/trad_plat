@@ -6,6 +6,8 @@
 	//request.setAttribute("INCLUDE_SKIN",false);
 	//如果不需要公用的js,请使用下面代码 (默认是为true)
 	//request.setAttribute("INCLUDE_COMMON",false);
+	//如果不需要公用的css,请使用下面代码 (默认是为true)
+	//request.setAttribute("INCLUDE_CSS",false);
 %>
 <%@ include file="/pages/common/header.jsp" %>
 <form class="layui-form" action="#" method="post">
@@ -18,14 +20,15 @@
      </div>
      <div class="layui-form-item">
           <label class="layui-form-label">角色描述：</label>
-          <div class="layui-input-block">
+          <div class="layui-input-inline">
                <input type="text" name="roleDesc"  placeholder="请输入角色描述" autocomplete="off" class="layui-input">
           </div>
      </div>
       <div class="layui-form-item">
           <label class="layui-form-label">角色用户：</label>
           <div class="layui-input-inline">
-               <input type="text" name="roleUsers"  disabled="disabled"  class="layui-input">
+               <input type="text" name="roleUsersName"  id="roleUsersName"   disabled="disabled"  class="layui-input">
+                <input type="hidden" name="roleUsers"  id="roleUsers">
           </div>
           <div><button class="layui-btn layui-btn-normal"  id="userSelect" >...</button></div>
      </div>
@@ -36,6 +39,12 @@
           </div>
            <div><button class="layui-btn layui-btn-normal"  id="menuSelect" >...</button></div>
      </div>
+      <div class="layui-form-item">
+	    <label class="layui-form-label">是否有效：</label>
+	    <div class="layui-input-inline">
+	      <input type="checkbox" checked="" name="recordStatus" lay-skin="switch" lay-filter="switchTest" lay-text="是|否">
+	    </div>
+  </div>
 </form>
  
 <script>
@@ -47,18 +56,20 @@
 		layer.open({
             type: 2
             ,title: '用户选择'
-            ,area: ['800px', '480px']
+            ,area: ['800px', '400px']
             ,shade: 0
             ,maxmin: true
             ,offset: [
                5
             ] 
-            ,content: '${ctx}/base/getUserTree'
+            ,content: '${ctx}/common/getUserTree'
             ,btn: ['确认', '关闭']
             ,yes: function(){
             	  var body = layer.getChildFrame('body', 0);
             	  var userIdsCheck = body.find('input[name="userIdsCheck"]').val();
+            	  var userIdsCheckName = body.find('input[name="userIdsCheckName"]').val();
             	  $("input[name='roleUsers']").val(userIdsCheck);
+            	  $("input[name='roleUsersName']").val(userIdsCheckName);
             	  layer.closeAll();
             },btn2: function(){
               layer.closeAll();
@@ -75,13 +86,13 @@
 		layer.open({
             type: 2
             ,title: '用户选择'
-            ,area: ['600px', '480px']
+            ,area: ['600px', '400px']
             ,shade: 0
             ,maxmin: true
             ,offset: [
-				20
+				5
             ] 
-            ,content: '${ctx}/base/getMenuTree'
+            ,content: '${ctx}/common/getMenuTree'
             ,btn: ['确认', '关闭']
             ,yes: function(){
             	var body = layer.getChildFrame('body', 0);

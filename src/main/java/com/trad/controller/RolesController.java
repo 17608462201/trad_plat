@@ -1,7 +1,6 @@
 package com.trad.controller;
 
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Field;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,12 +22,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONObject;
 import com.trad.bean.RolePermission;
 import com.trad.bean.Roles;
+import com.trad.bean.User;
 import com.trad.bean.UserRoles;
 import com.trad.bean.common.LayuiTable;
 import com.trad.bean.common.PageStatus;
+import com.trad.exception.TradBusinessException;
 import com.trad.service.RolesService;
 import com.trad.service.TreeService;
+import com.trad.util.CommonUtils;
 import com.trad.util.ReplyCode;
+import com.trad.util.SessionHelper;
 
 @Controller
 @RequestMapping("/roles")
@@ -127,34 +130,35 @@ public class RolesController {
 	          String nRoleID =request.getParameter("nRoleID");
 			  String nRoleFiled =request.getParameter("nRoleFiled");
 			  String nRoleValue = request.getParameter("nRoleValue");
-			  logger.info("传入的nRoleID={},nRoleFiled={}，nRoleName={}",nRoleID,nRoleFiled,nRoleValue);
+			  logger.info("传入的nRoleID={},nRoleFiled={}，nRoleValue={}",nRoleID,nRoleFiled,nRoleValue);
 			  if(StringUtils.isEmpty(nRoleID) || StringUtils.isEmpty(nRoleFiled) || StringUtils.isEmpty(nRoleValue)){
 				   return ReplyCode.INSIDEERROR;
 			  }
 			  Roles record = new Roles();
-			  Field treeFiled = record.getClass().getDeclaredField(nRoleFiled);
-			  treeFiled.setAccessible(true);  
-			  treeFiled.set(record,nRoleValue);
+			  CommonUtils.getInstance().setField(record, nRoleFiled, nRoleValue);
 			  record.setRoleId(Integer.parseInt(nRoleID));
 			  record.setUpdateTime(new Date());
 			  int count = rolesService.updateByPrimaryKeySelective(record);
 			  if(count == 1){
 				  return ReplyCode.SUCCESS;
 			  }
-	} catch (NoSuchFieldException e) {
-		logger.error("设置反射字段出错！");
+	}  catch (NoSuchFieldException e) {
+		logger.error("无法从找到传入参数对应的field！");
 		e.printStackTrace();
 	} catch (SecurityException e) {
-		logger.error("设置反射字段出错！");
+		logger.error("该映射不是安全的映射！");
 		e.printStackTrace();
 	} catch (IllegalArgumentException e) {
-		logger.error("设置反射字段出错！");
+		logger.error("设置值传入的参数不合法！");
 		e.printStackTrace();
 	} catch (IllegalAccessException e) {
-		logger.error("设置反射字段出错！");
+		logger.error("set方法不可访问！");
+		e.printStackTrace();
+	}catch (TradBusinessException e) {
+		logger.error("传入的对象为空或者methodName为空！");
 		e.printStackTrace();
 	}catch (Exception e) {
-		logger.error("修改tree信息出错！");
+		logger.error("修改roles信息出错！");
 		e.printStackTrace();
 	}
 	return ReplyCode.INSIDEERROR;
@@ -191,12 +195,17 @@ public class RolesController {
 		String roleDesc = request.getParameter("roleDesc"); 
 		String roleUsers = request.getParameter("roleUsers");
 		String roleMenus = request.getParameter("roleMenus"); 
+		String recordStatus = request.getParameter("recordStatus"); 
 		try{
+			User user = new SessionHelper(request).getLoginUser();
 			Roles roles = new Roles();
 			roles.setRoleName(roleName);
 			roles.setRoleDesc(roleDesc);
 			roles.setCreateTime(new Date());
 			roles.setUpdateTime(new Date());
+			roles.setCreatePer(user == null ? "": user.getRealName());
+			roles.setUpdatePer(user == null ? "": user.getRealName());
+			roles.setRecordStatus(recordStatus);
 			int insertId = rolesService.insert(roles);
 			if(insertId == 1){
 				//更新选中结果

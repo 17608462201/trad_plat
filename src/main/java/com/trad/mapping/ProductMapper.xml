@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.trad.dao.ProductMapper" >
+  <resultMap id="BaseResultMap" type="com.trad.bean.Product" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="decription" property="decription" jdbcType="VARCHAR" />
+    <result column="pay_name" property="payName" jdbcType="CHAR" />
+    <result column="pay_times" property="payTimes" jdbcType="INTEGER" />
+    <result column="trad" property="trad" jdbcType="DOUBLE" />
+    <result column="payType" property="paytype" jdbcType="CHAR" />
+    <result column="punishType" property="punishtype" jdbcType="CHAR" />
+    <result column="punishTrad" property="punishtrad" jdbcType="DOUBLE" />
+    <result column="mostMon" property="mostmon" jdbcType="INTEGER" />
+    <result column="payObj" property="payobj" jdbcType="CHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="create_per" property="createPer" jdbcType="VARCHAR" />
+    <result column="update_per" property="updatePer" jdbcType="VARCHAR" />
+    <result column="record_status" property="recordStatus" jdbcType="VARCHAR" />
+    <association property="ggdm1"  column="pay_name" select="selectGgdmPayName"></association>
+    <association property="ggdm2"  column="punishType" select="selectGgdmPunishType"></association>
+    <association property="ggdm3"  column="payObj" select="selectGgdmPayObj"></association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, decription, pay_name, pay_times, trad, payType, punishType, punishTrad, 
+    mostMon, payObj, remark, create_time, update_time, create_per, update_per,record_status
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_product
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectGgdmPayName" resultType="com.trad.bean.CommonGgdm" parameterType="java.lang.String" >
+   select * from t_common_ggdm  ggdm1 where ggdm1.dm= #{pay_name,jdbcType=INTEGER}  AND ggdm1.dmjbh='payType'
+ </select>
+ <select id="selectGgdmPunishType" resultType="com.trad.bean.CommonGgdm" parameterType="java.lang.String" >
+   select * from t_common_ggdm  ggdm2 where ggdm2.dm= #{punishType,jdbcType=INTEGER}  AND ggdm2.dmjbh='fxfs'
+ </select>
+ <select id="selectGgdmPayObj" resultType="com.trad.bean.CommonGgdm" parameterType="java.lang.String" >
+   select * from t_common_ggdm  ggdm3 where ggdm3.dm= #{payObj,jdbcType=INTEGER}  AND ggdm3.dmjbh='payobj'
+ </select>
+  <select id="queryByPaged"   resultMap="BaseResultMap" > 
+        SELECT p.*,ggdm1.*,ggdm2.*,ggdm3.*  FROM t_product p JOIN t_common_ggdm ggdm1 ON p.pay_name =ggdm1.dm AND ggdm1.dmjbh='payType'  
+ JOIN t_common_ggdm ggdm2 ON p.punishType =ggdm2.dm AND ggdm2.dmjbh='fxfs' 
+ JOIN t_common_ggdm ggdm3 ON p.payObj =ggdm3.dm AND ggdm3.dmjbh='payobj' 
+     <if test="filter != null and filter != ''" >
+        where name like #{filter,jdbcType=VARCHAR} 
+      </if>
+     LIMIT #{1} , #{2}
+  </select>
+  <select id="count" resultType="java.lang.Integer">
+    select count(1) cnt  from t_product
+      <if test="filter != null and filter !='' ">
+        where name like #{filter,jdbcType=VARCHAR}
+      </if>
+  </select> 
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_product
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.trad.bean.Product" >
+    insert into t_product (id, name, decription, 
+      pay_name, pay_times, trad, 
+      payType, punishType, punishTrad, 
+      mostMon, payObj, remark, 
+      create_time, update_time, create_per, 
+      update_per,record_status)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{decription,jdbcType=VARCHAR}, 
+      #{payName,jdbcType=CHAR}, #{payTimes,jdbcType=INTEGER}, #{trad,jdbcType=DOUBLE}, 
+      #{paytype,jdbcType=CHAR}, #{punishtype,jdbcType=CHAR}, #{punishtrad,jdbcType=DOUBLE}, 
+      #{mostmon,jdbcType=INTEGER}, #{payobj,jdbcType=CHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{createPer,jdbcType=VARCHAR}, 
+      #{updatePer,jdbcType=VARCHAR},#{recordStatus,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.trad.bean.Product" >
+    insert into t_product
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="decription != null" >
+        decription,
+      </if>
+      <if test="payName != null" >
+        pay_name,
+      </if>
+      <if test="payTimes != null" >
+        pay_times,
+      </if>
+      <if test="trad != null" >
+        trad,
+      </if>
+      <if test="paytype != null" >
+        payType,
+      </if>
+      <if test="punishtype != null" >
+        punishType,
+      </if>
+      <if test="punishtrad != null" >
+        punishTrad,
+      </if>
+      <if test="mostmon != null" >
+        mostMon,
+      </if>
+      <if test="payobj != null" >
+        payObj,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="createPer != null" >
+        create_per,
+      </if>
+      <if test="updatePer != null" >
+        update_per,
+      </if>
+      <if test="recordStatus != null" >
+        record_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="decription != null" >
+        #{decription,jdbcType=VARCHAR},
+      </if>
+      <if test="payName != null" >
+        #{payName,jdbcType=CHAR},
+      </if>
+      <if test="payTimes != null" >
+        #{payTimes,jdbcType=INTEGER},
+      </if>
+      <if test="trad != null" >
+        #{trad,jdbcType=DOUBLE},
+      </if>
+      <if test="paytype != null" >
+        #{paytype,jdbcType=CHAR},
+      </if>
+      <if test="punishtype != null" >
+        #{punishtype,jdbcType=CHAR},
+      </if>
+      <if test="punishtrad != null" >
+        #{punishtrad,jdbcType=DOUBLE},
+      </if>
+      <if test="mostmon != null" >
+        #{mostmon,jdbcType=INTEGER},
+      </if>
+      <if test="payobj != null" >
+        #{payobj,jdbcType=CHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createPer != null" >
+        #{createPer,jdbcType=VARCHAR},
+      </if>
+      <if test="updatePer != null" >
+        #{updatePer,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null" >
+        #{recordStatus,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.trad.bean.Product" >
+    update t_product
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="decription != null" >
+        decription = #{decription,jdbcType=VARCHAR},
+      </if>
+      <if test="payName != null" >
+        pay_name = #{payName,jdbcType=CHAR},
+      </if>
+      <if test="payTimes != null" >
+        pay_times = #{payTimes,jdbcType=INTEGER},
+      </if>
+      <if test="trad != null" >
+        trad = #{trad,jdbcType=DOUBLE},
+      </if>
+      <if test="paytype != null" >
+        payType = #{paytype,jdbcType=CHAR},
+      </if>
+      <if test="punishtype != null" >
+        punishType = #{punishtype,jdbcType=CHAR},
+      </if>
+      <if test="punishtrad != null" >
+        punishTrad = #{punishtrad,jdbcType=DOUBLE},
+      </if>
+      <if test="mostmon != null" >
+        mostMon = #{mostmon,jdbcType=INTEGER},
+      </if>
+      <if test="payobj != null" >
+        payObj = #{payobj,jdbcType=CHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createPer != null" >
+        create_per = #{createPer,jdbcType=VARCHAR},
+      </if>
+      <if test="updatePer != null" >
+        update_per = #{updatePer,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null" >
+        record_status = #{recordStatus,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.trad.bean.Product" >
+    update t_product
+    set name = #{name,jdbcType=VARCHAR},
+      decription = #{decription,jdbcType=VARCHAR},
+      pay_name = #{payName,jdbcType=CHAR},
+      pay_times = #{payTimes,jdbcType=INTEGER},
+      trad = #{trad,jdbcType=DOUBLE},
+      payType = #{paytype,jdbcType=CHAR},
+      punishType = #{punishtype,jdbcType=CHAR},
+      punishTrad = #{punishtrad,jdbcType=DOUBLE},
+      mostMon = #{mostmon,jdbcType=INTEGER},
+      payObj = #{payobj,jdbcType=CHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_per = #{createPer,jdbcType=VARCHAR},
+      update_per = #{updatePer,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

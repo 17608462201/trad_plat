@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.util.StringUtils;
 
 import com.trad.bean.Tree;
-import com.trad.bean.TreeVo;
+import com.trad.bean.vo.TreeVo;
 
 public class TreeUtil {
 

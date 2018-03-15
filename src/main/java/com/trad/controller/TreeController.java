@@ -1,7 +1,6 @@
 package com.trad.controller;
 
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -24,11 +23,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONObject;
 import com.trad.bean.RolePermission;
 import com.trad.bean.Tree;
-import com.trad.bean.TreeVo;
+import com.trad.bean.User;
 import com.trad.bean.common.LayuiTable;
 import com.trad.bean.common.PageStatus;
+import com.trad.bean.vo.TreeVo;
+import com.trad.exception.TradBusinessException;
 import com.trad.service.TreeService;
+import com.trad.util.CommonUtils;
 import com.trad.util.ReplyCode;
+import com.trad.util.SessionHelper;
 import com.trad.util.TreeUtil;
 @Controller
 @RequestMapping("/tree")
@@ -56,7 +59,9 @@ public class TreeController {
 			String treeDesc = request.getParameter("treeDesc");
 			String parentId = request.getParameter("parentId");
 			String url = request.getParameter("url");
-			 logger.info("传入的treeName={},treeDesc={},parentId={},url={}",treeName,treeDesc,parentId,url);
+			String ordernum = request.getParameter("ordernum");
+			String recordStatus = request.getParameter("recordStatus");
+			 logger.info("传入的treeName={},treeDesc={},parentId={},url={},ordernum={}",treeName,treeDesc,parentId,url,ordernum);
 			if(StringUtils.isEmpty(url)){
 				 return ReplyCode.INSIDEERROR;
 			}
@@ -67,8 +72,10 @@ public class TreeController {
 				tree.setParentId(Integer.parseInt(parentId));
 			}
 			tree.setUrl(url);
+			tree.setOrdernum(ordernum);
 			tree.setCreateTime(new Date());
 			tree.setUpdateTime(new Date());
+			tree.setRecordStatus(recordStatus);
 			int count = treeService.saveTree(tree);
 			if(count == 1){
 				  return ReplyCode.SUCCESS;
@@ -174,9 +181,7 @@ public class TreeController {
 					   return ReplyCode.INSIDEERROR;
 				  }
 				  Tree tree = new Tree();
-				  Field treeFiled = tree.getClass().getDeclaredField(nTreeFiled);
-				  treeFiled.setAccessible(true);  
-				  treeFiled.set(tree,nTreeValue);
+				  CommonUtils.getInstance().setField(tree, nTreeFiled, nTreeValue);
 				  tree.setTreeId(Integer.parseInt(nTreeID));
 				  tree.setUpdateTime(new Date());
 				  int count = treeService.updateByPrimaryKeySelective(tree);
@@ -184,16 +189,19 @@ public class TreeController {
 					  return ReplyCode.SUCCESS;
 				  }
 		} catch (NoSuchFieldException e) {
-			logger.error("设置反射字段出错！");
+			logger.error("无法从找到传入参数对应的field！");
 			e.printStackTrace();
 		} catch (SecurityException e) {
-			logger.error("设置反射字段出错！");
+			logger.error("该映射不是安全的映射！");
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
-			logger.error("设置反射字段出错！");
+			logger.error("设置值传入的参数不合法！");
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			logger.error("设置反射字段出错！");
+			logger.error("set方法不可访问！");
+			e.printStackTrace();
+		}catch (TradBusinessException e) {
+			logger.error("传入的对象为空或者methodName为空！");
 			e.printStackTrace();
 		}catch (Exception e) {
 			logger.error("修改tree信息出错！");
@@ -227,6 +235,7 @@ public class TreeController {
 	  String treeIdsCheck = request.getParameter("treeIdsCheck");
 	  String treeIdsUnCheck = request.getParameter("treeIdsUnCheck");
 	  try{
+		  User user = new SessionHelper(request).getLoginUser();
 		  if(!StringUtils.isEmpty(roleId)){
 			  //更新选中结果
 			  if(!StringUtils.isEmpty(treeIdsCheck)){
@@ -238,6 +247,8 @@ public class TreeController {
 						  rp.setUpdateTime(new Date());
 						  rp.setRoleId(Integer.parseInt(roleId));
 						  rp.setTreeId(Integer.parseInt(id));
+						  rp.setCreatePer(user == null ? "": user.getRealName());
+						  rp.setUpdatePer(user == null ? "": user.getRealName());
 						  //保存数据库数据
 						  treeService.insertRolePermission(rp);
 					  }

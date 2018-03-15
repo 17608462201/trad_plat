@@ -99,12 +99,13 @@
             <artifactId>mysql-connector-java</artifactId>  
             <version>5.1.30</version>  
         </dependency>  
-        <!-- 导入dbcp的jar包，用来在applicationContext.xml中配置数据库 -->  
-        <dependency>  
-            <groupId>commons-dbcp</groupId>  
-            <artifactId>commons-dbcp</artifactId>  
-            <version>1.2.2</version>  
-        </dependency>  
+        <!--  alibaba druid -->
+		<dependency>
+		    <groupId>com.alibaba</groupId>
+		    <artifactId>druid</artifactId>
+		    <version>1.0.29</version>
+		</dependency>
+        
         <!-- JSTL标签类 -->  
         <dependency>  
             <groupId>jstl</groupId>  
@@ -146,7 +147,7 @@
             <artifactId>jackson-mapper-asl</artifactId>  
             <version>1.9.13</version>  
         </dependency>  
-        <!-- 上传组件包 -->  
+        <!-- 上传组件包 start -->  
         <dependency>  
             <groupId>commons-fileupload</groupId>  
             <artifactId>commons-fileupload</artifactId>  
@@ -188,7 +189,17 @@
 		    <artifactId>commons-beanutils</artifactId>
 		    <version>1.9.2</version>
 		</dependency>
-
+       <!-- 上传组件   end -->
+       <dependency>
+		    <groupId>org.springframework.data</groupId>
+		    <artifactId>spring-data-redis</artifactId>
+		    <version>1.5.2.RELEASE</version>
+		</dependency>
+		<dependency>
+    	 <groupId>redis.clients</groupId>
+   		 <artifactId>jedis</artifactId>
+	 	 <version>2.7.3</version>
+		</dependency>
   </dependencies>
   <build>
     <finalName>trad_plat</finalName>

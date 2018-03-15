@@ -21,6 +21,36 @@ public class Roles {
     private String userNames;
     
     private String treeNames;
+    
+    private String createPer;
+    
+    private String updatePer;
+    
+    private String recordStatus="1";
+    
+    public String getRecordStatus() {
+		return recordStatus;
+	}
+
+	public void setRecordStatus(String recordStatus) {
+		this.recordStatus = recordStatus;
+	}
+    
+    public String getCreatePer() {
+        return createPer;
+    }
+
+    public void setCreatePer(String createPer) {
+        this.createPer = createPer == null ? null : createPer.trim();
+    }
+	
+	public String getUpdatePer() {
+        return updatePer;
+    }
+
+    public void setUpdatePer(String updatePer) {
+        this.updatePer = updatePer == null ? null : updatePer.trim();
+    }
 
     public Integer getRoleId() {
         return roleId;

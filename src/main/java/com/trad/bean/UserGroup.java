@@ -4,12 +4,14 @@ import java.util.Date;
 import java.util.List;
 
 public class UserGroup {
-    private String id;
+    private Integer id;
 
     private String groupName;
+    
+    private Integer masterId;
 
-    private String groupMaster;
-
+    private String masterName;
+    
     private String remark;
 
     private Date createTime;
@@ -18,28 +20,44 @@ public class UserGroup {
     
     private List<User> users;
 
-    public String getId() {
-        return id;
+    private String createPer;
+    
+    private String updatePer;
+    
+    private String userNames;
+    
+    private String recordStatus="1";
+    
+    public String getRecordStatus() {
+		return recordStatus;
+	}
+
+	public void setRecordStatus(String recordStatus) {
+		this.recordStatus = recordStatus;
+	}
+    
+    public String getCreatePer() {
+        return createPer;
     }
 
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+    public void setCreatePer(String createPer) {
+        this.createPer = createPer == null ? null : createPer.trim();
+    }
+	
+	public String getUpdatePer() {
+        return updatePer;
     }
 
+    public void setUpdatePer(String updatePer) {
+        this.updatePer = updatePer == null ? null : updatePer.trim();
+    }
+    
     public String getGroupName() {
         return groupName;
     }
 
     public void setGroupName(String groupName) {
         this.groupName = groupName == null ? null : groupName.trim();
-    }
-
-    public String getGroupMaster() {
-        return groupMaster;
-    }
-
-    public void setGroupMaster(String groupMaster) {
-        this.groupMaster = groupMaster == null ? null : groupMaster.trim();
     }
 
     public String getRemark() {
@@ -73,5 +91,37 @@ public class UserGroup {
 	public void setUsers(List<User> users) {
 		this.users = users;
 	}
-    
+
+	public String getUserNames() {
+		return userNames;
+	}
+
+	public void setUserNames(String userNames) {
+		this.userNames = userNames;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Integer getMasterId() {
+		return masterId;
+	}
+
+	public void setMasterId(Integer masterId) {
+		this.masterId = masterId;
+	}
+
+	public String getMasterName() {
+		return masterName;
+	}
+
+	public void setMasterName(String masterName) {
+		this.masterName = masterName;
+	}
+
 }

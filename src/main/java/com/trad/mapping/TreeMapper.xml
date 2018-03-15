@@ -11,22 +11,29 @@
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="ordernum" property="ordernum" jdbcType="VARCHAR" />
     <result column="icon" property="icon" jdbcType="VARCHAR" />
+    <result column="create_per" property="createPer" jdbcType="VARCHAR" />
+    <result column="update_per" property="updatePer" jdbcType="VARCHAR" />
+    <result column="record_status" property="recordStatus" jdbcType="VARCHAR" />
     <collection property="rolePers" ofType="com.trad.bean.RolePermission">  
         <result column="role_id" property="roleId" jdbcType="INTEGER" />
 	    <result column="tree_id" property="treeId" jdbcType="INTEGER" />
 	    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
 	    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	    <result column="create_per" property="createPer" jdbcType="VARCHAR" />
+        <result column="update_per" property="updatePer" jdbcType="VARCHAR" />
 	    <association property="roles" javaType="com.trad.bean.Roles">  
 	           <id column="role_id" property="roleId" jdbcType="INTEGER" />
 			    <result column="role_name" property="roleName" jdbcType="VARCHAR" />
 			    <result column="role_desc" property="roleDesc" jdbcType="VARCHAR" />
 			    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
 			    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+			    <result column="create_per" property="createPer" jdbcType="VARCHAR" />
+                <result column="update_per" property="updatePer" jdbcType="VARCHAR" />
 	    </association>
 	</collection>
   </resultMap>
   <sql id="Base_Column_List" >
-    tree_id, tree_name, tree_desc, parent_id, url, create_time, update_time,ordernum,icon
+    tree_id, tree_name, tree_desc, parent_id, url, create_time, update_time,ordernum,icon,create_per,update_per,record_status
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -38,7 +45,7 @@
     select 
     <include refid="Base_Column_List" />
     from t_tree
-    where parent_id = #{parentId,jdbcType=INTEGER}
+    where parent_id = #{parentId,jdbcType=INTEGER} order by ordernum asc
   </select>
   
   <select id="getAllTree" resultMap="BaseResultMap">
@@ -63,19 +70,19 @@
   <select id="getTreeList" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from t_tree
+    from t_tree where record_status='1' 
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from t_tree
-    where tree_id = #{treeId,jdbcType=INTEGER}
+    where  tree_id = #{treeId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.trad.bean.Tree"   useGeneratedKeys="true" keyProperty="treeId">
     insert into t_tree (tree_id, tree_name, tree_desc, 
       parent_id, url, create_time, 
-      update_time,ordernum,icon)
+      update_time,ordernum,icon,create_per,update_per,record_status)
     values (#{treeId,jdbcType=INTEGER}, #{treeName,jdbcType=VARCHAR}, #{treeDesc,jdbcType=VARCHAR}, 
       #{parentId,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}), #{ordernum,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR}
+      #{updateTime,jdbcType=TIMESTAMP}, #{ordernum,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR},#{createPer,jdbcType=VARCHAR},#{updatePer,jdbcType=VARCHAR},#{recordStatus,jdbcType=VARCHAR} )
   </insert>
   <insert id="insertSelective" parameterType="com.trad.bean.Tree"  useGeneratedKeys="true" keyProperty="treeId">
     insert into t_tree
@@ -107,6 +114,15 @@
        <if test="icon != null" >
         icon,
       </if>
+      <if test="createPer != null" >
+        create_per,
+      </if>
+      <if test="updatePer != null" >
+        update_per,
+      </if>
+      <if test="recordStatus != null" >
+        record_status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="treeId != null" >
@@ -135,6 +151,15 @@
       </if>
       <if test="icon != null" >
         #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="createPer != null" >
+        #{createPer,jdbcType=VARCHAR},
+      </if>
+      <if test="updatePer != null" >
+        #{updatePer,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null" >
+        #{recordStatus,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -165,6 +190,15 @@
       <if test="icon != null" >
         icon = #{icon,jdbcType=VARCHAR},
       </if>
+      <if test="createPer != null" >
+        create_per = #{createPer,jdbcType=VARCHAR},
+      </if>
+      <if test="updatePer != null" >
+        update_per = #{updatePer,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null" >
+        record_status = #{recordStatus,jdbcType=VARCHAR},
+      </if>
     </set>
     where tree_id = #{treeId,jdbcType=INTEGER}
   </update>
@@ -177,7 +211,10 @@
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
       ordernum = #{ordernum,jdbcType=VARCHAR},
-      icon = #{icon,jdbcType=VARCHAR}
+      icon = #{icon,jdbcType=VARCHAR},
+      create_per = #{createPer,jdbcType=VARCHAR},
+	  update_per = #{updatePer,jdbcType=VARCHAR},
+	  record_status = #{recordStatus,jdbcType=VARCHAR}
     where tree_id = #{treeId,jdbcType=INTEGER}
   </update>
 </mapper>

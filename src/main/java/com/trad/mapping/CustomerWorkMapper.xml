@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.trad.dao.CustomerWorkMapper" >
+  <resultMap id="BaseResultMap" type="com.trad.bean.CustomerWork" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="company_type" property="companyType" jdbcType="VARCHAR" />
+    <result column="department" property="department" jdbcType="VARCHAR" />
+    <result column="job" property="job" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="pay_month" property="payMonth" jdbcType="VARCHAR" />
+    <result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
+    <result column="pay_type" property="payType" jdbcType="VARCHAR" />
+    <result column="home_pay_month" property="homePayMonth" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="create_per" property="createPer" jdbcType="VARCHAR" />
+    <result column="update_per" property="updatePer" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, customer_id, company_name, company_type, department, job, start_time, pay_month, 
+    pay_time, pay_type, home_pay_month, address, create_time, update_time,create_per,update_per
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_customer_work
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByCustomerId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_customer_work
+    where customer_id = #{customerId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_customer_work
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByCustomerId" parameterType="java.lang.Integer" >
+    delete from t_customer_work
+    where customer_id = #{customerId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.trad.bean.CustomerWork" >
+    insert into t_customer_work (id, customer_id, company_name, 
+      company_type, department, job, 
+      start_time, pay_month, pay_time, 
+      pay_type, home_pay_month, address, 
+      create_time, update_time,create_per,update_per)
+    values (#{id,jdbcType=INTEGER}, #{customerId,jdbcType=INTEGER}, #{companyName,jdbcType=VARCHAR}, 
+      #{companyType,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{job,jdbcType=VARCHAR}, 
+      #{startTime,jdbcType=TIMESTAMP}, #{payMonth,jdbcType=VARCHAR}, #{payTime,jdbcType=TIMESTAMP}, 
+      #{payType,jdbcType=VARCHAR}, #{homePayMonth,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},#{createPer,jdbcType=VARCHAR},#{updatePer,jdbcType=VARCHAR} )
+  </insert>
+  <insert id="insertSelective" parameterType="com.trad.bean.CustomerWork" >
+    insert into t_customer_work
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="customerId != null" >
+        customer_id,
+      </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="companyType != null" >
+        company_type,
+      </if>
+      <if test="department != null" >
+        department,
+      </if>
+      <if test="job != null" >
+        job,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="payMonth != null" >
+        pay_month,
+      </if>
+      <if test="payTime != null" >
+        pay_time,
+      </if>
+      <if test="payType != null" >
+        pay_type,
+      </if>
+      <if test="homePayMonth != null" >
+        home_pay_month,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="createPer != null" >
+        create_per,
+      </if>
+      <if test="updatePer != null" >
+        update_per,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="customerId != null" >
+        #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyType != null" >
+        #{companyType,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null" >
+        #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="job != null" >
+        #{job,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payMonth != null" >
+        #{payMonth,jdbcType=VARCHAR},
+      </if>
+      <if test="payTime != null" >
+        #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payType != null" >
+        #{payType,jdbcType=VARCHAR},
+      </if>
+      <if test="homePayMonth != null" >
+        #{homePayMonth,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createPer != null" >
+        #{createPer,jdbcType=VARCHAR},
+      </if>
+      <if test="updatePer != null" >
+        #{updatePer,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.trad.bean.CustomerWork" >
+    update t_customer_work
+    <set >
+      <if test="customerId != null and customerId != ''" >
+        customer_id = #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="companyName != null and companyName != ''" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyType != null and companyType != ''" >
+        company_type = #{companyType,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null and department != ''" >
+        department = #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="job != null and job != ''" >
+        job = #{job,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null and startTime != ''" >
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payMonth != null and payMonth != ''" >
+        pay_month = #{payMonth,jdbcType=VARCHAR},
+      </if>
+      <if test="payTime != null and payTime != ''" >
+        pay_time = #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payType != null and payType != ''" >
+        pay_type = #{payType,jdbcType=VARCHAR},
+      </if>
+      <if test="homePayMonth != null and homePayMonth != ''" >
+        home_pay_month = #{homePayMonth,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null and address != ''" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null and createTime != ''" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null and updateTime != ''" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createPer != null and createPer != ''" >
+        create_per = #{createPer,jdbcType=VARCHAR},
+      </if>
+      <if test="updatePer != null and updatePer != ''" >
+        update_per = #{updatePer,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.trad.bean.CustomerWork" >
+    update t_customer_work
+    set customer_id = #{customerId,jdbcType=INTEGER},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      company_type = #{companyType,jdbcType=VARCHAR},
+      department = #{department,jdbcType=VARCHAR},
+      job = #{job,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      pay_month = #{payMonth,jdbcType=VARCHAR},
+      pay_time = #{payTime,jdbcType=TIMESTAMP},
+      pay_type = #{payType,jdbcType=VARCHAR},
+      home_pay_month = #{homePayMonth,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_per = #{createPer,jdbcType=VARCHAR},
+	  update_per = #{updatePer,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

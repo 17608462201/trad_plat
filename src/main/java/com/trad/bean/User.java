@@ -30,13 +30,45 @@ public class User {
 
     private Date updateTime;
 
-    private String groupId;
+    private Integer groupId;
     
     private List<UserRoles> userRoles;
     
     private boolean checked ;
     
     private String roleNames;
+    
+    private String createPer;
+    
+    private String updatePer;
+    
+    private String picPath;
+    
+    private String recordStatus="1";
+    
+    public String getRecordStatus() {
+		return recordStatus;
+	}
+
+	public void setRecordStatus(String recordStatus) {
+		this.recordStatus = recordStatus;
+	}
+	
+    public String getCreatePer() {
+        return createPer;
+    }
+
+    public void setCreatePer(String createPer) {
+        this.createPer = createPer == null ? null : createPer.trim();
+    }
+	
+	public String getUpdatePer() {
+        return updatePer;
+    }
+
+    public void setUpdatePer(String updatePer) {
+        this.updatePer = updatePer == null ? null : updatePer.trim();
+    }
     
     public Integer getUserId() {
         return userId;
@@ -150,14 +182,6 @@ public class User {
 		this.userRoles = userRoles;
 	}
 
-	public String getGroupId() {
-		return groupId;
-	}
-
-	public void setGroupId(String groupId) {
-		this.groupId = groupId;
-	}
-
 	public boolean isChecked() {
 		return checked;
 	}
@@ -173,5 +197,21 @@ public class User {
 	public void setRoleNames(String roleNames) {
 		this.roleNames = roleNames;
 	}
-	
+
+	public String getPicPath() {
+		return picPath;
+	}
+
+	public void setPicPath(String picPath) {
+		this.picPath = picPath;
+	}
+
+	public Integer getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(Integer groupId) {
+		this.groupId = groupId;
+	}
+
 }
