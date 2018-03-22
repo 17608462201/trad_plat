@@ -48,7 +48,7 @@
       <th lay-data="{checkbox:true, fixed: true}"></th>
       <th lay-data="{field:'id', width:100,sort: true}">客户ID</th>
       <th lay-data="{field:'name', width:100,sort: true,edit: 'text'}">客户名称</th>
-      <th lay-data="{field:'mobile', width:150,sort: true,edit: 'text'}">客户手机</th>
+      <th lay-data="{field:'mobile', width:120,sort: true,edit: 'text'}">客户手机</th>
       <th lay-data="{field:'province', width:100, sort: true,edit: 'text'}">省份</th>
       <th lay-data="{field:'city', width:130, sort: true,edit: 'text'}">市/区</th>
       <th lay-data="{field:'manager', width:100, sort: true,edit: 'text'}">客户经理</th>

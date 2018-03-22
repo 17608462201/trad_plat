@@ -23,8 +23,8 @@
       <th lay-data="{field:'payNameDec', width:100,sort: true,edit: 'text'}">还款方式</th>
       <th lay-data="{field:'payTimes', width:100, sort: true,edit: 'text'}">还款期数</th>
       <th lay-data="{field:'trad', width:100, sort: true,edit: 'text'}">利率</th>
-      <th lay-data="{field:'mostmon', width:150, sort: true,edit: 'text'}">最高贷款金额</th>
-      <th lay-data="{field:'updatePer', width:150, sort: true}">最后更新人</th>
+      <th lay-data="{field:'mostmon', width:100, sort: true,edit: 'text'}">最高贷款金额</th>
+      <th lay-data="{field:'updatePer', width:120, sort: true}">最后更新人</th>
       <th lay-data="{field:'updateTime', width:150, sort: true}">更细时间</th>
        <th lay-data="{field:'recordStatus', width:100,templet: '#checkboxTpl', unresize: true}">是否有效</th>
     </tr>
