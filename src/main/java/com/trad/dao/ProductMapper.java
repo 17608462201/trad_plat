@@ -1,6 +1,7 @@
 package com.trad.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -22,4 +23,6 @@ public interface ProductMapper {
     int count(@Param("filter")String filter);
     
     public List<Product> queryByPaged(@Param("filter")String filter,Integer start,Integer end);
+    
+    List<Map<String, Object>> getProductAll();
 }

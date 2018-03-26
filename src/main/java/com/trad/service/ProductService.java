@@ -1,6 +1,7 @@
 package com.trad.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.trad.bean.Product;
 
@@ -17,4 +18,6 @@ public interface ProductService {
   	public int updateByPrimaryKeySelective(Product record);
   	
   	public Product selectByPrimaryKey(Integer id);
+  	
+  	List<Map<String, Object>> getProductAll();
 }

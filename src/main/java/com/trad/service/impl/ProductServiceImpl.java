@@ -1,6 +1,7 @@
 package  com.trad.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -44,7 +45,10 @@ public class ProductServiceImpl implements ProductService{
 	public Product selectByPrimaryKey(Integer id) {
 		return proDao.selectByPrimaryKey(id);
 	}
+
+	@Override
+	public List<Map<String, Object>> getProductAll() {
+		return proDao.getProductAll();
+	}
 	
-	
-	 
 }

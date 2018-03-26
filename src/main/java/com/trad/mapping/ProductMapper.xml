@@ -33,6 +33,9 @@
     from t_product
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="getProductAll" resultType="map">
+  	select id,name from t_product where record_status=1
+  </select>
   <select id="selectGgdmPayName" resultType="com.trad.bean.CommonGgdm" parameterType="java.lang.String" >
    select * from t_common_ggdm  ggdm1 where ggdm1.dm= #{pay_name,jdbcType=INTEGER}  AND ggdm1.dmjbh='payType'
  </select>
