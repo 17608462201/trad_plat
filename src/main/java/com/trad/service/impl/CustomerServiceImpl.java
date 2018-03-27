@@ -155,4 +155,9 @@ public class CustomerServiceImpl implements CustomerService{
 		return 0;
 	}
 
+	@Override
+	public List<Customer> getCustomerAll() {
+		return customerDao.getCustomerAll();
+	}
+
 }

@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.trad.dao.LoanOfferMapper" >
+  <resultMap id="BaseResultMap" type="com.trad.bean.LoanOffer" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="load_id" property="loadId" jdbcType="VARCHAR" />
+    <result column="manager_id" property="managerId" jdbcType="VARCHAR" />
+    <result column="load_type" property="loadType" jdbcType="VARCHAR" />
+    <result column="payment_name" property="paymentName" jdbcType="VARCHAR" />
+    <result column="payment_contract" property="paymentContract" jdbcType="VARCHAR" />
+    <result column="bail_scale" property="bailScale" jdbcType="VARCHAR" />
+    <result column="bail_money" property="bailMoney" jdbcType="VARCHAR" />
+    <result column="evalue_money" property="evalueMoney" jdbcType="VARCHAR" />
+    <result column="offer_pound" property="offerPound" jdbcType="VARCHAR" />
+    <result column="zh_money" property="zhMoney" jdbcType="VARCHAR" />
+    <result column="plat_money" property="platMoney" jdbcType="VARCHAR" />
+    <result column="offer_day" property="offerDay" jdbcType="TIMESTAMP" />
+    <result column="offer_money" property="offerMoney" jdbcType="VARCHAR" />
+    <result column="month_scale" property="monthScale" jdbcType="VARCHAR" />
+    <result column="first_payment" property="firstPayment" jdbcType="TIMESTAMP" />
+    <result column="last_payment" property="lastPayment" jdbcType="TIMESTAMP" />
+    <result column="offer_limit" property="offerLimit" jdbcType="INTEGER" />
+    <result column="month_pay_money" property="monthPayMoney" jdbcType="VARCHAR" />
+    <result column="month_serc" property="monthSerc" jdbcType="VARCHAR" />
+    <result column="mortgage" property="mortgage" jdbcType="VARCHAR" />
+    <result column="mortgage_address" property="mortgageAddress" jdbcType="VARCHAR" />
+    <result column="mortgage_mark" property="mortgageMark" jdbcType="VARCHAR" />
+    <result column="payment_plan" property="paymentPlan" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="create_per" property="createPer" jdbcType="VARCHAR" />
+    <result column="update_per" property="updatePer" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, load_id, manager_id, load_type, payment_name, payment_contract, bail_scale, bail_money, 
+    evalue_money, offer_pound, zh_money, plat_money, offer_day, offer_money, month_scale, 
+    first_payment, last_payment, offer_limit, month_pay_money, month_serc, mortgage, 
+    mortgage_address, mortgage_mark, payment_plan, create_time, update_time, create_per, 
+    update_per
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_loan_offer
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_loan_offer
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.trad.bean.LoanOffer" >
+    insert into t_loan_offer (load_id, manager_id, 
+      load_type, payment_name, payment_contract, 
+      bail_scale, bail_money, evalue_money, 
+      offer_pound, zh_money, plat_money, 
+      offer_day, offer_money, month_scale, 
+      first_payment, last_payment, offer_limit, 
+      month_pay_money, month_serc, mortgage, 
+      mortgage_address, mortgage_mark, payment_plan, 
+      create_time, update_time, create_per, 
+      update_per)
+    values (#{loadId,jdbcType=VARCHAR}, #{managerId,jdbcType=VARCHAR}, 
+      #{loadType,jdbcType=VARCHAR}, #{paymentName,jdbcType=VARCHAR}, #{paymentContract,jdbcType=VARCHAR}, 
+      #{bailScale,jdbcType=VARCHAR}, #{bailMoney,jdbcType=VARCHAR}, #{evalueMoney,jdbcType=VARCHAR}, 
+      #{offerPound,jdbcType=VARCHAR}, #{zhMoney,jdbcType=VARCHAR}, #{platMoney,jdbcType=VARCHAR}, 
+      #{offerDay,jdbcType=TIMESTAMP}, #{offerMoney,jdbcType=VARCHAR}, #{monthScale,jdbcType=VARCHAR}, 
+      #{firstPayment,jdbcType=TIMESTAMP}, #{lastPayment,jdbcType=TIMESTAMP}, #{offerLimit,jdbcType=TIMESTAMP}, 
+      #{monthPayMoney,jdbcType=VARCHAR}, #{monthSerc,jdbcType=VARCHAR}, #{mortgage,jdbcType=VARCHAR}, 
+      #{mortgageAddress,jdbcType=VARCHAR}, #{mortgageMark,jdbcType=VARCHAR}, #{paymentPlan,jdbcType=VARCHAR}, 
+      now(), #{updateTime,jdbcType=TIMESTAMP}, #{createPer,jdbcType=VARCHAR}, 
+      #{updatePer,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.trad.bean.LoanOffer" >
+    insert into t_loan_offer
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="loadId != null" >
+        load_id,
+      </if>
+      <if test="managerId != null" >
+        manager_id,
+      </if>
+      <if test="loadType != null" >
+        load_type,
+      </if>
+      <if test="paymentName != null" >
+        payment_name,
+      </if>
+      <if test="paymentContract != null" >
+        payment_contract,
+      </if>
+      <if test="bailScale != null" >
+        bail_scale,
+      </if>
+      <if test="bailMoney != null" >
+        bail_money,
+      </if>
+      <if test="evalueMoney != null" >
+        evalue_money,
+      </if>
+      <if test="offerPound != null" >
+        offer_pound,
+      </if>
+      <if test="zhMoney != null" >
+        zh_money,
+      </if>
+      <if test="platMoney != null" >
+        plat_money,
+      </if>
+      <if test="offerDay != null" >
+        offer_day,
+      </if>
+      <if test="offerMoney != null" >
+        offer_money,
+      </if>
+      <if test="monthScale != null" >
+        month_scale,
+      </if>
+      <if test="firstPayment != null" >
+        first_payment,
+      </if>
+      <if test="lastPayment != null" >
+        last_payment,
+      </if>
+      <if test="offerLimit != null" >
+        offer_limit,
+      </if>
+      <if test="monthPayMoney != null" >
+        month_pay_money,
+      </if>
+      <if test="monthSerc != null" >
+        month_serc,
+      </if>
+      <if test="mortgage != null" >
+        mortgage,
+      </if>
+      <if test="mortgageAddress != null" >
+        mortgage_address,
+      </if>
+      <if test="mortgageMark != null" >
+        mortgage_mark,
+      </if>
+      <if test="paymentPlan != null" >
+        payment_plan,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="createPer != null" >
+        create_per,
+      </if>
+      <if test="updatePer != null" >
+        update_per,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="loadId != null" >
+        #{loadId,jdbcType=VARCHAR},
+      </if>
+      <if test="managerId != null" >
+        #{managerId,jdbcType=VARCHAR},
+      </if>
+      <if test="loadType != null" >
+        #{loadType,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentName != null" >
+        #{paymentName,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentContract != null" >
+        #{paymentContract,jdbcType=VARCHAR},
+      </if>
+      <if test="bailScale != null" >
+        #{bailScale,jdbcType=VARCHAR},
+      </if>
+      <if test="bailMoney != null" >
+        #{bailMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="evalueMoney != null" >
+        #{evalueMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="offerPound != null" >
+        #{offerPound,jdbcType=VARCHAR},
+      </if>
+      <if test="zhMoney != null" >
+        #{zhMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="platMoney != null" >
+        #{platMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="offerDay != null" >
+        #{offerDay,jdbcType=TIMESTAMP},
+      </if>
+      <if test="offerMoney != null" >
+        #{offerMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="monthScale != null" >
+        #{monthScale,jdbcType=VARCHAR},
+      </if>
+      <if test="firstPayment != null" >
+        #{firstPayment,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastPayment != null" >
+        #{lastPayment,jdbcType=TIMESTAMP},
+      </if>
+      <if test="offerLimit != null" >
+        #{offerLimit,jdbcType=TIMESTAMP},
+      </if>
+      <if test="monthPayMoney != null" >
+        #{monthPayMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="monthSerc != null" >
+        #{monthSerc,jdbcType=VARCHAR},
+      </if>
+      <if test="mortgage != null" >
+        #{mortgage,jdbcType=VARCHAR},
+      </if>
+      <if test="mortgageAddress != null" >
+        #{mortgageAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="mortgageMark != null" >
+        #{mortgageMark,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentPlan != null" >
+        #{paymentPlan,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createPer != null" >
+        #{createPer,jdbcType=VARCHAR},
+      </if>
+      <if test="updatePer != null" >
+        #{updatePer,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.trad.bean.LoanOffer" >
+    update t_loan_offer
+    <set >
+      <if test="loadId != null" >
+        load_id = #{loadId,jdbcType=VARCHAR},
+      </if>
+      <if test="managerId != null" >
+        manager_id = #{managerId,jdbcType=VARCHAR},
+      </if>
+      <if test="loadType != null" >
+        load_type = #{loadType,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentName != null" >
+        payment_name = #{paymentName,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentContract != null" >
+        payment_contract = #{paymentContract,jdbcType=VARCHAR},
+      </if>
+      <if test="bailScale != null" >
+        bail_scale = #{bailScale,jdbcType=VARCHAR},
+      </if>
+      <if test="bailMoney != null" >
+        bail_money = #{bailMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="evalueMoney != null" >
+        evalue_money = #{evalueMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="offerPound != null" >
+        offer_pound = #{offerPound,jdbcType=VARCHAR},
+      </if>
+      <if test="zhMoney != null" >
+        zh_money = #{zhMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="platMoney != null" >
+        plat_money = #{platMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="offerDay != null" >
+        offer_day = #{offerDay,jdbcType=TIMESTAMP},
+      </if>
+      <if test="offerMoney != null" >
+        offer_money = #{offerMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="monthScale != null" >
+        month_scale = #{monthScale,jdbcType=VARCHAR},
+      </if>
+      <if test="firstPayment != null" >
+        first_payment = #{firstPayment,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastPayment != null" >
+        last_payment = #{lastPayment,jdbcType=TIMESTAMP},
+      </if>
+      <if test="offerLimit != null" >
+        offer_limit = #{offerLimit,jdbcType=TIMESTAMP},
+      </if>
+      <if test="monthPayMoney != null" >
+        month_pay_money = #{monthPayMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="monthSerc != null" >
+        month_serc = #{monthSerc,jdbcType=VARCHAR},
+      </if>
+      <if test="mortgage != null" >
+        mortgage = #{mortgage,jdbcType=VARCHAR},
+      </if>
+      <if test="mortgageAddress != null" >
+        mortgage_address = #{mortgageAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="mortgageMark != null" >
+        mortgage_mark = #{mortgageMark,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentPlan != null" >
+        payment_plan = #{paymentPlan,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createPer != null" >
+        create_per = #{createPer,jdbcType=VARCHAR},
+      </if>
+      <if test="updatePer != null" >
+        update_per = #{updatePer,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.trad.bean.LoanOffer" >
+    update t_loan_offer
+    set load_id = #{loadId,jdbcType=VARCHAR},
+      manager_id = #{managerId,jdbcType=VARCHAR},
+      load_type = #{loadType,jdbcType=VARCHAR},
+      payment_name = #{paymentName,jdbcType=VARCHAR},
+      payment_contract = #{paymentContract,jdbcType=VARCHAR},
+      bail_scale = #{bailScale,jdbcType=VARCHAR},
+      bail_money = #{bailMoney,jdbcType=VARCHAR},
+      evalue_money = #{evalueMoney,jdbcType=VARCHAR},
+      offer_pound = #{offerPound,jdbcType=VARCHAR},
+      zh_money = #{zhMoney,jdbcType=VARCHAR},
+      plat_money = #{platMoney,jdbcType=VARCHAR},
+      offer_day = #{offerDay,jdbcType=TIMESTAMP},
+      offer_money = #{offerMoney,jdbcType=VARCHAR},
+      month_scale = #{monthScale,jdbcType=VARCHAR},
+      first_payment = #{firstPayment,jdbcType=TIMESTAMP},
+      last_payment = #{lastPayment,jdbcType=TIMESTAMP},
+      offer_limit = #{offerLimit,jdbcType=TIMESTAMP},
+      month_pay_money = #{monthPayMoney,jdbcType=VARCHAR},
+      month_serc = #{monthSerc,jdbcType=VARCHAR},
+      mortgage = #{mortgage,jdbcType=VARCHAR},
+      mortgage_address = #{mortgageAddress,jdbcType=VARCHAR},
+      mortgage_mark = #{mortgageMark,jdbcType=VARCHAR},
+      payment_plan = #{paymentPlan,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_per = #{createPer,jdbcType=VARCHAR},
+      update_per = #{updatePer,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

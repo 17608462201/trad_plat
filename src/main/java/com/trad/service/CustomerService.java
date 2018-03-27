@@ -54,4 +54,6 @@ public interface CustomerService {
 	public int updateByPrivateSelective(CustomerPrivate record);
 	
 	public int deletePrivate(Integer id);
+	
+	List<Customer> getCustomerAll();
 }

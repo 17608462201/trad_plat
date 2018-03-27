@@ -42,6 +42,9 @@
   <sql id="Blob_Column_List" >
     sum_money
   </sql>
+  <select id="getCustomerAll" resultMap="BaseResultMap">
+  	select id,name from t_customer
+  </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />

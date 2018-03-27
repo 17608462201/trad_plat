@@ -26,4 +26,7 @@ public interface CustomerMapper {
     public List<Customer> queryByPaged(@Param("filter")String filter,Integer start,Integer end);
     
     public List<Customer> queryAll();
+    
+    List<Customer> getCustomerAll();
+    
 }
