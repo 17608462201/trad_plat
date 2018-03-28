@@ -12,7 +12,7 @@
 %>
 <%@ include file="/pages/common/header.jsp"%>
 <form class="layui-form" action="${ctx}/loan/saveLoan" method="post">
-	<!--  --><div class="layui-row" style="padding-top: 10px; padding-bottom: 5px;">
+	<!-- <div class="layui-row" style="padding-top: 10px; padding-bottom: 5px;">
 		<div class="layui-col-xs6">
 			<div class="grid-demo grid-demo-bg1">&nbsp;</div>
 		</div>
@@ -26,7 +26,7 @@
 				</button>
 			</div>
 		</div>
-	</div>
+	</div> -->
 	<hr>
 	<div class="layui-row">
 		<div class="layui-col-xs6">
@@ -47,9 +47,8 @@
 					<label class="layui-form-label">客户经理名称：</label>
 					<div class="layui-input-block">
 						<input type="hidden" name="managerId" id="managerId">
-						<input type="text" name="managerName" lay-verify="required"
-							disabled="disabled" id="managerName" autocomplete="off"
-							class="layui-input">
+						<input type="hidden" name="managerNames" id="managerNames">
+						<input type="text" name="managerName" lay-verify="required" disabled="disabled" id="managerName" autocomplete="off"	class="layui-input">
 					</div>
 					<div>
 						<button class="layui-btn layui-btn-normal" id="userSelect">...</button>
@@ -379,6 +378,7 @@
 					userIdsCheckName = userIdsCheckName.substr(0, userIdsCheckName.length - 1)
 				}
 				$("#managerName").val(userIdsCheckName);
+				$("#managerNames").val(userIdsCheckName);
 				$("#managerId").val(userIdsCheck);
 				layer.closeAll();
 			},

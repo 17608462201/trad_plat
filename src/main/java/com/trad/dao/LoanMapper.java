@@ -1,24 +1,27 @@
 package com.trad.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.trad.bean.Loan;
 
 public interface LoanMapper {
 	
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(String id);
 
-    int insert(Loan record);
+    int insert(Map<String, Object> map);
 
     int insertSelective(Loan record);
 
-    Loan selectByPrimaryKey(Integer id);
+    Loan selectByPrimaryKey(String id);
 
-    int updateByPrimaryKeySelective(Loan record);
+    int updateByPrimaryKeySelective(Map<String, Object> map);
 
     int updateByPrimaryKey(Loan record);
     
     List<Loan> getLoanAll();
     
     int getCount();
+    
+    void upLoanStatus(Map<String, Object> map);
 }

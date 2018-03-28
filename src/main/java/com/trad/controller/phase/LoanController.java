@@ -1,7 +1,10 @@
-package com.trad.controller;
+package com.trad.controller.phase;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -18,15 +21,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONObject;
 import com.trad.bean.Customer;
 import com.trad.bean.Loan;
-import com.trad.bean.LoanOffer;
-import com.trad.bean.Product;
+import com.trad.bean.LoanStatus;
+import com.trad.bean.User;
 import com.trad.bean.common.LayuiTable;
 import com.trad.service.CustomerService;
 import com.trad.service.LoanOfferService;
 import com.trad.service.LoanService;
+import com.trad.service.LoanStatusService;
 import com.trad.service.ProductService;
 import com.trad.util.DateUtil;
+import com.trad.util.EntityToMap;
 import com.trad.util.ReplyCode;
+import com.trad.util.SessionHelper;
 
 @Controller
 @RequestMapping("/loan")
@@ -36,7 +42,7 @@ public class LoanController {
 	private LoanService loanServiceImpl;
 	
 	@Autowired
-	private LoanOfferService loanOfferService;
+	private LoanStatusService loanStatusService;
 	
 	@Autowired
 	private CustomerService customerServiceImpl;
@@ -69,11 +75,9 @@ public class LoanController {
 		try {
 			if (!StringUtils.isEmpty(loanId)) {
 				String[] idStr = loanId.split(",");
-				// 鎵归噺鍒犻櫎鑿滃崟淇℃伅
 				for (String id : idStr) {
-					Integer idInt = Integer.parseInt(id);
-					// 鍒犻櫎鑿滃崟琛�
-					loanServiceImpl.deleteByPrimaryKey(idInt);
+//					Integer idInt = Integer.parseInt(id);
+					loanServiceImpl.deleteByPrimaryKey(id);
 				}
 			}
 			return ReplyCode.SUCCESS;
@@ -88,8 +92,8 @@ public class LoanController {
 		try {
 			String loanId = request.getParameter("loanId");
 			if (!StringUtils.isEmpty(loanId)) {
-				Integer idInt = Integer.parseInt(loanId);
-				Loan loan = loanServiceImpl.selectByPrimaryKey(idInt);
+//				Integer idInt = Integer.parseInt(loanId);
+				Loan loan = loanServiceImpl.selectByPrimaryKey(loanId);
 				model.addAttribute("loan", loan);
 				model.addAttribute("type", "EDIT");
 			}
@@ -101,7 +105,11 @@ public class LoanController {
 	
 	@RequestMapping("/addLoan")
 	public String addLoan(HttpServletRequest request, Model model) {
-		return "loan/loanAdd";
+		Loan loan=new Loan();
+		loan.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+		model.addAttribute("loan", loan);
+		model.addAttribute("type", "ADD");
+		return "loan/loanEdit";
 	}
 	
 	@RequestMapping("/getProductAll")
@@ -118,70 +126,115 @@ public class LoanController {
 		return JSONObject.toJSONString(customerList);
 	}
 	
+	@RequestMapping("/loanExamine")
+	public String loanExamine(HttpServletRequest request, Model model) {
+		String loanId = request.getParameter("loanId");
+		model.addAttribute("loanId", loanId);
+		return "loan/loanExamine";
+	}
+	
+	@RequestMapping("/toLoanCheck")
+	public String toLoanCheck(HttpServletRequest request, Model model) {
+		String loanId = request.getParameter("loanId");
+		model.addAttribute("loanId", loanId);
+		return "loan/loanCheckAll";
+	}
+	
+	@RequestMapping("/loanCheck")
+	public String loanCheck(HttpServletRequest request, Model model) {
+		try {
+			String loanId = request.getParameter("loanId");
+			if (!StringUtils.isEmpty(loanId)) {
+				Loan loan = loanServiceImpl.selectByPrimaryKey(loanId);
+				model.addAttribute("loan", loan);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "loan/loanCheck";
+	}
+	
 	@RequestMapping("/saveLoan")
 	@ResponseBody
 	public String saveLoan(HttpServletRequest request,Model model) {
 		try {
-			String productId=request.getParameter("productId");
-			String managerId=request.getParameter("managerId");
-			String loadType=request.getParameter("loadType");
-			String customerName=request.getParameter("customerName");
-			String loanMobile=request.getParameter("loanMobile");
-			String paymentName=request.getParameter("paymentName");
-			String paymentContract=request.getParameter("paymentContract");
-			String bailScale=request.getParameter("bailScale");
-			String bailMoney=request.getParameter("bailMoney");
-			String evalueMoney=request.getParameter("evalueMoney");
-			String offerPound=request.getParameter("offerPound");
-			String zhMoney=request.getParameter("zhMoney");
-			String platMoney=request.getParameter("platMoney");
-			String offerDay=request.getParameter("offerDay");
-			String offerMoney=request.getParameter("offerMoney");
-			String monthScale=request.getParameter("monthScale");
-			String firstPayment=request.getParameter("firstPayment");
-			String lastPayment=request.getParameter("lastPayment");
-			String offerLimit=request.getParameter("offerLimit");
-			String monthSerc=request.getParameter("monthSerc");
-//			String remark=request.getParameter("remark");
-//
 			Loan loan=new Loan();
-			LoanOffer loanOffer=new LoanOffer();
 			
 			ServletRequestDataBinder binder = new ServletRequestDataBinder(loan);
 			binder.bind(request);
 			
-			ServletRequestDataBinder binderTwo = new ServletRequestDataBinder(loanOffer);
-			binderTwo.bind(request);
+			loan.setApplyTime(DateUtil.format(new Date()));
+			loan.setLoanStatus("1");
 			
-//			loan.setProductId(productId);
-//			loan.setLoanPer(customerName);
-//			loan.setLoanMobile(loanMobile);
-//			loan.setManagerId(managerId);
-//			loan.setRemark(remark);
-//			
-//			loanOffer.setLoadType(loadType);
-//			loanOffer.setPaymentName(paymentName);
-//			loanOffer.setPaymentContract(paymentContract);
-//			loanOffer.setBailScale(bailScale);
-//			loanOffer.setBailMoney(bailMoney);
-//			loanOffer.setEvalueMoney(evalueMoney);
-//			loanOffer.setOfferPound(offerPound);
-//			loanOffer.setZhMoney(zhMoney);
-//			loanOffer.setPlatMoney(platMoney);
-//			loanOffer.setOfferDay(DateUtil.parse(offerDay));
-//			loanOffer.setOfferMoney(offerMoney);
-//			loanOffer.setMonthScale(monthScale);
-//			loanOffer.setFirstPayment(DateUtil.parse(firstPayment));
-//			loanOffer.setOfferLimit(Integer.parseInt(offerLimit));
-//			loanOffer.setLastPayment(DateUtil.parse(lastPayment));
-//			loanOffer.setMonthSerc(monthSerc);
+			LoanStatus loanStatus=new LoanStatus();
 			
-			loanServiceImpl.insert(loan);
-			loanOfferService.insert(loanOffer);
+			User user = new SessionHelper(request).getLoginUser();
+			
+			loanStatus.setLoanId(loan.getId());
+			loanStatus.setCreateUserId(user.getUserId());
+			
+			Map<String, Object> map=EntityToMap.ConvertObjToMap(loan);
+			map.put("loanStatus", "1");
+			
+			loanServiceImpl.insert(map);
+			loanStatusService.insert(loanStatus);
 			return ReplyCode.SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ReplyCode.INSIDEERROR;
 		}
 	}
+	
+	@RequestMapping("/upLoan")
+	@ResponseBody
+	public String upLoan(HttpServletRequest request,Model model) {
+		try {
+			Loan loan=new Loan();
+			
+			ServletRequestDataBinder binder = new ServletRequestDataBinder(loan);
+			binder.bind(request);
+			
+			LoanStatus loanStatus=new LoanStatus();
+			
+			User user = new SessionHelper(request).getLoginUser();
+			
+			loanStatus.setLoanId(loan.getId());
+			loanStatus.setLoanStatus(1);
+			loanStatus.setCreateUserId(user.getUserId());
+			
+			Map<String, Object> map=EntityToMap.ConvertObjToMap(loan);
+			map.put("loanStatus", "1");
+			
+			loanServiceImpl.updateByPrimaryKeySelective(map);
+			loanStatusService.insert(loanStatus);
+			return ReplyCode.SUCCESS;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReplyCode.INSIDEERROR;
+		}
+	}
+	
+	@RequestMapping("/upLoanStatus")
+	@ResponseBody
+	public String upLoanStatus(HttpServletRequest request,Model model) {
+		try {
+			String loanId=request.getParameter("loanId");
+			Map<String, Object> map=new HashMap<>();
+			map.put("loanId", loanId);
+			map.put("loanStatus", 2);
+			
+			User user = new SessionHelper(request).getLoginUser();
+			LoanStatus loanStatus=new LoanStatus();
+			loanStatus.setLoanId(loanId);
+			loanStatus.setLoanStatus(2);
+			loanStatus.setCreateUserId(user.getUserId());
+			
+			loanStatusService.insert(loanStatus);
+			loanServiceImpl.upLoanStatus(map);
+			return ReplyCode.SUCCESS;
+		} catch (Exception e) {
+			return ReplyCode.INSIDEERROR;
+		}
+	}
+	
 }

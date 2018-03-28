@@ -40,6 +40,10 @@
         <script type="text/javascript" src="${ctx }/res/layui/layui.js"></script>
         <script type="text/javascript" src="${ctx }/res/scripts/common/jquery1.11.3.min.js"></script>
     </c:if>
+    <%-- 是否需要引入公用的js--%>
+    <c:if test="${requestScope.INCLUDE_UPLOAD eq true}">
+        <script type="text/javascript" src="${ctx }/res/layui/lay/modules/upload.js"></script>
+    </c:if>
 </head>
 <%-- 是否需要body --%>
 <c:if test="${requestScope.SHOW_BODY_TAG ne false}">

@@ -13,29 +13,76 @@
 	//request.setAttribute("INCLUDE_CSS",false);
 %>
 <%@ include file="/pages/common/header.jsp" %>
-<%@ include file="/pages/common/listHeader.jsp" %>
+<div class="layui-row">
+    <div class="layui-col-xs6">
+		      <div class="grid-demo grid-demo-bg1">
+		      <div class="layui-form-item">
+		    <div class="layui-input-inline"style="width: 250px;padding-left: 5px;">
+		        <input type="text" id="filter" name="filter" value="" lay-verify="" placeholder="${requestScope.QUERY_TILE }" autocomplete="off" class="layui-input">
+		    </div>
+		    <div class="layui-input-inline">
+		        <button class="layui-btn" id="search" name="search"><i class="layui-icon">&#xe615;</i>搜索 </button>
+		    </div>
+     </div>
+    </div>
+    </div>
+    <div class="layui-col-xs6">
+      <div class="grid-demo">
+       <div class="layui-form-item">
+  	 		<button class="layui-btn" id="add"><i class="layui-icon">&#xe654;</i>添加</button>
+  	 		<c:if test="${requestScope.SHOW_EDIT eq true}">
+  	 		<button class="layui-btn" id="edit"><i class="layui-icon">&#xe642;</i>编辑</button>
+  	 		</c:if>
+			<button class="layui-btn layui-btn-danger" id="delete"><i class="layui-icon">&#xe640;</i>删除 </button>
+			<button class="layui-btn" id="refresh"><i class="layui-icon">&#x1002;</i>刷新</button>
+			<button class="layui-btn" id="check"><i class="layui-icon">&#xe615;</i>查看</button>
+      </div>
+    </div>
+  </div>
+  </div>
 <table class="layui-table" lay-data="{height:550,url:'${ctx }/loan/getList', page:true, limit:10, id:'tables'}" lay-filter="tree_filter">
   <thead>
     <tr>
       <th lay-data="{checkbox:true, fixed: true}"></th>
-      <th lay-data="{field:'id', width:80}">借款ID</th>
+      <th lay-data="{field:'id', width:75}">借款ID</th>
       <th lay-data="{field:'productName', width:90}">产品名称</th>
-      <th lay-data="{field:'loanPer', width:85}">借款人</th>
+      <th lay-data="{field:'customerName', width:85}">客户名称</th>
       <th lay-data="{field:'loanMobile', width:100}">借款人手机</th>
       <th lay-data="{field:'loanMoney', width:90}">借款金额</th>
       <th lay-data="{field:'loanLimit', width:90}">借款期限</th>
-      <th lay-data="{field:'loanStatus', width:90}">借款状态</th>
-      <th lay-data="{field:'applyTime', width:130}">申请时间</th>
-      <th lay-data="{field:'customerName', width:90}">客户名称</th>
+      <th lay-data="{field:'loanStatus', width:90, toolbar: '#checkboxTpl'}">借款状态</th>
       <th lay-data="{field:'managerName', width:100}">客户经理名称</th>
       <th lay-data="{field:'loanPawn', width:100}">借款抵押物</th>
       <th lay-data="{field:'pawnAdd', width:100}">抵押物地址</th>
-      <th lay-data="{field:'applyTime', width:130}">申请时间</th>
+      <th lay-data="{field:'applyTime', width:110}">申请时间</th>
+      <th lay-data="{fixed: 'right', width:120, toolbar: '#barDemo'}"></th>
     </tr>
   </thead>
 </table>
  <script type="text/html" id="checkboxTpl">
-  <input type="checkbox" {{ d.recordStatus == 1 ? 'checked' : '' }} name="recordStatus" lay-skin="switch" lay-filter="validFilter" lay-text="是|否">
+  	{{# if(d.loanStatus == 1){ }}
+		<div class="layui-table-cell laytable-cell-1-loanStatus">待初审</div>
+	{{# }else if(d.loanStatus == 2){ }}
+		<div class="layui-table-cell laytable-cell-1-loanStatus">待下户</div>
+	{{# }else if(d.loanStatus == 3){ }}
+		<div class="layui-table-cell laytable-cell-1-loanStatus">待核算</div>
+	{{# }else if(d.loanStatus == 4){ }}
+		<div class="layui-table-cell laytable-cell-1-loanStatus">待签约</div>
+	{{# }else if(d.loanStatus == 5){ }}
+		<div class="layui-table-cell laytable-cell-1-loanStatus">待公证</div>
+	{{# }else if(d.loanStatus == 6){ }}
+		<div class="layui-table-cell laytable-cell-1-loanStatus">待放款</div>
+	{{# }else if(d.loanStatus == 7){ }}
+		<div class="layui-table-cell laytable-cell-1-loanStatus">放款审核</div>
+	{{# }else if(d.loanStatus == 8){ }}
+		<div class="layui-table-cell laytable-cell-1-loanStatus">总经理审核</div>
+	{{# }else if(d.loanStatus == 9){ }}
+		<div class="layui-table-cell laytable-cell-1-loanStatus">财务放款</div>
+	{{# } }}
+</script>
+
+<script type="text/html" id="barDemo">
+  {{ d.loanStatus == 1 ? '<a class="layui-btn layui-btn-xs" lay-event="examine">提交待下户</a>' : '' }}
 </script>
 <script>
 layui.use('table', function(){
@@ -100,7 +147,7 @@ layui.use('table', function(){
 	   	         	     success: function(data){
 	   	         	    	 if(data =='200'){
 	   	         	    		layer.closeAll();
-	   	         	    		window.location.href ='${ctx }/product/init';
+	   	         	    		window.location.href ='${ctx }/loan/init';
 	   	         	    	 }else{
 	   	         	    		 layer.msg("删除产品信息失败，请重试！");
 	   	         	    	 }
@@ -112,6 +159,27 @@ layui.use('table', function(){
 	 	 }
 	});
   
+  $("#check").on("click",function(){
+	  var datas = table.checkStatus('tables').data;
+	  if(datas.length>1){
+    	  layer.alert("不支持同时查看多行，请只选中一行！");
+      }else{
+    	  var ids = datas[0].id;
+    	  layer.open({
+              type: 2 //此处以iframe举例
+              ,title: '查看借款单'
+              ,area: ['750px', '600px']
+              ,shade: 0
+              ,maxmin: true
+              ,offset: [
+                   10
+              ] 
+              ,content: '${ctx}/loan/toLoanCheck?loanId='+ids+"&type=EDIT"
+              ,btn: ['关闭']
+    	  })
+      }
+  })
+  
   $("#edit").on("click",function(){
 	  //删除表格
 	  var datas = table.checkStatus('tables').data;
@@ -119,18 +187,52 @@ layui.use('table', function(){
     	  layer.alert("不支持同时编辑多行，请只选中一行！");
       }else{
     	  var ids = datas[0].id;
-    	  //新增
-    	  layer.open({
-              type: 2 //此处以iframe举例
-              ,title: '修改借款'
-              ,area: ['650px', '600px']
-              ,shade: 0
-              ,maxmin: true
-              ,offset: [
-                   10
-              ] 
-              ,content: '${ctx}/loan/editLoan?loanId='+ids+"&type=EDIT"
-       });
+    	  var loanStatus = datas[0].loanStatus;
+    	  if(loanStatus == 1){
+    		//新增
+        	  layer.open({
+                  type: 2 //此处以iframe举例
+                  ,title: '修改借款'
+                  ,area: ['650px', '600px']
+                  ,shade: 0
+                  ,maxmin: true
+                  ,offset: [
+                       10
+                  ] 
+                  ,content: '${ctx}/loan/editLoan?loanId='+ids+"&type=EDIT"
+                  ,btn: ['保存', '关闭']
+    	    	  ,yes: function(){
+    	    		  var body = layer.getChildFrame('body', 0);
+    	    		  var id=body.find('input[name="id"]').val();
+            		  var productId=body.find('select[name="productName"]').val();
+            		  var productName=body.find('select[name="productName"]').find("option:selected").text();
+          			  var managerId=body.find('input[name="managerId"]').val();
+          			  var managerName=body.find('input[name="managerNames"]').val();
+          			  var loanPer=body.find('input[name="loanPer"]').val();
+          			  var loanMobile=body.find('input[name="loanMobile"]').val();
+          			  var loanMoney=body.find('input[name="loanMoney"]').val();
+          			  var loanLimit=body.find('input[name="loanLimit"]').val();
+          			  var customerId=body.find('select[name="customerName"]').val();
+          			  var customerName=body.find('select[name="customerName"]').find("option:selected").text();
+          			  var pawnAdd=body.find('input[name="pawnAdd"]').val();
+          			  var remark=body.find('input[name="remark"]').val();
+          			  
+          			  var jsonObj = {"id":id,"productId":productId,"productName":productName,"managerId":managerId,"managerName":managerName,"loanPer":loanPer,
+    		      			  "loanMobile":loanMobile,"loanMoney":loanMoney,"loanLimit":loanLimit,"customerId":customerId,"customerName":customerName,
+    		      			  "pawnAdd":pawnAdd,"remark":remark};
+    	    		  $.post("${ctx}/loan/upLoan",jsonObj,function(text){
+    	          		  if(text=='200'){
+    	          			layer.closeAll();
+    		          		  window.location.href ='${ctx }/loan/init';
+    	          		  }else{
+    	          			  layer.msg("保存借款信息出错！");
+    	          		  }
+    	       	     });
+    	    	  }
+           });
+    	  }else{
+    		  layer.alert("数据已提交，不支持修改！");
+    	  }
  	 }
 });
   
@@ -149,33 +251,23 @@ layui.use('table', function(){
               ,btn: ['保存', '关闭']
         	  ,yes: function(){
         		  var body = layer.getChildFrame('body', 0);
+        		  var id=body.find('input[name="id"]').val();
         		  var productId=body.find('select[name="productName"]').val();
-        		  var productName=body.find('select[name="productName"]').text();
+        		  var productName=body.find('select[name="productName"]').find("option:selected").text();
       			  var managerId=body.find('input[name="managerId"]').val();
-      			  var managerName=body.find('input[name="managerName"]').val();
-      			  var loadType=body.find('select[name="loadType"]').val();
-      			  var customerId=body.find('select[name="customerName"]').text();
-      			  var customerName=body.find('select[name="customerName"]').val();
+      			  var managerName=body.find('input[name="managerNames"]').val();
+      			  var loanPer=body.find('input[name="loanPer"]').val();
       			  var loanMobile=body.find('input[name="loanMobile"]').val();
-      			  var paymentName=body.find('input[name="paymentName"]').val();
-      			  var paymentContract=body.find('input[name="paymentContract"]').val();
-      			  var bailScale=body.find('input[name="bailScale"]').val();
-      			  var bailMoney=body.find('input[name="bailMoney"]').val();
-      			  var evalueMoney=body.find('input[name="evalueMoney"]').val();
-      			  var offerPound=body.find('input[name="offerPound"]').val();
-      			  var zhMoney=body.find('input[name="zhMoney"]').val();
-      			  var platMoney=body.find('input[name="platMoney"]').val();
-      			  var offerDay=body.find('input[name="offerDay"]').val();
-      			  var offerMoney=body.find('input[name="offerMoney"]').val();
-      			  var monthScale=body.find('input[name="monthScale"]').val();
-      			  var firstPayment=body.find('input[name="firstPayment"]').val();
-      			  var lastPayment=body.find('input[name="lastPayment"]').val();
-      			  var offerLimit=body.find('input[name="offerLimit"]').val();
-      			  var monthSerc=body.find('input[name="monthSerc"]').val();
-				  var jsonObj = {"productId":productId,"productName":productName,"managerId":managerId,"loadType":loadType,"customerId":customerId,"customerName":customerName,"loanMobile":loanMobile,"paymentName":paymentName,
-					"paymentContract":paymentContract,"bailScale":bailScale,"bailMoney":bailMoney,"evalueMoney":evalueMoney,"offerPound":offerPound,
-					"zhMoney":zhMoney,"platMoney":platMoney,"offerDay":offerDay,"offerMoney":offerMoney,"monthScale":monthScale,"firstPayment":firstPayment,
-					"lastPayment":lastPayment,"offerLimit":offerLimit,"monthSerc":monthSerc};
+      			  var loanMoney=body.find('input[name="loanMoney"]').val();
+      			  var loanLimit=body.find('input[name="loanLimit"]').val();
+      			  var customerId=body.find('select[name="customerName"]').val();
+      			  var customerName=body.find('select[name="customerName"]').find("option:selected").text();
+      			  var pawnAdd=body.find('input[name="pawnAdd"]').val();
+      			  var remark=body.find('input[name="remark"]').val();
+      			  
+				  var jsonObj = {"id":id,"productId":productId,"productName":productName,"managerId":managerId,"managerName":managerName,"loanPer":loanPer,
+		      			  "loanMobile":loanMobile,"loanMoney":loanMoney,"loanLimit":loanLimit,"customerId":customerId,"customerName":customerName,
+		      			  "pawnAdd":pawnAdd,"remark":remark};
         		  $.post("${ctx}/loan/saveLoan",jsonObj,function(text){
 	          		  if(text=='200'){
 	          			layer.closeAll();
@@ -196,7 +288,20 @@ layui.use('table', function(){
 			  url: '${ctx }/product/list?filter='+encodeURI(encodeURI(val))
 		  });
 	 });*/
-   
+	 table.on('tool(tree_filter)', function(obj){
+		    var data = obj.data;
+		    if(obj.event === 'examine'){
+		    	$.post("${ctx}/loan/upLoanStatus?loanId="+data.id,function(text){
+	          		  if(text=='200'){
+	          			  layer.closeAll();
+		          		  window.location.href ='${ctx }/loan/init';
+	          		  }else{
+	          			  layer.msg("保存借款信息出错！");
+	          		  }
+	       	     });
+		    }
+	 })
 });
+
 </script>
 <%@ include file="/pages/common/footer.jsp"%>

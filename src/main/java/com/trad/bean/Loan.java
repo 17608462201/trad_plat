@@ -4,14 +4,12 @@ import java.util.Date;
 
 public class Loan {
     private String id;
+    
+    private String loanContractNo;
 
     private String productId;
 
     private String productName;
-
-    private String contractId;
-
-    private String fileName;
 
     private String loanPer;
 
@@ -33,8 +31,6 @@ public class Loan {
 
     private String managerName;
 
-    private String loanPawn;
-
     private String pawnAdd;
 
     private String remark;
@@ -46,7 +42,7 @@ public class Loan {
     private String createPer;
 
     private String updatePer;
-
+    
     public String getId() {
         return id;
     }
@@ -55,7 +51,15 @@ public class Loan {
         this.id = id == null ? null : id.trim();
     }
 
-    public String getProductId() {
+    public String getLoanContractNo() {
+		return loanContractNo;
+	}
+
+	public void setLoanContractNo(String loanContractNo) {
+		this.loanContractNo = loanContractNo;
+	}
+
+	public String getProductId() {
         return productId;
     }
 
@@ -69,22 +73,6 @@ public class Loan {
 
     public void setProductName(String productName) {
         this.productName = productName == null ? null : productName.trim();
-    }
-
-    public String getContractId() {
-        return contractId;
-    }
-
-    public void setContractId(String contractId) {
-        this.contractId = contractId == null ? null : contractId.trim();
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName == null ? null : fileName.trim();
     }
 
     public String getLoanPer() {
@@ -124,7 +112,26 @@ public class Loan {
     }
 
     public void setLoanStatus(String loanStatus) {
-        this.loanStatus = loanStatus == null ? null : loanStatus.trim();
+    	this.loanStatus = loanStatus;
+    	/*if(loanStatus.equals("1")) {
+    		this.loanStatus = "待初审";
+    	}else if(loanStatus.equals("2")) {
+    		this.loanStatus = "待下户";
+    	}else if(loanStatus.equals("3")) {
+    		this.loanStatus = "待核算";
+    	}else if(loanStatus.equals("4")) {
+    		this.loanStatus = "待签约";
+    	}else if(loanStatus.equals("5")) {
+    		this.loanStatus = "待公证";
+    	}else if(loanStatus.equals("6")) {
+    		this.loanStatus = "待放款";
+    	}else if(loanStatus.equals("7")) {
+    		this.loanStatus = "放款审核";
+    	}else if(loanStatus.equals("8")) {
+    		this.loanStatus = "总经理审核";
+    	}else if(loanStatus.equals("9")) {
+    		this.loanStatus = "财务放款";
+    	}*/
     }
 
     public String getApplyTime() {
@@ -165,14 +172,6 @@ public class Loan {
 
     public void setManagerName(String managerName) {
         this.managerName = managerName == null ? null : managerName.trim();
-    }
-
-    public String getLoanPawn() {
-        return loanPawn;
-    }
-
-    public void setLoanPawn(String loanPawn) {
-        this.loanPawn = loanPawn == null ? null : loanPawn.trim();
     }
 
     public String getPawnAdd() {

@@ -4,7 +4,7 @@
 	//页面标题设置
 	request.setAttribute("pageTitle", "新增产品");
 	//如果不需要公用的css,请使用下面代码 (默认是为true)
-	//request.setAttribute("INCLUDE_SKIN",false);
+	request.setAttribute("INCLUDE_UPLOAD",true);
 	//如果不需要公用的js,请使用下面代码 (默认是为true)
 	//request.setAttribute("INCLUDE_COMMON",false);
 	//如果不需要公用的css,请使用下面代码 (默认是为true)
@@ -12,7 +12,7 @@
 %>
 <%@ include file="/pages/common/header.jsp"%>
 <form class="layui-form" action="#" method="post">
-	<div class="layui-row" style="padding-top: 10px; padding-bottom: 5px;">
+	<!-- <div class="layui-row" style="padding-top: 10px; padding-bottom: 5px;">
 		<div class="layui-col-xs6">
 			<div class="grid-demo grid-demo-bg1">&nbsp;</div>
 		</div>
@@ -26,8 +26,9 @@
 				</button>
 			</div>
 		</div>
-	</div>
+	</div> -->
 	<hr>
+	<input type="hidden" name="type" id="type" value="${type }">
 	<input type="hidden" name="id" id="id" value="${loan.id }">
 	<div class="layui-form-item">
 		<label class="layui-form-label">产品：</label>
@@ -65,7 +66,7 @@
 				autocomplete="off" class="layui-input">
 		</div>
 	</div>
-	<div class="layui-form-item">
+	<!-- <div class="layui-form-item">
 		<label class="layui-form-label">借款状态：</label>
 		<div class="layui-input-block">
 			<select name="loanStatus" id="loanStatus" value="${loan.loanStatus }" lay-verify="required">
@@ -78,12 +79,13 @@
 			<input type="text" name="applyTime" id="applyTime" value="${loan.applyTime }" placeholder=""
 				autocomplete="off" class="layui-input">
 		</div>
-	</div>
+	</div> -->
 	<div class="layui-form-item">
 		<label class="layui-form-label">客户名称：</label>
 		<div class="layui-input-block">
 			<input type="hidden" name="customerId" id="customerId" value="${loan.customerId }">
-			<select name="customerName" id="customerName" lay-verify="required">
+			<select lay-verify="required" lay-search="" name="customerName" id="customerName">
+				<option value="">直接选择或搜索选择</option>
 			</select>
 		</div>
 	</div>
@@ -91,15 +93,20 @@
 		<label class="layui-form-label">客户经理名称：</label>
 		<div class="layui-input-block">
 			<input type="hidden" name="managerId" id="managerId" value="${loan.managerId }">
-			<select name="managerName" id="managerName" lay-verify="required">
-			</select>
+			<input type="hidden" name="managerNames" id="managerNames" value="${loan.managerName }">
+			<input type="text" name="managerName" lay-verify="required" disabled="disabled" id="managerName" value="${loan.managerName }" autocomplete="off"	class="layui-input">
+		</div>
+		<div>
+			<button class="layui-btn layui-btn-normal" id="userSelect">...</button>
 		</div>
 	</div>
 	<div class="layui-form-item">
 		<label class="layui-form-label">借款抵押物：</label>
 		<div class="layui-input-block">
-			<input type="text" name="loanPawn" id="loanPawn" value="${loan.loanPawn }" placeholder=""
-				autocomplete="off" class="layui-input">
+			<div class="layui-upload-drag" id="test10">
+			  <i class="layui-icon"></i>
+			  <p>点击上传，或将文件拖拽到此处</p>
+			</div>
 		</div>
 	</div>
 	<div class="layui-form-item">
@@ -116,65 +123,98 @@
 				autocomplete="off" class="layui-input">
 		</div>
 	</div>
-	<div class="layui-form-item">
-		<label class="layui-form-label">申请时间：</label>
-		<div class="layui-input-block">
-			<input type="text" name="createTime" id="createTime" value="${loan.createTime }"
-				placeholder="" autocomplete="off" class="layui-input">
-		</div>
-	</div>
 </form>
 
 <script>
 	layui.use('form', function() {
+		var upload = layui.upload;
+		console.log(upload)
+		 //拖拽上传
+		upload.render({
+		  elem: '#test10'
+		  ,url: '/upload/'
+		  ,done: function(res){
+		    console.log(res)
+		  }
+		});
+		
 		var form = layui.form;
 		//initGroupSelect(form);
-
-		var hasData = '${pro.id }';
-		if (hasData != '') {
-			$("input").attr("disabled", true);
-			$("select").attr("disabled", true);
-			$("button").hide();
-			$("#edit").show();
-		}
-
-		$("#edit").on("click", function() {
-			//js方法解除禁用
-			$("input").removeAttr("disabled");
-			$("select").removeAttr("disabled");
-			$("button").show();
-			$("#edit").hide();
-			form.render('select');
-		});
+		getProductAll(form);
+		getCustomerAll(form);
 	});
 	
-	
-
-	function initGroupSelect(form) {
+	function getCustomerAll(form){
 		$.ajax({
-			url : "${ctx}/common/getGGdmj?dmjbhs=payType,fxfs,payobj",
+		     url: "${ctx}/loan/getCustomerAll", 
+		     dataType: "json", 
+		     success: function(data){
+		    	 var customerId=$('#customerId').val();
+		   		 $.each(data,function(index,val){
+		   			 if(val.id==customerId){
+		   				$("#customerName").append('<option value="'+val.id+'" selected="selected">'+val.name+'</option>');
+		   			 }else{
+		   				$("#customerName").append('<option value="'+val.id+'">'+val.name+'</option>');
+		   			 }
+		   		 });
+		   		 form.render('select');
+		     }
+		 });
+	}
+	
+	function getProductAll(form) {
+		$.ajax({
+			url : "${ctx}/loan/getProductAll",
 			dataType : "json",
 			success : function(data) {
-				var jsonData = eval(data);
-				$.each(jsonData['payType'], function(index, val) {
-					$("#payName").append(
-							'<option value="'+val.dm+'">' + val.dmnr
-									+ '</option>');
-				});
-				$.each(jsonData['fxfs'], function(index, val) {
-					$("#punishtype").append(
-							'<option value="'+val.dm+'">' + val.dmnr
-									+ '</option>');
-				});
-				$.each(jsonData['payobj'], function(index, val) {
-					$("#payobj").append(
-							'<option value="'+val.dm+'">' + val.dmnr
-									+ '</option>');
-				});
-
+				var html = '';
+				var productId=$('#productId').val();
+				$.each(data, function(index, val) {
+					if(val.id==productId){
+						html += '<option value="'+val.id+'" selected="selected">' + val.name + '</option>';
+					}else{
+						html += '<option value="'+val.id+'">' + val.name + '</option>';
+					}
+					
+				})
+				$('#productName').append(html);
 				form.render('select');
 			}
-		});
+		})
 	}
+	
+	$("#userSelect").on("click", function() {
+		var managerVal = $("#managerId").val();
+		layer.open({
+			type : 2,
+			title : '用户选择',
+			area : [ '800px', '480px' ],
+			shade : 0,
+			maxmin : true,
+			offset : [ 5 ],
+			content : '${ctx}/common/getUserTree?onlySelect=yes&masterId=' + managerVal,
+			btn : [ '确认', '关闭' ],
+			yes : function() {
+				var body = layer.getChildFrame('body', 0);
+				var userIdsCheckName = body.find('input[name="userIdsCheckName"]').val();
+				var userIdsCheck = body.find('input[name="userIdsCheck"]').val();
+				if (userIdsCheckName.indexOf(',') > -1) {
+					userIdsCheckName = userIdsCheckName.substr(0, userIdsCheckName.length - 1)
+				}
+				$("#managerName").val(userIdsCheckName);
+				$("#managerNames").val(userIdsCheckName);
+				$("#managerId").val(userIdsCheck);
+				layer.closeAll();
+			},
+			btn2 : function() {
+				layer.closeAll();
+			},
+			zIndex : layer.zIndex //重点1
+			,success : function(layero) {
+				layer.setTop(layero); //重点2
+			}
+		});
+		return false;
+	})
 </script>
 <%@ include file="/pages/common/footer.jsp"%>

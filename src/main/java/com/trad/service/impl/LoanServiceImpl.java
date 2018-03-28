@@ -1,6 +1,7 @@
 package com.trad.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,17 +25,27 @@ public class LoanServiceImpl implements LoanService {
 	}
 
 	@Override
-	public int deleteByPrimaryKey(Integer id) {
+	public int deleteByPrimaryKey(String id) {
 		return loanMapper.deleteByPrimaryKey(id);
 	}
 
 	@Override
-	public Loan selectByPrimaryKey(Integer id) {
+	public Loan selectByPrimaryKey(String id) {
 		return loanMapper.selectByPrimaryKey(id);
 	}
 
 	@Override
-	public int insert(Loan record) {
-		return loanMapper.insert(record);
+	public int insert(Map<String, Object> map) {
+		return loanMapper.insert(map);
+	}
+
+	@Override
+	public int updateByPrimaryKeySelective(Map<String, Object> map) {
+		return loanMapper.updateByPrimaryKeySelective(map);
+	}
+
+	@Override
+	public void upLoanStatus(Map<String, Object> map) {
+		loanMapper.upLoanStatus(map);
 	}
 }
