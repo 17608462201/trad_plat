@@ -53,7 +53,7 @@ public class LoanController {
 
 	@RequestMapping("/init")
 	public String init(HttpServletRequest request, Model model) {
-		return "loan/loanList";
+		return "loan/phaseOne/loanList";
 	}
 
 	@RequestMapping("/getList")
@@ -100,7 +100,7 @@ public class LoanController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "loan/loanEdit";
+		return "loan/phaseOne/loanEdit";
 	}
 	
 	@RequestMapping("/addLoan")
@@ -109,7 +109,7 @@ public class LoanController {
 		loan.setId(UUID.randomUUID().toString().replaceAll("-", ""));
 		model.addAttribute("loan", loan);
 		model.addAttribute("type", "ADD");
-		return "loan/loanEdit";
+		return "loan/phaseOne/loanEdit";
 	}
 	
 	@RequestMapping("/getProductAll")
@@ -130,14 +130,14 @@ public class LoanController {
 	public String loanExamine(HttpServletRequest request, Model model) {
 		String loanId = request.getParameter("loanId");
 		model.addAttribute("loanId", loanId);
-		return "loan/loanExamine";
+		return "loan/phaseOne/loanExamine";
 	}
 	
 	@RequestMapping("/toLoanCheck")
 	public String toLoanCheck(HttpServletRequest request, Model model) {
 		String loanId = request.getParameter("loanId");
 		model.addAttribute("loanId", loanId);
-		return "loan/loanCheckAll";
+		return "loan/phaseOne/loanCheckAll";
 	}
 	
 	@RequestMapping("/loanCheck")
@@ -151,7 +151,7 @@ public class LoanController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "loan/loanCheck";
+		return "loan/phaseOne/loanCheck";
 	}
 	
 	@RequestMapping("/saveLoan")
