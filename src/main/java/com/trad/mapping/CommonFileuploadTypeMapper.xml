@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.trad.dao.CommonFileuploadTypeMapper" >
+  <resultMap id="BaseResultMap" type="com.trad.bean.CommonFileuploadType" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="filter" property="filter" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="create_per" property="createPer" jdbcType="VARCHAR" />
+    <result column="update_per" property="updatePer" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, code, filter, name, create_time, update_time, create_per, update_per
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_common_fileupload_type
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_common_fileupload_type
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.trad.bean.CommonFileuploadType" >
+    insert into t_common_fileupload_type (id, code, filter, 
+      name, create_time, update_time, 
+      create_per, update_per)
+    values (#{id,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{filter,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{createPer,jdbcType=VARCHAR}, #{updatePer,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.trad.bean.CommonFileuploadType" >
+    insert into t_common_fileupload_type
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="filter != null" >
+        filter,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="createPer != null" >
+        create_per,
+      </if>
+      <if test="updatePer != null" >
+        update_per,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="filter != null" >
+        #{filter,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createPer != null" >
+        #{createPer,jdbcType=VARCHAR},
+      </if>
+      <if test="updatePer != null" >
+        #{updatePer,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.trad.bean.CommonFileuploadType" >
+    update t_common_fileupload_type
+    <set >
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="filter != null" >
+        filter = #{filter,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createPer != null" >
+        create_per = #{createPer,jdbcType=VARCHAR},
+      </if>
+      <if test="updatePer != null" >
+        update_per = #{updatePer,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.trad.bean.CommonFileuploadType" >
+    update t_common_fileupload_type
+    set code = #{code,jdbcType=VARCHAR},
+      filter = #{filter,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_per = #{createPer,jdbcType=VARCHAR},
+      update_per = #{updatePer,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

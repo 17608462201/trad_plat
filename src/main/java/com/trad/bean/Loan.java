@@ -40,10 +40,50 @@ public class Loan {
     private Date updateTime;
 
     private String createPer;
+    
+    private String loanState;
+    
+    private String loanPurpose;
+    
+    private String loanSource;
+    
+    private String loanOperate;
 
     private String updatePer;
     
-    public String getId() {
+    public String getLoanState() {
+		return loanState;
+	}
+
+	public void setLoanState(String loanState) {
+		this.loanState = loanState;
+	}
+
+	public String getLoanPurpose() {
+		return loanPurpose;
+	}
+
+	public void setLoanPurpose(String loanPurpose) {
+		this.loanPurpose = loanPurpose;
+	}
+
+	public String getLoanSource() {
+		return loanSource;
+	}
+
+	public void setLoanSource(String loanSource) {
+		this.loanSource = loanSource;
+	}
+
+	public String getLoanOperate() {
+		return loanOperate;
+	}
+
+	public void setLoanOperate(String loanOperate) {
+		this.loanOperate = loanOperate;
+	}
+
+	public String getId() {
         return id;
     }
 

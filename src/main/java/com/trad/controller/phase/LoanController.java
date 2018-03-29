@@ -24,6 +24,7 @@ import com.trad.bean.Loan;
 import com.trad.bean.LoanStatus;
 import com.trad.bean.User;
 import com.trad.bean.common.LayuiTable;
+import com.trad.service.CommonFileuploadService;
 import com.trad.service.CustomerService;
 import com.trad.service.LoanOfferService;
 import com.trad.service.LoanService;
@@ -46,6 +47,9 @@ public class LoanController {
 	
 	@Autowired
 	private CustomerService customerServiceImpl;
+	
+	@Autowired
+	private CommonFileuploadService commonFileuploadService;
 	
 	@Autowired
 	private ProductService productServiceImpl;
@@ -94,6 +98,11 @@ public class LoanController {
 			if (!StringUtils.isEmpty(loanId)) {
 //				Integer idInt = Integer.parseInt(loanId);
 				Loan loan = loanServiceImpl.selectByPrimaryKey(loanId);
+				Map<String, Object> map=new HashMap<>();
+				map.put("loanId", loanId);
+				map.put("type", "1");
+				List<Map<String, Object>> fileList=commonFileuploadService.selFileByLoanId(map);
+				model.addAttribute("fileList", fileList);
 				model.addAttribute("loan", loan);
 				model.addAttribute("type", "EDIT");
 			}
@@ -131,6 +140,17 @@ public class LoanController {
 		String loanId = request.getParameter("loanId");
 		model.addAttribute("loanId", loanId);
 		return "loan/phaseOne/loanExamine";
+	}
+	
+	@RequestMapping("/loanImg")
+	public String loanImg(HttpServletRequest request, Model model) {
+		String loanId = request.getParameter("loanId");
+		Map<String, Object> map=new HashMap<>();
+		map.put("loanId", loanId);
+		map.put("type", "1");
+		List<Map<String, Object>> fileList=commonFileuploadService.selFileByLoanId(map);
+		model.addAttribute("fileList", fileList);
+		return "loan/loanImg";
 	}
 	
 	@RequestMapping("/toLoanCheck")
@@ -221,7 +241,7 @@ public class LoanController {
 			String loanId=request.getParameter("loanId");
 			Map<String, Object> map=new HashMap<>();
 			map.put("loanId", loanId);
-			map.put("loanStatus", 2);
+			map.put("loanStatus", 1);
 			
 			User user = new SessionHelper(request).getLoginUser();
 			LoanStatus loanStatus=new LoanStatus();
@@ -237,4 +257,19 @@ public class LoanController {
 		}
 	}
 	
+	@RequestMapping("/delImage")
+	@ResponseBody
+	public String delImage(HttpServletRequest request,Model model) {
+		String loanId=request.getParameter("loanId");
+		String type=request.getParameter("type");
+		Map<String, Object> map=new HashMap<>();
+		map.put("loanId", loanId);
+		map.put("type", type);
+		try {
+			commonFileuploadService.delFile(map);
+			return ReplyCode.SUCCESS;
+		} catch (Exception e) {
+			return ReplyCode.INSIDEERROR;
+		}
+	}
 }

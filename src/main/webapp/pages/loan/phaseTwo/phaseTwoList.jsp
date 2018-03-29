@@ -29,18 +29,18 @@
     <div class="layui-col-xs6">
       <div class="grid-demo">
        <div class="layui-form-item">
-  	 		<button class="layui-btn" id="add"><i class="layui-icon">&#xe654;</i>添加</button>
+  	 		<!-- <button class="layui-btn" id="add"><i class="layui-icon">&#xe654;</i>添加</button> -->
   	 		<c:if test="${requestScope.SHOW_EDIT eq true}">
   	 		<button class="layui-btn" id="edit"><i class="layui-icon">&#xe642;</i>编辑</button>
   	 		</c:if>
-			<button class="layui-btn layui-btn-danger" id="delete"><i class="layui-icon">&#xe640;</i>删除 </button>
+			<!-- <button class="layui-btn layui-btn-danger" id="delete"><i class="layui-icon">&#xe640;</i>删除 </button> -->
 			<button class="layui-btn" id="refresh"><i class="layui-icon">&#x1002;</i>刷新</button>
 			<button class="layui-btn" id="check"><i class="layui-icon">&#xe615;</i>查看</button>
       </div>
     </div>
   </div>
   </div>
-<table class="layui-table" lay-data="{height:550,url:'${ctx }/loan/getList', page:true, limit:10, id:'tables'}" lay-filter="tree_filter">
+<table class="layui-table" lay-data="{height:550,url:'${ctx }/loanPhaseTow/getList', page:true, limit:10, id:'tables'}" lay-filter="tree_filter">
   <thead>
     <tr>
       <th lay-data="{checkbox:true, fixed: true}"></th>
@@ -81,7 +81,7 @@
 </script>
 
 <script type="text/html" id="barDemo">
-  {{ d.loanStatus == 1 ? '<a class="layui-btn layui-btn-xs" lay-event="examine">提交待下户</a>' : '' }}
+  {{ d.loanStatus == 2 ? '<a class="layui-btn layui-btn-xs" lay-event="examine">提交待复核</a>' : '' }}
 </script>
 <script>
 layui.use('table', function(){
@@ -101,14 +101,6 @@ layui.use('table', function(){
    	}else{
    	    dataVal = '0';
    	}
-   	
-    $.post("${ctx}/loan/getList",{"proID":id,"proFiled":this.name,"proValue":dataVal},function(obj){
-  		 if(obj == "200"){
-  			 layer.msg("设置产品是否有效成功！");
-  		 }else{
-  			 layer.msg("设置产品是否有效失败！");
-  		 }
-    });
 });
   
 //监听单元格编辑
@@ -127,35 +119,8 @@ layui.use('table', function(){
 	  var val = $("#filter").val();
 	  //刷新表格
 	  table.reload('tables', {
-		  url: '${ctx }/loan/getList?filter='+encodeURI(encodeURI(val))
+		  url: '${ctx }/loanPhaseTow/getList?filter='+encodeURI(encodeURI(val))
 		});
-	});
-  
-  $("#delete").on("click",function(){
-		  //删除表格
-		  var datas = table.checkStatus('tables').data;
-	      var loanId = '';
-	      for(i=0;i<datas.length;i++){
-	    	  loanId += datas[i].id+',';
-	      }
-	 	 if(loanId!=''){
-				 layer.confirm('确认删除么？', function(index){
-					 $.ajax({
-	   	         	     url: "${ctx}/loan/delLoan?loanId="+loanId, 
-	   	         	     dataType: "text", 
-	   	         	     success: function(data){
-	   	         	    	 if(data =='200'){
-	   	         	    		layer.closeAll();
-	   	         	    		window.location.href ='${ctx }/loan/init';
-	   	         	    	 }else{
-	   	         	    		 layer.msg("删除产品信息失败，请重试！");
-	   	         	    	 }
-	   	         	     }
-	   	         	 });
-				  });
-	 	 }else{
-	 		 layer.alert("你未选中任何行！");
-	 	 }
 	});
   
   $("#check").on("click",function(){
@@ -184,47 +149,35 @@ layui.use('table', function(){
 	  var datas = table.checkStatus('tables').data;
 	  if(datas.length>1){
     	  layer.alert("不支持同时编辑多行，请只选中一行！");
-      }else if(datas.length == 0) {
-    	  layer.alert("请选中一行！");
-      }else {
+      }else{
     	  var ids = datas[0].id;
     	  var loanStatus = datas[0].loanStatus;
-    	  if(loanStatus == 1){
+    	  if(loanStatus == 2){
     		//新增
         	  layer.open({
                   type: 2 //此处以iframe举例
                   ,title: '修改借款'
-                  ,area: ['850px', '600px']
+                  ,area: ['750px', '600px']
                   ,shade: 0
                   ,maxmin: true
                   ,offset: [
                        10
                   ] 
-                  ,content: '${ctx}/loan/editLoan?loanId='+ids+"&type=EDIT"
+                  ,content: '${ctx}/loanPhaseTow/editLoan?loanId='+ids+"&type=EDIT"
                   ,btn: ['保存', '关闭']
     	    	  ,yes: function(){
     	    		  var body = layer.getChildFrame('body', 0);
     	    		  var id=body.find('input[name="id"]').val();
-            		  var productId=body.find('select[name="productName"]').val();
-            		  var productName=body.find('select[name="productName"]').find("option:selected").text();
-          			  var managerId=body.find('input[name="managerId"]').val();
-          			  var managerName=body.find('input[name="managerNames"]').val();
-          			  var loanPer=body.find('input[name="loanPer"]').val();
-          			  var loanMobile=body.find('input[name="loanMobile"]').val();
-          			  var loanMoney=body.find('input[name="loanMoney"]').val();
-          			  var loanLimit=body.find('input[name="loanLimit"]').val();
-          			  var customerId=body.find('select[name="customerName"]').val();
-          			  var customerName=body.find('select[name="customerName"]').find("option:selected").text();
-          			  var pawnAdd=body.find('input[name="pawnAdd"]').val();
-          			  var remark=body.find('input[name="remark"]').val();
-          			  
-          			  var jsonObj = {"id":id,"productId":productId,"productName":productName,"managerId":managerId,"managerName":managerName,"loanPer":loanPer,
-    		      			  "loanMobile":loanMobile,"loanMoney":loanMoney,"loanLimit":loanLimit,"customerId":customerId,"customerName":customerName,
-    		      			  "pawnAdd":pawnAdd,"remark":remark};
-    	    		  $.post("${ctx}/loan/upLoan",jsonObj,function(text){
+    	    		  var loanState=body.find('input[name="loanState"]').val();
+    	    		  var loanPurpose=body.find('input[name="loanPurpose"]').val();
+    	    		  var loanSource=body.find('input[name="loanSource"]').val();
+    	    		  var loanOperate=body.find('input[name="loanOperate"]').val();
+          			  console.log(loanState+"   "+loanPurpose+"    "+loanSource +"    "+loanOperate)
+          			  var jsonObj = {"id":id,"loanState":loanState,"loanPurpose":loanPurpose,"loanSource":loanSource,"loanOperate":loanOperate};
+    	    		  $.post("${ctx}/loanPhaseTow/upLoan",jsonObj,function(text){
     	          		  if(text=='200'){
     	          			layer.closeAll();
-    		          		  window.location.href ='${ctx }/loan/init';
+    		          		  window.location.href ='${ctx }/loanPhaseTow/init';
     	          		  }else{
     	          			  layer.msg("保存借款信息出错！");
     	          		  }
@@ -237,50 +190,6 @@ layui.use('table', function(){
  	 }
 });
   
-  $("#add").on("click",function(){
-		//新增
-		layer.open({
-              type: 2 //此处以iframe举例
-              ,title: '修改借款'
-              ,area: ['850px', '600px']
-              ,shade: 0
-              ,maxmin: true
-              ,offset: [
-                   10
-              ] 
-              ,content: '${ctx}/loan/addLoan'
-              ,btn: ['保存', '关闭']
-        	  ,yes: function(){
-        		  var body = layer.getChildFrame('body', 0);
-        		  var id=body.find('input[name="id"]').val();
-        		  var productId=body.find('select[name="productName"]').val();
-        		  var productName=body.find('select[name="productName"]').find("option:selected").text();
-      			  var managerId=body.find('input[name="managerId"]').val();
-      			  var managerName=body.find('input[name="managerNames"]').val();
-      			  var loanPer=body.find('input[name="loanPer"]').val();
-      			  var loanMobile=body.find('input[name="loanMobile"]').val();
-      			  var loanMoney=body.find('input[name="loanMoney"]').val();
-      			  var loanLimit=body.find('input[name="loanLimit"]').val();
-      			  var customerId=body.find('select[name="customerName"]').val();
-      			  var customerName=body.find('select[name="customerName"]').find("option:selected").text();
-      			  var pawnAdd=body.find('input[name="pawnAdd"]').val();
-      			  var remark=body.find('input[name="remark"]').val();
-      			  
-				  var jsonObj = {"id":id,"productId":productId,"productName":productName,"managerId":managerId,"managerName":managerName,"loanPer":loanPer,
-		      			  "loanMobile":loanMobile,"loanMoney":loanMoney,"loanLimit":loanLimit,"customerId":customerId,"customerName":customerName,
-		      			  "pawnAdd":pawnAdd,"remark":remark};
-        		  $.post("${ctx}/loan/saveLoan",jsonObj,function(text){
-	          		  if(text=='200'){
-	          			layer.closeAll();
-		          		  window.location.href ='${ctx }/loan/init';
-	          		  }else{
-	          			  layer.msg("保存借款信息出错！");
-	          		  }
-	       	     });
-        	  }
-       	});
-	});
-
   /*$("#search").on("click",function() {
 		var val = $("#filter").val();
 		//刷新表格
@@ -292,7 +201,7 @@ layui.use('table', function(){
 	 table.on('tool(tree_filter)', function(obj){
 		    var data = obj.data;
 		    if(obj.event === 'examine'){
-		    	$.post("${ctx}/loan/upLoanStatus?loanId="+data.id,function(text){
+		    	$.post("${ctx}/loanPhaseTow/upLoanStatus?loanId="+data.id,function(text){
 	          		  if(text=='200'){
 	          			  layer.closeAll();
 		          		  window.location.href ='${ctx }/loan/init';
