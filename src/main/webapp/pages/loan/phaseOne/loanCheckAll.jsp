@@ -15,17 +15,37 @@
   <ul class="layui-tab-title">
    <li class="layui-this" lay-id="11">借款基本信息</li>
     <li lay-id="22">下户信息</li>
-    <li lay-id="33">核算信息</li>
+    <li lay-id="33">复核信息</li>
     <li lay-id="44">签约信息</li>
   </ul>
   <div class="layui-tab-content">
-  <div class="layui-tab-item layui-show">
-       <iframe  id="tabFrame11" src="${ctx }/loan/loanCheck?loanId=${loanId}"  width="100%" height="100%" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes"></iframe>
-  </div>
+	  <div class="layui-tab-item layui-show">
+	       <iframe  id="tabFrame11" src="${ctx }/loan/loanCheck?loanId=${loanId}"  width="100%" height="100%" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes"></iframe>
+	  </div>
+	  <div class="layui-tab-item">
+           <iframe  id="tabFrame22" src="${ctx }/loanPhaseTow/loanCheck?loanId=${loanId}"  width="100%" height="100%" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes"></iframe>
+      </div>
+      <div class="layui-tab-item">
+           <iframe  id="tabFrame33"  src="${ctx }/loanPhaseThree/loanCheck?loanId=${loanId}" width="100%" height="100%" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes"></iframe>
+      </div>
   </div>
 </div>
 
 <script>
-	
+layui.use('element', function(){
+	  var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+	  var $ = layui.jquery
+	  var layid = location.hash.replace(/^#customerTab=/, '');
+	  element.tabChange('customerTab', layid);
+	  element.on('tab(customerTab)', function(data){
+		  location.hash = 'customerTab='+ $(this).attr('lay-id');
+		  var iframe=$(data.elem).find("iframe").eq(data.index);
+		 //if(data.index == 2 || data.index ==3){
+			  var iframeSrc=$(iframe[0]).attr("src");
+			  console.log(iframeSrc);
+	          $(iframe[0]).attr("src",iframeSrc);
+		  //}
+		});
+	});	
 </script>
 <%@ include file="/pages/common/footer.jsp"%>

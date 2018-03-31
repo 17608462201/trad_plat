@@ -245,7 +245,7 @@
             ,offset: [
                  10
             ] 
-            ,content: '${ctx}/loan/loanImg?loanId='+$('#id').val()
+            ,content: '${ctx}/loan/loanImg?loanId='+$('#id').val()+"&type=1"
             ,btn: ['关闭']
   	    })
 	})

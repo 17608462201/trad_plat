@@ -135,19 +135,13 @@ public class LoanController {
 		return JSONObject.toJSONString(customerList);
 	}
 	
-	@RequestMapping("/loanExamine")
-	public String loanExamine(HttpServletRequest request, Model model) {
-		String loanId = request.getParameter("loanId");
-		model.addAttribute("loanId", loanId);
-		return "loan/phaseOne/loanExamine";
-	}
-	
 	@RequestMapping("/loanImg")
 	public String loanImg(HttpServletRequest request, Model model) {
 		String loanId = request.getParameter("loanId");
+		String type=request.getParameter("type");
 		Map<String, Object> map=new HashMap<>();
 		map.put("loanId", loanId);
-		map.put("type", "1");
+		map.put("type", type);
 		List<Map<String, Object>> fileList=commonFileuploadService.selFileByLoanId(map);
 		model.addAttribute("fileList", fileList);
 		return "loan/loanImg";
@@ -166,7 +160,12 @@ public class LoanController {
 			String loanId = request.getParameter("loanId");
 			if (!StringUtils.isEmpty(loanId)) {
 				Loan loan = loanServiceImpl.selectByPrimaryKey(loanId);
+				Map<String, Object> map=new HashMap<>();
+				map.put("loanId", loanId);
+				map.put("type", "1");
+				List<Map<String, Object>> fileList=commonFileuploadService.selFileByLoanId(map);
 				model.addAttribute("loan", loan);
+				model.addAttribute("fileList", fileList);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -241,7 +240,7 @@ public class LoanController {
 			String loanId=request.getParameter("loanId");
 			Map<String, Object> map=new HashMap<>();
 			map.put("loanId", loanId);
-			map.put("loanStatus", 1);
+			map.put("loanStatus", 2);
 			
 			User user = new SessionHelper(request).getLoginUser();
 			LoanStatus loanStatus=new LoanStatus();

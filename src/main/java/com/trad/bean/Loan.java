@@ -51,7 +51,27 @@ public class Loan {
 
     private String updatePer;
     
-    public String getLoanState() {
+    private String examineMoney;
+    
+    private String examineLimit;
+    
+    public String getExamineMoney() {
+		return examineMoney;
+	}
+
+	public void setExamineMoney(String examineMoney) {
+		this.examineMoney = examineMoney;
+	}
+
+	public String getExamineLimit() {
+		return examineLimit;
+	}
+
+	public void setExamineLimit(String examineLimit) {
+		this.examineLimit = examineLimit;
+	}
+
+	public String getLoanState() {
 		return loanState;
 	}
 

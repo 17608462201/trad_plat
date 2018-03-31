@@ -1,5 +1,6 @@
 package com.trad.controller.phase;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,30 +18,34 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.trad.bean.Loan;
+import com.trad.bean.LoanOffer;
 import com.trad.bean.LoanStatus;
 import com.trad.bean.User;
 import com.trad.bean.common.LayuiTable;
 import com.trad.service.CommonFileuploadService;
+import com.trad.service.LoanOfferService;
 import com.trad.service.LoanService;
 import com.trad.service.LoanStatusService;
-import com.trad.util.EntityToMap;
+import com.trad.util.DateUtil;
 import com.trad.util.ReplyCode;
 import com.trad.util.SessionHelper;
 
 @Controller
-@RequestMapping("/loanPhaseTow")
-public class LoanPhaseTowController {
+@RequestMapping("loanPhaseThree")
+public class LoanPhaseThreeController {
 	
 	@Autowired
 	private LoanService loanServiceImpl;
+	
 	@Autowired
 	private CommonFileuploadService commonFileuploadService;
+	
 	@Autowired
 	private LoanStatusService loanStatusService;
 	
 	@RequestMapping("/init")
 	public String init(HttpServletRequest request, Model model) {
-		return "loan/phaseTwo/phaseTwoList";
+		return "loan/phaseThree/loanOfferList";
 	}
 
 	@RequestMapping("/getList")
@@ -55,43 +60,11 @@ public class LoanPhaseTowController {
 		return JSONObject.toJSONString(returnMsg);
 	}
 	
-	@RequestMapping("/editLoan")
-	public String editPro(HttpServletRequest request, Model model) {
-		try {
-			String loanId = request.getParameter("loanId");
-			if (!StringUtils.isEmpty(loanId)) {
-//				Integer idInt = Integer.parseInt(loanId);
-				Loan loan = loanServiceImpl.selectByPrimaryKey(loanId);
-				Map<String, Object> map=new HashMap<>();
-				map.put("loanId", loanId);
-				map.put("type", "2");
-				List<Map<String, Object>> fileList=commonFileuploadService.selFileByLoanId(map);
-				model.addAttribute("fileList", fileList);
-				model.addAttribute("loan", loan);
-				model.addAttribute("type", "EDIT");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return "loan/phaseTwo/phaseTwoEdit";
-	}
-	
-	@RequestMapping("/upLoan")
-	@ResponseBody
-	public String upLoan(HttpServletRequest request,Model model) {
-		try {
-			Loan loan=new Loan();
-			
-			ServletRequestDataBinder binder = new ServletRequestDataBinder(loan);
-			binder.bind(request);
-			
-			Map<String, Object> map=EntityToMap.ConvertObjToMap(loan);
-			
-			loanServiceImpl.updateByPrimaryKeySelective(map);
-			return ReplyCode.SUCCESS;
-		}catch (Exception e) {
-			return ReplyCode.INSIDEERROR;
-		}
+	@RequestMapping("/loanExamine")
+	public String loanExamine(HttpServletRequest request, Model model) {
+		String loanId = request.getParameter("loanId");
+		model.addAttribute("loanId", loanId);
+		return "loan/phaseThree/loanExamine";
 	}
 	
 	@RequestMapping("/upLoanStatus")
@@ -99,18 +72,30 @@ public class LoanPhaseTowController {
 	public String upLoanStatus(HttpServletRequest request,Model model) {
 		try {
 			String loanId=request.getParameter("loanId");
+			String examineMoney=request.getParameter("examineMoney");
+			String examineLimit=request.getParameter("examineLimit");
+			String isStatus=request.getParameter("isStatus");
 			Map<String, Object> map=new HashMap<>();
-			map.put("loanId", loanId);
-			map.put("loanStatus", 3);
+			map.put("id", loanId);
+			
+			map.put("examineMoney", examineMoney);
+			map.put("examineLimit", examineLimit);
 			
 			User user = new SessionHelper(request).getLoginUser();
 			LoanStatus loanStatus=new LoanStatus();
 			loanStatus.setLoanId(loanId);
-			loanStatus.setLoanStatus(3);
+			if(isStatus.equals("1")) {
+				map.put("loanStatus", 4);
+				loanStatus.setLoanStatus(4);
+			}else {
+				map.put("loanStatus", 1);
+				loanStatus.setLoanStatus(1);
+			}
 			loanStatus.setCreateUserId(user.getUserId());
 			
 			loanStatusService.insert(loanStatus);
-			loanServiceImpl.upLoanStatus(map);
+//			loanServiceImpl.upLoanStatus(map);
+			loanServiceImpl.updateByPrimaryKeySelective(map);
 			return ReplyCode.SUCCESS;
 		} catch (Exception e) {
 			return ReplyCode.INSIDEERROR;
@@ -123,17 +108,17 @@ public class LoanPhaseTowController {
 			String loanId = request.getParameter("loanId");
 			if (!StringUtils.isEmpty(loanId)) {
 				Loan loan = loanServiceImpl.selectByPrimaryKey(loanId);
-				Map<String, Object> map=new HashMap<>();
-				map.put("loanId", loanId);
-				map.put("type", "2");
-				List<Map<String, Object>> fileList=commonFileuploadService.selFileByLoanId(map);
+//				Map<String, Object> map=new HashMap<>();
+//				map.put("loanId", loanId);
+//				map.put("type", "2");
+//				List<Map<String, Object>> fileList=commonFileuploadService.selFileByLoanId(map);
 				
 				model.addAttribute("loan", loan);
-				model.addAttribute("fileList", fileList);
+//				model.addAttribute("fileList", fileList);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "loan/phaseTwo/loanCheck";
+		return "loan/phaseThree/loanCheck";
 	}
 }

@@ -137,6 +137,22 @@
 		    }
 		  });
 	});
+	
+	$('#loanImg').on('click', function(){
+		layer.open({
+            type: 2 //此处以iframe举例
+            ,title: '查看借款单'
+            ,area: ['620px', '300px']
+            ,shade: 0
+            ,maxmin: true
+            ,offset: [
+                 10
+            ] 
+            ,content: '${ctx}/loan/loanImg?loanId='+$('#id').val()+"&type=2"
+            ,btn: ['关闭']
+  	    })
+	})
+	
 	$('#delImage').on('click', function(){
 		if (confirm("确定要删除吗？")==true){
 			$.ajax({

@@ -30,21 +30,28 @@
 	<hr>
 	<input type="hidden" name="loanId" id="loanId" value="${loanId }">
 	<div class="layui-form-item">
-		<label class="layui-form-label">审核状态：</label>
-		<div class="layui-input-inline">
-			<select name="loanStatus" id="loanStatus" lay-verify="required">
-				<option>请选择审核状态</option>
-				<option value="1">待审核</option>
-				<option value="2">待放款</option>
-				<option value="3">取消贷款申请</option>
-				<option value="4">拒绝贷款申请</option>
-			</select>
+		<div class="layui-inline">
+			<label class="layui-form-label">借款金额：</label>
+			<div class="layui-input-inline">
+				<input type="text" name="examineMoney" lay-verify="required" id="examineMoney" autocomplete="off"	class="layui-input">
+			</div>
 		</div>
 	</div>
 	<div class="layui-form-item">
-		<label class="layui-form-label">审核意见：</label>
-		<div class="layui-input-block">
-			<input type="text" name="loanOpinion" lay-verify="required" id="loanOpinion" autocomplete="off"	class="layui-input">
+		<div class="layui-inline">
+			<label class="layui-form-label">还款期限：</label>
+			<div class="layui-input-block">
+				<input type="text" name="examineLimit" lay-verify="required" id="examineLimit" autocomplete="off"	class="layui-input">
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">是否同意：</label>
+			<div class="layui-input-block">
+				<input type="radio" name="isStatus" value="1" title="是">
+	      		<input type="radio" name="isStatus" value="2" title="否" checked>
+			</div>
 		</div>
 	</div>
 </form>
