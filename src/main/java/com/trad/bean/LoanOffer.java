@@ -7,8 +7,6 @@ public class LoanOffer {
 
     private String loadId;
 
-    private String managerId;
-
     private String loadType;
 
     private String paymentName;
@@ -27,33 +25,27 @@ public class LoanOffer {
 
     private String platMoney;
 
-    private Date offerDay;
+    private String offerDay;
 
     private String offerMoney;
 
     private String monthScale;
 
-    private Date firstPayment;
+    private String firstPayment;
 
-    private Date lastPayment;
+    private String lastPayment;
 
-    private int offerLimit;
+    private String offerLimit;
 
     private String monthPayMoney;
 
     private String monthSerc;
 
-    private String mortgage;
-
-    private String mortgageAddress;
-
-    private String mortgageMark;
-
     private String paymentPlan;
 
-    private Date createTime;
+    private String createTime;
 
-    private Date updateTime;
+    private String updateTime;
 
     private String createPer;
 
@@ -73,14 +65,6 @@ public class LoanOffer {
 
     public void setLoadId(String loadId) {
         this.loadId = loadId == null ? null : loadId.trim();
-    }
-
-    public String getManagerId() {
-        return managerId;
-    }
-
-    public void setManagerId(String managerId) {
-        this.managerId = managerId == null ? null : managerId.trim();
     }
 
     public String getLoadType() {
@@ -155,14 +139,6 @@ public class LoanOffer {
         this.platMoney = platMoney == null ? null : platMoney.trim();
     }
 
-    public Date getOfferDay() {
-        return offerDay;
-    }
-
-    public void setOfferDay(Date offerDay) {
-        this.offerDay = offerDay;
-    }
-
     public String getOfferMoney() {
         return offerMoney;
     }
@@ -179,27 +155,27 @@ public class LoanOffer {
         this.monthScale = monthScale == null ? null : monthScale.trim();
     }
 
-    public Date getFirstPayment() {
-        return firstPayment;
-    }
+    public String getFirstPayment() {
+		return firstPayment;
+	}
 
-    public void setFirstPayment(Date firstPayment) {
-        this.firstPayment = firstPayment;
-    }
+	public void setFirstPayment(String firstPayment) {
+		this.firstPayment = firstPayment;
+	}
 
-    public Date getLastPayment() {
-        return lastPayment;
-    }
+	public String getLastPayment() {
+		return lastPayment;
+	}
 
-    public void setLastPayment(Date lastPayment) {
-        this.lastPayment = lastPayment;
-    }
+	public void setLastPayment(String lastPayment) {
+		this.lastPayment = lastPayment;
+	}
 
-    public int getOfferLimit() {
+	public String getOfferLimit() {
 		return offerLimit;
 	}
 
-	public void setOfferLimit(int offerLimit) {
+	public void setOfferLimit(String offerLimit) {
 		this.offerLimit = offerLimit;
 	}
 
@@ -219,52 +195,12 @@ public class LoanOffer {
         this.monthSerc = monthSerc == null ? null : monthSerc.trim();
     }
 
-    public String getMortgage() {
-        return mortgage;
-    }
-
-    public void setMortgage(String mortgage) {
-        this.mortgage = mortgage == null ? null : mortgage.trim();
-    }
-
-    public String getMortgageAddress() {
-        return mortgageAddress;
-    }
-
-    public void setMortgageAddress(String mortgageAddress) {
-        this.mortgageAddress = mortgageAddress == null ? null : mortgageAddress.trim();
-    }
-
-    public String getMortgageMark() {
-        return mortgageMark;
-    }
-
-    public void setMortgageMark(String mortgageMark) {
-        this.mortgageMark = mortgageMark == null ? null : mortgageMark.trim();
-    }
-
     public String getPaymentPlan() {
         return paymentPlan;
     }
 
     public void setPaymentPlan(String paymentPlan) {
         this.paymentPlan = paymentPlan == null ? null : paymentPlan.trim();
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
     }
 
     public String getCreatePer() {
@@ -282,4 +218,28 @@ public class LoanOffer {
     public void setUpdatePer(String updatePer) {
         this.updatePer = updatePer == null ? null : updatePer.trim();
     }
+
+	public String getOfferDay() {
+		return offerDay;
+	}
+
+	public void setOfferDay(String offerDay) {
+		this.offerDay = offerDay;
+	}
+
+	public String getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
+
+	public String getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(String updateTime) {
+		this.updateTime = updateTime;
+	}
 }

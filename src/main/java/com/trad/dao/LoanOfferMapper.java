@@ -1,5 +1,8 @@
 package com.trad.dao;
 
+import java.util.List;
+import java.util.Map;
+
 import com.trad.bean.LoanOffer;
 
 public interface LoanOfferMapper {
@@ -11,7 +14,13 @@ public interface LoanOfferMapper {
 
     LoanOffer selectByPrimaryKey(String id);
 
-    int updateByPrimaryKeySelective(LoanOffer record);
+    int updateByPrimaryKeySelective(LoanOffer loanOffer);
 
     int updateByPrimaryKey(LoanOffer record);
+    
+    List<Map<String, Object>> getLoanOfferList(Map<String, Object> map);
+    
+    int getCount(Map<String, Object> map);
+    
+    Map<String, Object> selloanOfferByloanId(String loanId);
 }

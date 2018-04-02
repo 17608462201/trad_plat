@@ -16,7 +16,7 @@
    <li class="layui-this" lay-id="11">借款基本信息</li>
     <li lay-id="22">下户信息</li>
     <li lay-id="33">复核信息</li>
-    <li lay-id="44">签约信息</li>
+    <li lay-id="44">费用核算</li>
   </ul>
   <div class="layui-tab-content">
 	  <div class="layui-tab-item layui-show">
@@ -27,6 +27,9 @@
       </div>
       <div class="layui-tab-item">
            <iframe  id="tabFrame33"  src="${ctx }/loanPhaseThree/loanCheck?loanId=${loanId}" width="100%" height="100%" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes"></iframe>
+      </div>
+      <div class="layui-tab-item">
+           <iframe  id="tabFrame44"  src="${ctx }/loanPhaseFour/loanCheck?loanId=${loanId}" width="100%" height="1300" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes"></iframe>
       </div>
   </div>
 </div>
@@ -40,11 +43,10 @@ layui.use('element', function(){
 	  element.on('tab(customerTab)', function(data){
 		  location.hash = 'customerTab='+ $(this).attr('lay-id');
 		  var iframe=$(data.elem).find("iframe").eq(data.index);
-		 //if(data.index == 2 || data.index ==3){
+		 if(data.index == 2 || data.index ==3){
 			  var iframeSrc=$(iframe[0]).attr("src");
-			  console.log(iframeSrc);
 	          $(iframe[0]).attr("src",iframeSrc);
-		  //}
+		  }
 		});
 	});	
 </script>

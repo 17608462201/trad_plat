@@ -1,106 +1,123 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.trad.dao.LoanPlanMapper" >
-  <resultMap id="BaseResultMap" type="com.trad.bean.LoanPlan" >
-    <id column="loan_plan_id" property="loanPlanId" jdbcType="INTEGER" />
-    <result column="payment_time" property="paymentTime" jdbcType="TIMESTAMP" />
-    <result column="principal" property="principal" jdbcType="VARCHAR" />
-    <result column="interest" property="interest" jdbcType="VARCHAR" />
-    <result column="guarantee" property="guarantee" jdbcType="VARCHAR" />
-    <result column="service" property="service" jdbcType="VARCHAR" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.trad.dao.LoanPlanMapper">
+  <resultMap id="BaseResultMap" type="com.trad.bean.LoanPlan">
+    <id column="plan_id" jdbcType="INTEGER" property="planId" />
+    <result column="loan_id" jdbcType="VARCHAR" property="loanId" />
+    <result column="stage_number" jdbcType="INTEGER" property="stageNumber" />
+    <result column="payment_time" jdbcType="VARCHAR" property="paymentTime" />
+    <result column="principal" jdbcType="VARCHAR" property="principal" />
+    <result column="interest" jdbcType="VARCHAR" property="interest" />
+    <result column="guarantee" jdbcType="VARCHAR" property="guarantee" />
+    <result column="service" jdbcType="VARCHAR" property="service" />
   </resultMap>
-  <sql id="Base_Column_List" >
-    loan_plan_id, payment_time, principal, interest, guarantee, service
+  <sql id="Base_Column_List">
+    plan_id, loan_id, stage_number, payment_time, principal, interest, guarantee, service
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  
+  <select id="selPlanByLoanId" parameterType="String" resultType="map">
+  	select plan_id planId, loan_id loanId, stage_number stageNumber, left(payment_time,10) paymentTime, principal, interest, guarantee, service from t_loan_plan where loan_id=#{loanId}
+  </select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from t_loan_plan
-    where loan_plan_id = #{loanPlanId,jdbcType=INTEGER}
+    where plan_id = #{planId,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_loan_plan
-    where loan_plan_id = #{loanPlanId,jdbcType=INTEGER}
+    where plan_id = #{planId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.trad.bean.LoanPlan" >
-    insert into t_loan_plan (loan_plan_id, payment_time, principal, 
-      interest, guarantee, service
-      )
-    values (#{loanPlanId,jdbcType=INTEGER}, #{paymentTime,jdbcType=TIMESTAMP}, #{principal,jdbcType=VARCHAR}, 
-      #{interest,jdbcType=VARCHAR}, #{guarantee,jdbcType=VARCHAR}, #{service,jdbcType=VARCHAR}
-      )
+  <insert id="insert" parameterType="com.trad.bean.LoanPlan">
+    insert into t_loan_plan (loan_id, stage_number, payment_time, 
+      principal, interest, guarantee, 
+      service)
+    values (#{loanId,jdbcType=VARCHAR}, #{stageNumber}, #{paymentTime,jdbcType=VARCHAR}, 
+      #{principal,jdbcType=VARCHAR}, #{interest,jdbcType=VARCHAR}, #{guarantee,jdbcType=VARCHAR}, 
+      #{service,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.trad.bean.LoanPlan" >
+  <insert id="insertSelective" parameterType="com.trad.bean.LoanPlan">
     insert into t_loan_plan
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="loanPlanId != null" >
-        loan_plan_id,
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="planId != null">
+        plan_id,
       </if>
-      <if test="paymentTime != null" >
+      <if test="loanId != null">
+        loan_id,
+      </if>
+      <if test="paymentTime != null">
         payment_time,
       </if>
-      <if test="principal != null" >
+      <if test="principal != null">
         principal,
       </if>
-      <if test="interest != null" >
+      <if test="interest != null">
         interest,
       </if>
-      <if test="guarantee != null" >
+      <if test="guarantee != null">
         guarantee,
       </if>
-      <if test="service != null" >
+      <if test="service != null">
         service,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="loanPlanId != null" >
-        #{loanPlanId,jdbcType=INTEGER},
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="planId != null">
+        #{planId,jdbcType=INTEGER},
       </if>
-      <if test="paymentTime != null" >
-        #{paymentTime,jdbcType=TIMESTAMP},
+      <if test="loanId != null">
+        #{loanId,jdbcType=VARCHAR},
       </if>
-      <if test="principal != null" >
+      <if test="paymentTime != null">
+        #{paymentTime,jdbcType=VARCHAR},
+      </if>
+      <if test="principal != null">
         #{principal,jdbcType=VARCHAR},
       </if>
-      <if test="interest != null" >
+      <if test="interest != null">
         #{interest,jdbcType=VARCHAR},
       </if>
-      <if test="guarantee != null" >
+      <if test="guarantee != null">
         #{guarantee,jdbcType=VARCHAR},
       </if>
-      <if test="service != null" >
+      <if test="service != null">
         #{service,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.trad.bean.LoanPlan" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.trad.bean.LoanPlan">
     update t_loan_plan
-    <set >
-      <if test="paymentTime != null" >
-        payment_time = #{paymentTime,jdbcType=TIMESTAMP},
+    <set>
+      <if test="loanId != null">
+        loan_id = #{loanId,jdbcType=VARCHAR},
       </if>
-      <if test="principal != null" >
+      <if test="paymentTime != null">
+        payment_time = #{paymentTime,jdbcType=VARCHAR},
+      </if>
+      <if test="principal != null">
         principal = #{principal,jdbcType=VARCHAR},
       </if>
-      <if test="interest != null" >
+      <if test="interest != null">
         interest = #{interest,jdbcType=VARCHAR},
       </if>
-      <if test="guarantee != null" >
+      <if test="guarantee != null">
         guarantee = #{guarantee,jdbcType=VARCHAR},
       </if>
-      <if test="service != null" >
+      <if test="service != null">
         service = #{service,jdbcType=VARCHAR},
       </if>
     </set>
-    where loan_plan_id = #{loanPlanId,jdbcType=INTEGER}
+    where plan_id = #{planId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.trad.bean.LoanPlan" >
+  <update id="updateByPrimaryKey" parameterType="com.trad.bean.LoanPlan">
     update t_loan_plan
-    set payment_time = #{paymentTime,jdbcType=TIMESTAMP},
+    set loan_id = #{loanId,jdbcType=VARCHAR},
+      payment_time = #{paymentTime,jdbcType=VARCHAR},
       principal = #{principal,jdbcType=VARCHAR},
       interest = #{interest,jdbcType=VARCHAR},
       guarantee = #{guarantee,jdbcType=VARCHAR},
       service = #{service,jdbcType=VARCHAR}
-    where loan_plan_id = #{loanPlanId,jdbcType=INTEGER}
+    where plan_id = #{planId,jdbcType=INTEGER}
   </update>
 </mapper>

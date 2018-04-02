@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONObject;
 import com.trad.bean.Customer;
 import com.trad.bean.Loan;
+import com.trad.bean.LoanOffer;
 import com.trad.bean.LoanStatus;
 import com.trad.bean.User;
 import com.trad.bean.common.LayuiTable;
@@ -50,6 +51,9 @@ public class LoanController {
 	
 	@Autowired
 	private CommonFileuploadService commonFileuploadService;
+	
+	@Autowired
+	private LoanOfferService loanOfferService;
 	
 	@Autowired
 	private ProductService productServiceImpl;
@@ -178,17 +182,18 @@ public class LoanController {
 	public String saveLoan(HttpServletRequest request,Model model) {
 		try {
 			Loan loan=new Loan();
+			loan.setApplyTime(DateUtil.format(new Date()));
+			loan.setLoanStatus("1");
 			
 			ServletRequestDataBinder binder = new ServletRequestDataBinder(loan);
 			binder.bind(request);
 			
-			loan.setApplyTime(DateUtil.format(new Date()));
-			loan.setLoanStatus("1");
+			LoanOffer loanOffer=new LoanOffer();
+			loanOffer.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+			loanOffer.setLoadId(loan.getId());
 			
 			LoanStatus loanStatus=new LoanStatus();
-			
 			User user = new SessionHelper(request).getLoginUser();
-			
 			loanStatus.setLoanId(loan.getId());
 			loanStatus.setCreateUserId(user.getUserId());
 			
@@ -197,6 +202,7 @@ public class LoanController {
 			
 			loanServiceImpl.insert(map);
 			loanStatusService.insert(loanStatus);
+			loanOfferService.insert(loanOffer);
 			return ReplyCode.SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();

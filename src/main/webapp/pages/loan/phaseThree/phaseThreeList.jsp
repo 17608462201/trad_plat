@@ -59,17 +59,17 @@
 	{{# }else if(d.loanStatus == 2){ }}
 		<div class="layui-table-cell laytable-cell-1-loanStatus">待下户</div>
 	{{# }else if(d.loanStatus == 3){ }}
-		<div class="layui-table-cell laytable-cell-1-loanStatus">待核算</div>
+		<div class="layui-table-cell laytable-cell-1-loanStatus">待复核</div>
 	{{# }else if(d.loanStatus == 4){ }}
-		<div class="layui-table-cell laytable-cell-1-loanStatus">待签约</div>
+		<div class="layui-table-cell laytable-cell-1-loanStatus">待核算</div>
 	{{# }else if(d.loanStatus == 5){ }}
-		<div class="layui-table-cell laytable-cell-1-loanStatus">待公证</div>
+		<div class="layui-table-cell laytable-cell-1-loanStatus">待签约</div>
 	{{# }else if(d.loanStatus == 6){ }}
-		<div class="layui-table-cell laytable-cell-1-loanStatus">待放款</div>
+		<div class="layui-table-cell laytable-cell-1-loanStatus">待公证</div>
 	{{# }else if(d.loanStatus == 7){ }}
-		<div class="layui-table-cell laytable-cell-1-loanStatus">放款审核</div>
+		<div class="layui-table-cell laytable-cell-1-loanStatus">待放款</div>
 	{{# }else if(d.loanStatus == 8){ }}
-		<div class="layui-table-cell laytable-cell-1-loanStatus">总经理审核</div>
+		<div class="layui-table-cell laytable-cell-1-loanStatus">放款审核</div>
 	{{# }else if(d.loanStatus == 9){ }}
 		<div class="layui-table-cell laytable-cell-1-loanStatus">财务放款</div>
 	{{# } }}

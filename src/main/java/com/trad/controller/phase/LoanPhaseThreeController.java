@@ -45,7 +45,7 @@ public class LoanPhaseThreeController {
 	
 	@RequestMapping("/init")
 	public String init(HttpServletRequest request, Model model) {
-		return "loan/phaseThree/loanOfferList";
+		return "loan/phaseThree/phaseThreeList";
 	}
 
 	@RequestMapping("/getList")
@@ -94,7 +94,6 @@ public class LoanPhaseThreeController {
 			loanStatus.setCreateUserId(user.getUserId());
 			
 			loanStatusService.insert(loanStatus);
-//			loanServiceImpl.upLoanStatus(map);
 			loanServiceImpl.updateByPrimaryKeySelective(map);
 			return ReplyCode.SUCCESS;
 		} catch (Exception e) {
@@ -108,13 +107,7 @@ public class LoanPhaseThreeController {
 			String loanId = request.getParameter("loanId");
 			if (!StringUtils.isEmpty(loanId)) {
 				Loan loan = loanServiceImpl.selectByPrimaryKey(loanId);
-//				Map<String, Object> map=new HashMap<>();
-//				map.put("loanId", loanId);
-//				map.put("type", "2");
-//				List<Map<String, Object>> fileList=commonFileuploadService.selFileByLoanId(map);
-				
 				model.addAttribute("loan", loan);
-//				model.addAttribute("fileList", fileList);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

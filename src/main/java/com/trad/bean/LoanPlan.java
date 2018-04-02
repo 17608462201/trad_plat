@@ -3,9 +3,13 @@ package com.trad.bean;
 import java.util.Date;
 
 public class LoanPlan {
-    private Integer loanPlanId;
+    private Integer planId;
 
-    private Date paymentTime;
+    private String loanId;
+
+    private int stageNumber;
+    
+    private String paymentTime;
 
     private String principal;
 
@@ -15,20 +19,36 @@ public class LoanPlan {
 
     private String service;
 
-    public Integer getLoanPlanId() {
-        return loanPlanId;
+    public int getStageNumber() {
+		return stageNumber;
+	}
+
+	public void setStageNumber(int stageNumber) {
+		this.stageNumber = stageNumber;
+	}
+
+	public String getPaymentTime() {
+		return paymentTime;
+	}
+
+	public void setPaymentTime(String paymentTime) {
+		this.paymentTime = paymentTime;
+	}
+
+	public Integer getPlanId() {
+        return planId;
     }
 
-    public void setLoanPlanId(Integer loanPlanId) {
-        this.loanPlanId = loanPlanId;
+    public void setPlanId(Integer planId) {
+        this.planId = planId;
     }
 
-    public Date getPaymentTime() {
-        return paymentTime;
+    public String getLoanId() {
+        return loanId;
     }
 
-    public void setPaymentTime(Date paymentTime) {
-        this.paymentTime = paymentTime;
+    public void setLoanId(String loanId) {
+        this.loanId = loanId == null ? null : loanId.trim();
     }
 
     public String getPrincipal() {

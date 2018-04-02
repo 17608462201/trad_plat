@@ -586,8 +586,19 @@ public class DateUtil {
         return c.getTime();
     }
     
-    public static void main(String[] args) {
-    	
+    public static Date monthAdd(Date date) {
+        Calendar calendar = Calendar.getInstance();
+  	    calendar.setTime(date);
+  	    calendar.add(Calendar.MONTH, 2);
+  	    calendar.set(Calendar.DATE, 0);
+  	    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+  	    Date retDate=new Date();
+    	try {
+			retDate=DateUtil.parse(df.format(calendar.getTime()));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+    	return retDate;
     }
     
     /**
