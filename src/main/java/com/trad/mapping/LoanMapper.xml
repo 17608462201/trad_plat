@@ -6,7 +6,8 @@
   	<result column="loan_contract_no" jdbcType="VARCHAR" property="loanContractNo" />
     <result column="product_id" jdbcType="VARCHAR" property="productId" />
     <result column="product_name" jdbcType="VARCHAR" property="productName" />
-    <result column="loan_per" jdbcType="VARCHAR" property="loanPer" />
+    <result column="loan_examine" jdbcType="INTEGER" property="loanExamine" />
+    <result column="manager_examine" jdbcType="INTEGER" property="managerExamine" />
     <result column="loan_mobile" jdbcType="VARCHAR" property="loanMobile" />
     <result column="loan_money" jdbcType="VARCHAR" property="loanMoney" />
     <result column="loan_limit" jdbcType="VARCHAR" property="loanLimit" />
@@ -35,32 +36,42 @@
     
   </resultMap>
   <sql id="Base_Column_List">
-  	id, loan_contract_no, product_id, product_name, loan_per, loan_mobile, loan_money, loan_limit, loan_status, 
+  	id, loan_contract_no, product_id, product_name, loan_examine, manager_examine, loan_mobile, loan_money, loan_limit, loan_status, 
     apply_time, customer_id, customer_name, manager_id, manager_name, pawn_add, remark, 
     create_time, update_time, create_per, update_per, loan_state, loan_purpose, loan_source, loan_operate,
     examine_money examineMoney, examine_limit examineLimit, loan_notarization_time loanNotarizationTime
   </sql>
   
   <select id="getLoanAll" resultType="com.trad.bean.Loan">
-  	select l.id,l.loan_contract_no loanContractNo,l.product_id productId,l.product_name productName,l.loan_per loanPer,l.loan_mobile loanMobile,l.loan_money loanMoney,
+  	select l.id,l.loan_contract_no loanContractNo,l.product_id productId,l.product_name productName,l.loan_mobile loanMobile,l.loan_money loanMoney,
   	l.loan_limit loanLimit,l.loan_status loanStatus,l.apply_time applyTime,l.customer_id customerId,l.customer_name customerName,l.manager_id managerId,l.manager_name managerName,
   	l.pawn_add pawnAdd,l.remark,l.create_time createTime,l.update_time updateTime,l.create_per createPer,l.update_per updatePer,
-  	l.loan_state loanState,l.loan_purpose loanPurpose,l.loan_source loanSource,l.loan_operate loanOperate
+  	l.loan_state loanState,l.loan_purpose loanPurpose,l.loan_source loanSource,l.loan_operate loanOperate,l.loan_examine loanExamine, l.manager_examine managerExamine
   	from t_loan l
   </select>
   <select id="getCount" resultType="java.lang.Integer">
   	select count(*) countx from t_loan l
   </select>
   <update id="upLoanStatus" parameterType="map">
-  	update t_loan set loan_status=#{loanStatus} where id=#{loanId}
+  	update t_loan set 
+  	<if test="loanStatus!=null">
+	  	loan_status=#{loanStatus},
+  	</if>
+  	<if test="loanExamine!=null">
+  		loan_examine=#{loanExamine},
+  	</if>
+  	<if test="managerExamine!=null">
+  		manager_examine=#{managerExamine}
+  	</if>
+  	 where id=#{loanId}
   </update>
   
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select l.id,l.loan_contract_no loanContractNo,l.product_id productId,l.product_name productName,l.loan_per loanPer,l.loan_mobile loanMobile,l.loan_money loanMoney,
+    select l.id,l.loan_contract_no loanContractNo,l.product_id productId,l.product_name productName,l.loan_mobile loanMobile,l.loan_money loanMoney,
   	l.loan_limit loanLimit,l.loan_status loanStatus,l.apply_time applyTime,l.customer_id customerId,l.customer_name customerName,l.manager_id managerId,l.manager_name managerName,
   	l.pawn_add pawnAdd,l.remark,l.create_time createTime,l.update_time updateTime,l.create_per createPer,l.update_per updatePer,
   	l.loan_state loanState,l.loan_purpose loanPurpose,l.loan_source loanSource,l.loan_operate loanOperate,
-  	l.examine_money examineMoney, l.examine_limit examineLimit,left(l.loan_notarization_time,10) loanNotarizationTime
+  	l.examine_money examineMoney, l.examine_limit examineLimit,left(l.loan_notarization_time,10) loanNotarizationTime,l.loan_examine loanExamine, l.manager_examine managerExamine
   	from t_loan l where l.id=#{id}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
@@ -69,19 +80,19 @@
   </delete>
   <insert id="insert" parameterType="map">
     insert into t_loan (id, loan_contract_no, product_id, product_name, 
-      loan_per, loan_mobile, loan_money, 
+      loan_mobile, loan_money, 
       loan_limit, loan_status, apply_time, 
       customer_id, customer_name, manager_id, 
       manager_name, pawn_add, remark, 
       create_time, update_time, create_per, 
-      update_per)
+      update_per,loan_examine, manager_examine)
     values (#{id,jdbcType=VARCHAR}, #{loanContractNo,jdbcType=VARCHAR}, #{productId,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, 
-      #{loanPer,jdbcType=VARCHAR}, #{loanMobile,jdbcType=VARCHAR}, #{loanMoney,jdbcType=VARCHAR}, 
+      #{loanMobile,jdbcType=VARCHAR}, #{loanMoney,jdbcType=VARCHAR}, 
       #{loanLimit,jdbcType=VARCHAR}, #{loanStatus,jdbcType=CHAR}, #{applyTime,jdbcType=VARCHAR}, 
       #{customerId,jdbcType=VARCHAR}, #{customerName,jdbcType=VARCHAR}, #{managerId,jdbcType=VARCHAR}, 
       #{managerName,jdbcType=VARCHAR}, #{pawnAdd,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{createPer,jdbcType=VARCHAR}, 
-      #{updatePer,jdbcType=VARCHAR})
+      #{updatePer,jdbcType=VARCHAR},${loanExamine} ,#{managerExamine})
   </insert>
   <insert id="insertSelective" parameterType="com.trad.bean.Loan">
     insert into t_loan
@@ -94,9 +105,6 @@
       </if>
       <if test="productName != null">
         product_name,
-      </if>
-      <if test="loanPer != null">
-        loan_per,
       </if>
       <if test="loanMobile != null">
         loan_mobile,
@@ -154,9 +162,6 @@
       <if test="productName != null">
         #{productName,jdbcType=VARCHAR},
       </if>
-      <if test="loanPer != null">
-        #{loanPer,jdbcType=VARCHAR},
-      </if>
       <if test="loanMobile != null">
         #{loanMobile,jdbcType=VARCHAR},
       </if>
@@ -212,9 +217,6 @@
       </if>
       <if test="productName != null">
         product_name = #{productName,jdbcType=VARCHAR},
-      </if>
-      <if test="loanPer != null">
-        loan_per = #{loanPer,jdbcType=VARCHAR},
       </if>
       <if test="loanMobile != null">
         loan_mobile = #{loanMobile,jdbcType=VARCHAR},
@@ -282,6 +284,12 @@
       <if test="loanNotarizationTime != null">
       	loan_notarization_time = #{loanNotarizationTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="loanExamine != null">
+      	loan_examine = #{loanExamine,jdbcType=TIMESTAMP},
+      </if>
+      <if test="managerExamine != null">
+      	manager_examine = #{managerExamine,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -289,7 +297,6 @@
     update t_loan
     set product_id = #{productId,jdbcType=VARCHAR},
       product_name = #{productName,jdbcType=VARCHAR},
-      loan_per = #{loanPer,jdbcType=VARCHAR},
       loan_mobile = #{loanMobile,jdbcType=VARCHAR},
       loan_money = #{loanMoney,jdbcType=VARCHAR},
       loan_limit = #{loanLimit,jdbcType=VARCHAR},

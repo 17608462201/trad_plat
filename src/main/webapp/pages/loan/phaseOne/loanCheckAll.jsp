@@ -18,6 +18,7 @@
     <li lay-id="33">复核信息</li>
     <li lay-id="44">费用核算</li>
     <li lay-id="55">签约合同信息</li>
+    <li lay-id="66">抵押公证信息</li>
   </ul>
   <div class="layui-tab-content">
 	  <div class="layui-tab-item layui-show">
@@ -34,6 +35,9 @@
       </div>
       <div class="layui-tab-item">
            <iframe  id="tabFrame55"  src="${ctx }/loanPhaseFive/loanCheck?loanId=${loanId}" width="100%" height="100%" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes"></iframe>
+      </div>
+      <div class="layui-tab-item">
+           <iframe  id="tabFrame55"  src="${ctx }/loanPhaseSix/loanCheck?loanId=${loanId}" width="100%" height="100%" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes"></iframe>
       </div>
   </div>
 </div>

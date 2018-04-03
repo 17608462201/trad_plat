@@ -11,7 +11,9 @@ public class Loan {
 
     private String productName;
 
-    private String loanPer;
+    private int loanExamine;
+    
+    private int managerExamine;
 
     private String loanMobile;
 
@@ -145,15 +147,23 @@ public class Loan {
         this.productName = productName == null ? null : productName.trim();
     }
 
-    public String getLoanPer() {
-        return loanPer;
-    }
+    public int getLoanExamine() {
+		return loanExamine;
+	}
 
-    public void setLoanPer(String loanPer) {
-        this.loanPer = loanPer == null ? null : loanPer.trim();
-    }
+	public void setLoanExamine(int loanExamine) {
+		this.loanExamine = loanExamine;
+	}
 
-    public String getLoanMobile() {
+	public int getManagerExamine() {
+		return managerExamine;
+	}
+
+	public void setManagerExamine(int managerExamine) {
+		this.managerExamine = managerExamine;
+	}
+
+	public String getLoanMobile() {
         return loanMobile;
     }
 

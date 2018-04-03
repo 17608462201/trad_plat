@@ -29,10 +29,8 @@
     <div class="layui-col-xs6">
       <div class="grid-demo">
        <div class="layui-form-item">
-  	 		<!-- <button class="layui-btn" id="add"><i class="layui-icon">&#xe654;</i>添加</button> -->
-  	 		<c:if test="${requestScope.SHOW_EDIT eq true}">
-  	 		<button class="layui-btn" id="edit"><i class="layui-icon">&#xe642;</i>编辑</button>
-  	 		</c:if>
+  	 		<!-- <button class="layui-btn" id="add"><i class="layui-icon">&#xe654;</i>添加</button>
+  	 		<button class="layui-btn" id="edit"><i class="layui-icon">&#xe642;</i>编辑</button> -->
 			<!-- <button class="layui-btn layui-btn-danger" id="delete"><i class="layui-icon">&#xe640;</i>删除 </button> -->
 			<button class="layui-btn" id="refresh"><i class="layui-icon">&#x1002;</i>刷新</button>
 			<button class="layui-btn" id="check"><i class="layui-icon">&#xe615;</i>查看</button>
@@ -81,7 +79,7 @@
 </script>
 
 <script type="text/html" id="barDemo">
-  {{ d.loanStatus == 6 ? '<a class="layui-btn layui-btn-xs" lay-event="examine">提交放款审核</a>' : '' }}
+  {{ d.loanStatus == 6 ? '<a class="layui-btn layui-btn-xs" lay-event="examine">提交总经理审核</a>' : '' }}
 </script>
 <script>
 layui.use('table', function(){
@@ -175,21 +173,13 @@ layui.use('table', function(){
  	 }
 });
   
-  /*$("#search").on("click",function() {
-		var val = $("#filter").val();
-		//刷新表格
-		  table.reload('tables', {
-			  //encodeURI加密
-			  url: '${ctx }/product/list?filter='+encodeURI(encodeURI(val))
-		  });
-	 });*/
 	 table.on('tool(tree_filter)', function(obj){
 		    var data = obj.data;
 		    if(obj.event === 'examine'){
-		    	$.post("${ctx}/loanPhaseSix/upLoanStatus?loanId="+data.id,function(text){
+		    	$.post("${ctx}/loanPhaseSeven/upLoanStatus?loanId="+data.id,function(text){
 	          		  if(text=='200'){
 	          			  layer.closeAll();
-		          		  window.location.href ='${ctx }/loan/init';
+		          		  window.location.href ='${ctx }/loanPhaseSeven/init';
 	          		  }else{
 	          			  layer.msg("保存借款信息出错！");
 	          		  }

@@ -28,8 +28,8 @@ import com.trad.util.ReplyCode;
 import com.trad.util.SessionHelper;
 
 @Controller
-@RequestMapping("/loanPhaseSix")
-public class LoanPhaseSixController {
+@RequestMapping("/loanPhaseEight")
+public class LoanPhaseEightController {
 	
 	@Autowired
 	private LoanService loanServiceImpl;
@@ -40,7 +40,7 @@ public class LoanPhaseSixController {
 	
 	@RequestMapping("/init")
 	public String init(HttpServletRequest request, Model model) {
-		return "loan/phaseSix/phaseSixList";
+		return "loan/phaseEight/phaseEightList";
 	}
 
 	@RequestMapping("/getList")
@@ -55,24 +55,44 @@ public class LoanPhaseSixController {
 		return JSONObject.toJSONString(returnMsg);
 	}
 	
-	@RequestMapping("/loanCheck")
-	public String loanCheck(HttpServletRequest request, Model model) {
+	@RequestMapping("/upLoan")
+	@ResponseBody
+	public String upLoan(HttpServletRequest request,Model model) {
 		try {
-			String loanId = request.getParameter("loanId");
-			if (!StringUtils.isEmpty(loanId)) {
-				Loan loan = loanServiceImpl.selectByPrimaryKey(loanId);
-				Map<String, Object> map=new HashMap<>();
-				map.put("loanId", loanId);
-				map.put("type", "4");
-				List<Map<String, Object>> fileList=commonFileuploadService.selFileByLoanId(map);
-				
-				model.addAttribute("loan", loan);
-				model.addAttribute("fileList", fileList);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+			Loan loan=new Loan();
+			
+			ServletRequestDataBinder binder = new ServletRequestDataBinder(loan);
+			binder.bind(request);
+			
+			Map<String, Object> map=EntityToMap.ConvertObjToMap(loan);
+			loanServiceImpl.updateByPrimaryKeySelective(map);
+			return ReplyCode.SUCCESS;
+		}catch (Exception e) {
+			return ReplyCode.INSIDEERROR;
 		}
-		return "loan/phaseSix/loanCheck";
 	}
 	
+	@RequestMapping("/upLoanStatus")
+	@ResponseBody
+	public String upLoanStatus(HttpServletRequest request,Model model) {
+		try {
+			String loanId=request.getParameter("loanId");
+			Map<String, Object> map=new HashMap<>();
+			map.put("loanId", loanId);
+			map.put("loanStatus", 8);
+			map.put("managerExamine", 1);
+			
+			User user = new SessionHelper(request).getLoginUser();
+			LoanStatus loanStatus=new LoanStatus();
+			loanStatus.setLoanId(loanId);
+			loanStatus.setLoanStatus(8);
+			loanStatus.setCreateUserId(user.getUserId());
+			
+			loanStatusService.insert(loanStatus);
+			loanServiceImpl.upLoanStatus(map);
+			return ReplyCode.SUCCESS;
+		} catch (Exception e) {
+			return ReplyCode.INSIDEERROR;
+		}
+	}
 }

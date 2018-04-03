@@ -29,10 +29,8 @@
     <div class="layui-col-xs6">
       <div class="grid-demo">
        <div class="layui-form-item">
-  	 		<!-- <button class="layui-btn" id="add"><i class="layui-icon">&#xe654;</i>添加</button> -->
-  	 		<c:if test="${requestScope.SHOW_EDIT eq true}">
-  	 		<button class="layui-btn" id="edit"><i class="layui-icon">&#xe642;</i>编辑</button>
-  	 		</c:if>
+  	 		<!-- <button class="layui-btn" id="add"><i class="layui-icon">&#xe654;</i>添加</button>
+  	 		<button class="layui-btn" id="edit"><i class="layui-icon">&#xe642;</i>编辑</button> -->
 			<!-- <button class="layui-btn layui-btn-danger" id="delete"><i class="layui-icon">&#xe640;</i>删除 </button> -->
 			<button class="layui-btn" id="refresh"><i class="layui-icon">&#x1002;</i>刷新</button>
 			<button class="layui-btn" id="check"><i class="layui-icon">&#xe615;</i>查看</button>
@@ -40,7 +38,7 @@
     </div>
   </div>
   </div>
-<table class="layui-table" lay-data="{height:550,url:'${ctx }/loanPhaseSix/getList', page:true, limit:10, id:'tables'}" lay-filter="tree_filter">
+<table class="layui-table" lay-data="{height:550,url:'${ctx }/loanPhaseEight/getList', page:true, limit:10, id:'tables'}" lay-filter="tree_filter">
   <thead>
     <tr>
       <th lay-data="{checkbox:true, fixed: true}"></th>
@@ -72,16 +70,16 @@
 	{{# }else if(d.loanStatus == 6){ }}
 		<div class="layui-table-cell laytable-cell-1-loanStatus">待公证</div>
 	{{# }else if(d.loanStatus == 7){ }}
-		<div class="layui-table-cell laytable-cell-1-loanStatus">待放款</div>
-	{{# }else if(d.loanStatus == 8){ }}
 		<div class="layui-table-cell laytable-cell-1-loanStatus">放款审核</div>
+	{{# }else if(d.loanStatus == 8){ }}
+		<div class="layui-table-cell laytable-cell-1-loanStatus">总经理审核</div>
 	{{# }else if(d.loanStatus == 9){ }}
 		<div class="layui-table-cell laytable-cell-1-loanStatus">财务放款</div>
 	{{# } }}
 </script>
 
 <script type="text/html" id="barDemo">
-  {{ d.loanStatus == 6 ? '<a class="layui-btn layui-btn-xs" lay-event="examine">提交放款审核</a>' : '' }}
+  {{ d.loanStatus == 7 ? '<a class="layui-btn layui-btn-xs" lay-event="examine">提交财务放款</a>' : '' }}
 </script>
 <script>
 layui.use('table', function(){
@@ -107,7 +105,7 @@ layui.use('table', function(){
 	  var val = $("#filter").val();
 	  //刷新表格
 	  table.reload('tables', {
-		  url: '${ctx }/loanPhaseSix/getList?filter='+encodeURI(encodeURI(val))
+		  url: '${ctx }/loanPhaseEight/getList?filter='+encodeURI(encodeURI(val))
 		});
 	});
   
@@ -132,64 +130,13 @@ layui.use('table', function(){
       }
   })
   
-  $("#edit").on("click",function(){
-	  //删除表格
-	  var datas = table.checkStatus('tables').data;
-	  if(datas.length>1){
-    	  layer.alert("不支持同时编辑多行，请只选中一行！");
-      }else{
-    	  var ids = datas[0].id;
-    	  var loanStatus = datas[0].loanStatus;
-    	  console.log(loanStatus)
-    	  if(loanStatus == 6){
-    		//新增
-        	  layer.open({
-                  type: 2 //此处以iframe举例
-                  ,title: '修改借款'
-                  ,area: ['750px', '600px']
-                  ,shade: 0
-                  ,maxmin: true
-                  ,offset: [
-                       10
-                  ] 
-                  ,content: '${ctx}/loanPhaseSix/editLoan?loanId='+ids+"&type=EDIT"
-                  ,btn: ['保存', '关闭']
-    	    	  ,yes: function(){
-    	    		  var body = layer.getChildFrame('body', 0);
-    	    		  var id=body.find('input[name="id"]').val();
-    	    		  var loanNotarizationTime=body.find('input[name="loanNotarizationTime"]').val();
-          			  var jsonObj = {"id":id,"loanNotarizationTime":loanNotarizationTime};
-    	    		  $.post("${ctx}/loanPhaseSix/upLoan",jsonObj,function(text){
-    	          		  if(text=='200'){
-    	          			layer.closeAll();
-    		          		  window.location.href ='${ctx }/loanPhaseSix/init';
-    	          		  }else{
-    	          			  layer.msg("保存借款信息出错！");
-    	          		  }
-    	       	     });
-    	    	  }
-           });
-    	  }else{
-    		  layer.alert("数据已提交，不支持修改！");
-    	  }
- 	 }
-});
-  
-  /*$("#search").on("click",function() {
-		var val = $("#filter").val();
-		//刷新表格
-		  table.reload('tables', {
-			  //encodeURI加密
-			  url: '${ctx }/product/list?filter='+encodeURI(encodeURI(val))
-		  });
-	 });*/
 	 table.on('tool(tree_filter)', function(obj){
 		    var data = obj.data;
 		    if(obj.event === 'examine'){
-		    	$.post("${ctx}/loanPhaseSix/upLoanStatus?loanId="+data.id,function(text){
+		    	$.post("${ctx}/loanPhaseEight/upLoanStatus?loanId="+data.id,function(text){
 	          		  if(text=='200'){
 	          			  layer.closeAll();
-		          		  window.location.href ='${ctx }/loan/init';
+		          		  window.location.href ='${ctx }/loanPhaseEight/init';
 	          		  }else{
 	          			  layer.msg("保存借款信息出错！");
 	          		  }
