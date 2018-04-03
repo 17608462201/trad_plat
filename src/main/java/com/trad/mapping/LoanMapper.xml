@@ -31,12 +31,14 @@
     <result column="examine_money" jdbcType="VARCHAR" property="examineMoney" />
     <result column="examine_limit" jdbcType="VARCHAR" property="examineLimit" />
     
+    <result column="loan_notarization_time" jdbcType="VARCHAR" property="loanNotarizationTime" />
+    
   </resultMap>
   <sql id="Base_Column_List">
   	id, loan_contract_no, product_id, product_name, loan_per, loan_mobile, loan_money, loan_limit, loan_status, 
     apply_time, customer_id, customer_name, manager_id, manager_name, pawn_add, remark, 
     create_time, update_time, create_per, update_per, loan_state, loan_purpose, loan_source, loan_operate,
-    examine_money examineMoney, examine_limit examineLimit
+    examine_money examineMoney, examine_limit examineLimit, loan_notarization_time loanNotarizationTime
   </sql>
   
   <select id="getLoanAll" resultType="com.trad.bean.Loan">
@@ -58,7 +60,7 @@
   	l.loan_limit loanLimit,l.loan_status loanStatus,l.apply_time applyTime,l.customer_id customerId,l.customer_name customerName,l.manager_id managerId,l.manager_name managerName,
   	l.pawn_add pawnAdd,l.remark,l.create_time createTime,l.update_time updateTime,l.create_per createPer,l.update_per updatePer,
   	l.loan_state loanState,l.loan_purpose loanPurpose,l.loan_source loanSource,l.loan_operate loanOperate,
-  	l.examine_money examineMoney, l.examine_limit examineLimit
+  	l.examine_money examineMoney, l.examine_limit examineLimit,left(l.loan_notarization_time,10) loanNotarizationTime
   	from t_loan l where l.id=#{id}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
@@ -276,6 +278,9 @@
       </if>
       <if test="examineLimit != null">
         examine_limit = #{examineLimit,jdbcType=VARCHAR},
+      </if>
+      <if test="loanNotarizationTime != null">
+      	loan_notarization_time = #{loanNotarizationTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}

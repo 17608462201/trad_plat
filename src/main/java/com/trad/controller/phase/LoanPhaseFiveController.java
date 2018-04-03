@@ -19,11 +19,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONObject;
 import com.trad.bean.Loan;
 import com.trad.bean.LoanOffer;
+import com.trad.bean.LoanPlan;
 import com.trad.bean.LoanStatus;
 import com.trad.bean.User;
 import com.trad.bean.common.LayuiTable;
 import com.trad.service.CommonFileuploadService;
 import com.trad.service.LoanOfferService;
+import com.trad.service.LoanPlanService;
 import com.trad.service.LoanService;
 import com.trad.service.LoanStatusService;
 import com.trad.util.DateUtil;
@@ -31,40 +33,48 @@ import com.trad.util.ReplyCode;
 import com.trad.util.SessionHelper;
 
 @Controller
-@RequestMapping("loanPhaseThree")
-public class LoanPhaseThreeController {
+@RequestMapping("loanPhaseFive")
+public class LoanPhaseFiveController {
 	
 	@Autowired
-	private LoanService loanServiceImpl;
-	
+	private LoanOfferService loanOfferService;
 	@Autowired
 	private CommonFileuploadService commonFileuploadService;
-	
+	@Autowired
+	private LoanService loanServiceImpl;
 	@Autowired
 	private LoanStatusService loanStatusService;
 	
 	@RequestMapping("/init")
 	public String init(HttpServletRequest request, Model model) {
-		return "loan/phaseThree/phaseThreeList";
+		return "loan/phaseFive/phaseFiveList";
 	}
-
+	
 	@RequestMapping("/getList")
 	@ResponseBody
 	public String getList(@RequestParam(value = "page", defaultValue = "1") int page,
 			@RequestParam(value = "limit", defaultValue = "4") int limit, HttpServletRequest request, Model model) {
-		List<Loan> list = loanServiceImpl.getLoanAll();
-		int count = loanServiceImpl.getCount();
+		Map<String, Object> map=new HashMap<>();
+		List<Map<String, Object>> list = loanOfferService.getLoanOfferList(map);
+		int count = loanOfferService.getCount(map);
+		
 		LayuiTable returnMsg = new LayuiTable();
 		returnMsg.setData(list);
 		returnMsg.setCount(count);
 		return JSONObject.toJSONString(returnMsg);
 	}
 	
-	@RequestMapping("/loanExamine")
+	@RequestMapping("/editLoanOffer")
 	public String loanExamine(HttpServletRequest request, Model model) {
-		String loanId = request.getParameter("loanId");
-		model.addAttribute("loanId", loanId);
-		return "loan/phaseThree/loanExamine";
+		String loanOfferId = request.getParameter("loanOfferId");
+		LoanOffer loanOffer=loanOfferService.selectByPrimaryKey(loanOfferId);
+		Map<String, Object> map=new HashMap<>();
+		map.put("loanId", loanOffer.getLoadId());
+		map.put("type", "3");
+		List<Map<String, Object>> fileList=commonFileuploadService.selFileByLoanId(map);
+		model.addAttribute("fileList", fileList);
+		model.addAttribute("loanOffer", loanOffer);
+		return "loan/phaseFive/phaseFiveEdit";
 	}
 	
 	@RequestMapping("/upLoanStatus")
@@ -72,33 +82,29 @@ public class LoanPhaseThreeController {
 	public String upLoanStatus(HttpServletRequest request,Model model) {
 		try {
 			String loanId=request.getParameter("loanId");
-			String examineMoney=request.getParameter("examineMoney");
-			String examineLimit=request.getParameter("examineLimit");
-			String isStatus=request.getParameter("isStatus");
 			Map<String, Object> map=new HashMap<>();
-			map.put("id", loanId);
-			
-			map.put("examineMoney", examineMoney);
-			map.put("examineLimit", examineLimit);
+			map.put("loanId", loanId);
+			map.put("loanStatus", 6);
 			
 			User user = new SessionHelper(request).getLoginUser();
 			LoanStatus loanStatus=new LoanStatus();
 			loanStatus.setLoanId(loanId);
-			if(isStatus.equals("1")) {
-				map.put("loanStatus", 4);
-				loanStatus.setLoanStatus(4);
-			}else {
-				map.put("loanStatus", 1);
-				loanStatus.setLoanStatus(1);
-			}
+			loanStatus.setLoanStatus(6);
 			loanStatus.setCreateUserId(user.getUserId());
 			
 			loanStatusService.insert(loanStatus);
-			loanServiceImpl.updateByPrimaryKeySelective(map);
+			loanServiceImpl.upLoanStatus(map);
 			return ReplyCode.SUCCESS;
 		} catch (Exception e) {
 			return ReplyCode.INSIDEERROR;
 		}
+	}
+	
+	@RequestMapping("/toLoanCheck")
+	public String toLoanCheck(HttpServletRequest request, Model model) {
+		String loanId = request.getParameter("loanId");
+		model.addAttribute("loanId", loanId);
+		return "loan/phaseOne/loanCheckAll";
 	}
 	
 	@RequestMapping("/loanCheck")
@@ -108,16 +114,15 @@ public class LoanPhaseThreeController {
 			if (!StringUtils.isEmpty(loanId)) {
 				Loan loan = loanServiceImpl.selectByPrimaryKey(loanId);
 				model.addAttribute("loan", loan);
-				
 				Map<String, Object> map=new HashMap<>();
 				map.put("loanId", loanId);
-				map.put("type", "2");
+				map.put("type", "3");
 				List<Map<String, Object>> fileList=commonFileuploadService.selFileByLoanId(map);
 				model.addAttribute("fileList", fileList);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "loan/phaseThree/loanCheck";
+		return "loan/phaseFive/loanCheck";
 	}
 }

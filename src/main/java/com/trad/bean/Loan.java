@@ -55,7 +55,17 @@ public class Loan {
     
     private String examineLimit;
     
-    public String getExamineMoney() {
+    private String loanNotarizationTime;
+    
+    public String getLoanNotarizationTime() {
+		return loanNotarizationTime;
+	}
+
+	public void setLoanNotarizationTime(String loanNotarizationTime) {
+		this.loanNotarizationTime = loanNotarizationTime;
+	}
+
+	public String getExamineMoney() {
 		return examineMoney;
 	}
 
