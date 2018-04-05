@@ -50,38 +50,18 @@
       <th lay-data="{field:'loanMobile', width:100}">借款人手机</th>
       <th lay-data="{field:'loanMoney', width:90}">借款金额</th>
       <th lay-data="{field:'loanLimit', width:90}">借款期限</th>
-      <th lay-data="{field:'loanStatus', width:90, toolbar: '#checkboxTpl'}">借款状态</th>
+      <th lay-data="{field:'loanStatus', width:90}">借款状态</th>
       <th lay-data="{field:'managerName', width:100}">客户经理名称</th>
       <th lay-data="{field:'pawnAdd', width:100}">抵押物地址</th>
       <th lay-data="{field:'applyTime', width:110}">申请时间</th>
-      <th lay-data="{fixed: 'right', width:120, toolbar: '#barDemo'}"></th>
+      <th lay-data="{fixed: 'right', width:180, toolbar: '#barDemo'}"></th>
     </tr>
   </thead>
 </table>
- <script type="text/html" id="checkboxTpl">
-  	{{# if(d.loanStatus == 1){ }}
-		<div class="layui-table-cell laytable-cell-1-loanStatus">待初审</div>
-	{{# }else if(d.loanStatus == 2){ }}
-		<div class="layui-table-cell laytable-cell-1-loanStatus">待下户</div>
-	{{# }else if(d.loanStatus == 3){ }}
-		<div class="layui-table-cell laytable-cell-1-loanStatus">待复核</div>
-	{{# }else if(d.loanStatus == 4){ }}
-		<div class="layui-table-cell laytable-cell-1-loanStatus">待核算</div>
-	{{# }else if(d.loanStatus == 5){ }}
-		<div class="layui-table-cell laytable-cell-1-loanStatus">待签约</div>
-	{{# }else if(d.loanStatus == 6){ }}
-		<div class="layui-table-cell laytable-cell-1-loanStatus">待公证</div>
-	{{# }else if(d.loanStatus == 7){ }}
-		<div class="layui-table-cell laytable-cell-1-loanStatus">待放款</div>
-	{{# }else if(d.loanStatus == 8){ }}
-		<div class="layui-table-cell laytable-cell-1-loanStatus">放款审核</div>
-	{{# }else if(d.loanStatus == 9){ }}
-		<div class="layui-table-cell laytable-cell-1-loanStatus">财务放款</div>
-	{{# } }}
-</script>
 
 <script type="text/html" id="barDemo">
-  {{ d.loanStatus == 1 ? '<a class="layui-btn layui-btn-xs" lay-event="examine">提交待下户</a>' : '' }}
+  {{ d.status == 1 ? '<a class="layui-btn layui-btn-xs" lay-event="examine">提交待下户</a>' : '' }}
+  {{ d.status == 1 ? '<a class="layui-btn layui-btn-xs" lay-event="fallback">退回</a>' : '' }}
 </script>
 <script>
 layui.use('table', function(){
@@ -175,6 +155,10 @@ layui.use('table', function(){
               ] 
               ,content: '${ctx}/loan/toLoanCheck?loanId='+ids+"&type=EDIT"
               ,btn: ['关闭']
+	    	  ,zIndex: layer.zIndex //重点1
+	          ,success: function(layero){
+	            layer.setTop(layero); //重点2
+	          }
     	  })
       }
   })
@@ -188,7 +172,7 @@ layui.use('table', function(){
     	  layer.alert("请选中一行！");
       }else {
     	  var ids = datas[0].id;
-    	  var loanStatus = datas[0].loanStatus;
+    	  var loanStatus = datas[0].status;
     	  if(loanStatus == 1){
     		//新增
         	  layer.open({
@@ -209,7 +193,6 @@ layui.use('table', function(){
             		  var productName=body.find('select[name="productName"]').find("option:selected").text();
           			  var managerId=body.find('input[name="managerId"]').val();
           			  var managerName=body.find('input[name="managerNames"]').val();
-          			  var loanPer=body.find('input[name="loanPer"]').val();
           			  var loanMobile=body.find('input[name="loanMobile"]').val();
           			  var loanMoney=body.find('input[name="loanMoney"]').val();
           			  var loanLimit=body.find('input[name="loanLimit"]').val();
@@ -218,7 +201,7 @@ layui.use('table', function(){
           			  var pawnAdd=body.find('input[name="pawnAdd"]').val();
           			  var remark=body.find('input[name="remark"]').val();
           			  
-          			  var jsonObj = {"id":id,"productId":productId,"productName":productName,"managerId":managerId,"managerName":managerName,"loanPer":loanPer,
+          			  var jsonObj = {"id":id,"productId":productId,"productName":productName,"managerId":managerId,"managerName":managerName,
     		      			  "loanMobile":loanMobile,"loanMoney":loanMoney,"loanLimit":loanLimit,"customerId":customerId,"customerName":customerName,
     		      			  "pawnAdd":pawnAdd,"remark":remark};
     	    		  $.post("${ctx}/loan/upLoan",jsonObj,function(text){
@@ -257,7 +240,6 @@ layui.use('table', function(){
         		  var productName=body.find('select[name="productName"]').find("option:selected").text();
       			  var managerId=body.find('input[name="managerId"]').val();
       			  var managerName=body.find('input[name="managerNames"]').val();
-      			  var loanPer=body.find('input[name="loanPer"]').val();
       			  var loanMobile=body.find('input[name="loanMobile"]').val();
       			  var loanMoney=body.find('input[name="loanMoney"]').val();
       			  var loanLimit=body.find('input[name="loanLimit"]').val();
@@ -266,7 +248,7 @@ layui.use('table', function(){
       			  var pawnAdd=body.find('input[name="pawnAdd"]').val();
       			  var remark=body.find('input[name="remark"]').val();
       			  
-				  var jsonObj = {"id":id,"productId":productId,"productName":productName,"managerId":managerId,"managerName":managerName,"loanPer":loanPer,
+				  var jsonObj = {"id":id,"productId":productId,"productName":productName,"managerId":managerId,"managerName":managerName,
 		      			  "loanMobile":loanMobile,"loanMoney":loanMoney,"loanLimit":loanLimit,"customerId":customerId,"customerName":customerName,
 		      			  "pawnAdd":pawnAdd,"remark":remark};
         		  $.post("${ctx}/loan/saveLoan",jsonObj,function(text){
@@ -300,6 +282,35 @@ layui.use('table', function(){
 	          			  layer.msg("保存借款信息出错！");
 	          		  }
 	       	     });
+		    }else if(obj.event === 'fallback'){
+		    	layer.open({
+		              type: 2 //此处以iframe举例
+		              ,title: '查看借款单'
+		              ,area: ['300px', '300px']
+		              ,shade: 0
+		              ,maxmin: true
+		              ,offset: [
+		                   10
+		              ] 
+		              ,content: '${ctx}/loan/loanFallbackById?loanId='+data.id
+		              ,btn: ['保存','关闭']
+		              ,yes: function(){
+		            	  var body = layer.getChildFrame('body', 0);
+		        		  var id=body.find('input[name="id"]').val();
+		        		  var status=body.find('input[name="status"]:checked').val();
+		        		  var loanOpinion=body.find('textarea[name="loan_opinion"]').val();
+		        		  
+		            	  var jsonObj = {"id":id,"status":status,"loanOpinion":loanOpinion};
+		            	 $.post("${ctx}/loan/fallBack",jsonObj,function(text){
+		            		  if(text=='200'){
+		  	          			layer.closeAll();
+		  		          		  window.location.href ='${ctx }/loan/init';
+		  	          		  }else{
+		  	          			  layer.msg("保存借款信息出错！");
+		  	          		  }
+			       	     });
+		              }
+		    	})
 		    }
 	 })
 });

@@ -32,7 +32,7 @@ public class LoanOfferServiceImpl implements LoanOfferService {
 	}
 
 	@Override
-	public LoanOffer selectByPrimaryKey(String id) {
+	public Map<String, Object> selectByPrimaryKey(String id) {
 		return loanOfferMapper.selectByPrimaryKey(id);
 	}
 

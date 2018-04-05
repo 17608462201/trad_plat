@@ -15,6 +15,7 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
+				<input type="hidden" name="id" id="id" value="${loan.id }">
 				<label class="layui-form-label">签约合同附件：</label>
 				<div class="layui-input-inline">
 					<div class="layui-upload-list">
@@ -24,22 +25,16 @@
 									<th>文件名</th>
 									<th>大小</th>
 									<th>状态</th>
-									<th>操作</th>
 								</tr>
 							</thead>
 							<tbody id="demoList">
 								<c:forEach items="${fileList }" var="fileList">
-									<tr id="upload-1522293012844-0">
-										<td>${ctx}${fileList.address }</td>
-										<td></td>
-										<td><span style="color: #5FB878;">已经上传</span></td>
-										<td>
-											<button
-												class="layui-btn layui-btn-mini layui-btn-danger demo-delete"
-												id="delImage">删除</button>
-										</td>
-									</tr>
-								</c:forEach>
+						      		<tr id="upload-1522293012844-0">
+								      	<td><a href="javascript:void(0)" data-url="${ctx}${fileList.address }" id="downloadFile">${fileList.fileName }</a></td>
+								      	<td>${fileList.fileSize }</td>
+								      	<td><span style="color: #5FB878;">已经上传</span></td>
+							      	</tr>
+						      	</c:forEach>
 							</tbody>
 						</table>
 					</div>
@@ -67,6 +62,14 @@ layui.use('element', function(){
 	});
 });	
 
+$('#downloadFile').on('click', function(){
+	console.log($(this).attr('data-url'))
+	var $form = $('<form method="GET"></form>');
+    $form.attr('action', $(this).attr('data-url'));
+    $form.appendTo($('body'));
+    $form.submit();
+})
+
 $('#loanImg').on('click', function(){
 	layer.open({
         type: 2 //此处以iframe举例
@@ -77,7 +80,7 @@ $('#loanImg').on('click', function(){
         ,offset: [
              10
         ] 
-        ,content: '${ctx}/loan/loanImg?loanId='+$('#id').val()+"&type=2"
+        ,content: '${ctx}/loan/loanImg?loanId='+$('#id').val()+"&type=3"
         ,btn: ['关闭']
 	})
 })

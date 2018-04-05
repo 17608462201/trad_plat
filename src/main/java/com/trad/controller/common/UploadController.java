@@ -69,9 +69,15 @@ public class UploadController {
 						commonFileupload.setBusnissType(PHASEFOUR);
 					}
 					commonFileupload.setCreatePer(String.valueOf(user.getUserId()));
-					commonFileupload.setCreatePer(String.valueOf(user.getUserId()));
 					commonFileupload.setAddress("/res/upload/"+fileName);
-					
+					commonFileupload.setFileName(upfileName.substring(0, upfileName.lastIndexOf(".")));
+					commonFileupload.setFileSize(String.valueOf(files.get(i).getSize()));
+					commonFileupload.setUpdatePer(String.valueOf(user.getUserId()));
+					if(".BMP.JPG.JPEG.PNG.GIF.bmp.jpg.jpeg.png.gif".indexOf(suffix)!=-1) {
+						commonFileupload.setFileType("1");
+					}else if(".xls.xlsx.doc.docx.pdf".indexOf(suffix)!=-1) {
+						commonFileupload.setFileType("2");
+					}
 					commonFileuploadService.insert(commonFileupload);
 				} else {
 					System.out.println("文件为空出现错误");

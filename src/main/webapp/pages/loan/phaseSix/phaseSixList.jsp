@@ -50,38 +50,18 @@
       <th lay-data="{field:'loanMobile', width:100}">借款人手机</th>
       <th lay-data="{field:'loanMoney', width:90}">借款金额</th>
       <th lay-data="{field:'loanLimit', width:90}">借款期限</th>
-      <th lay-data="{field:'loanStatus', width:90, toolbar: '#checkboxTpl'}">借款状态</th>
+      <th lay-data="{field:'loanStatus', width:90}">借款状态</th>
       <th lay-data="{field:'managerName', width:100}">客户经理名称</th>
       <th lay-data="{field:'pawnAdd', width:100}">抵押物地址</th>
       <th lay-data="{field:'applyTime', width:110}">申请时间</th>
-      <th lay-data="{fixed: 'right', width:130, toolbar: '#barDemo'}"></th>
+      <th lay-data="{fixed: 'right', width:160, toolbar: '#barDemo'}"></th>
     </tr>
   </thead>
 </table>
- <script type="text/html" id="checkboxTpl">
-  	{{# if(d.loanStatus == 1){ }}
-		<div class="layui-table-cell laytable-cell-1-loanStatus">待初审</div>
-	{{# }else if(d.loanStatus == 2){ }}
-		<div class="layui-table-cell laytable-cell-1-loanStatus">待下户</div>
-	{{# }else if(d.loanStatus == 3){ }}
-		<div class="layui-table-cell laytable-cell-1-loanStatus">待复核</div>
-	{{# }else if(d.loanStatus == 4){ }}
-		<div class="layui-table-cell laytable-cell-1-loanStatus">待核算</div>
-	{{# }else if(d.loanStatus == 5){ }}
-		<div class="layui-table-cell laytable-cell-1-loanStatus">待签约</div>
-	{{# }else if(d.loanStatus == 6){ }}
-		<div class="layui-table-cell laytable-cell-1-loanStatus">待公证</div>
-	{{# }else if(d.loanStatus == 7){ }}
-		<div class="layui-table-cell laytable-cell-1-loanStatus">待放款</div>
-	{{# }else if(d.loanStatus == 8){ }}
-		<div class="layui-table-cell laytable-cell-1-loanStatus">放款审核</div>
-	{{# }else if(d.loanStatus == 9){ }}
-		<div class="layui-table-cell laytable-cell-1-loanStatus">财务放款</div>
-	{{# } }}
-</script>
 
 <script type="text/html" id="barDemo">
-  {{ d.loanStatus == 6 ? '<a class="layui-btn layui-btn-xs" lay-event="examine">提交放款审核</a>' : '' }}
+  {{ d.status == 6 ? '<a class="layui-btn layui-btn-xs" lay-event="examine">提交放款审核</a>' : '' }}
+  {{ d.status == 6 ? '<a class="layui-btn layui-btn-xs" lay-event="fallback">退回</a>' : '' }}
 </script>
 <script>
 layui.use('table', function(){
@@ -139,7 +119,7 @@ layui.use('table', function(){
     	  layer.alert("不支持同时编辑多行，请只选中一行！");
       }else{
     	  var ids = datas[0].id;
-    	  var loanStatus = datas[0].loanStatus;
+    	  var loanStatus = datas[0].status;
     	  console.log(loanStatus)
     	  if(loanStatus == 6){
     		//新增
@@ -189,11 +169,40 @@ layui.use('table', function(){
 		    	$.post("${ctx}/loanPhaseSix/upLoanStatus?loanId="+data.id,function(text){
 	          		  if(text=='200'){
 	          			  layer.closeAll();
-		          		  window.location.href ='${ctx }/loan/init';
+		          		  window.location.href ='${ctx }/loanPhaseSix/init';
 	          		  }else{
 	          			  layer.msg("保存借款信息出错！");
 	          		  }
 	       	     });
+		    }else if(obj.event === 'fallback'){
+		    	layer.open({
+		              type: 2 //此处以iframe举例
+		              ,title: '查看借款单'
+		              ,area: ['300px', '300px']
+		              ,shade: 0
+		              ,maxmin: true
+		              ,offset: [
+		                   10
+		              ] 
+		              ,content: '${ctx}/loan/loanFallbackById?loanId='+data.id
+		              ,btn: ['保存','关闭']
+		              ,yes: function(){
+		            	  var body = layer.getChildFrame('body', 0);
+		        		  var id=body.find('input[name="id"]').val();
+		        		  var status=body.find('input[name="status"]:checked').val();
+		        		  var loanOpinion=body.find('textarea[name="loan_opinion"]').val();
+		        		  
+		            	  var jsonObj = {"id":id,"status":status,"loanOpinion":loanOpinion};
+		            	 $.post("${ctx}/loan/fallBack",jsonObj,function(text){
+		            		  if(text=='200'){
+		  	          			layer.closeAll();
+		  		          		  window.location.href ='${ctx }/loanPhaseSix/init';
+		  	          		  }else{
+		  	          			  layer.msg("保存借款信息出错！");
+		  	          		  }
+			       	     });
+		              }
+		    	})
 		    }
 	 })
 });

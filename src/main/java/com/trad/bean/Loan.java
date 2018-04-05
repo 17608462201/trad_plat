@@ -59,7 +59,27 @@ public class Loan {
     
     private String loanNotarizationTime;
     
-    public String getLoanNotarizationTime() {
+    private String status;
+    
+    private String loanOpinion;
+    
+    public String getLoanOpinion() {
+		return loanOpinion;
+	}
+
+	public void setLoanOpinion(String loanOpinion) {
+		this.loanOpinion = loanOpinion;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getLoanNotarizationTime() {
 		return loanNotarizationTime;
 	}
 

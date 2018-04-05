@@ -52,7 +52,7 @@ public class LoanPhaseFourController {
 	
 	@RequestMapping("/getList")
 	@ResponseBody
-	public String getList(@RequestParam(value = "page", defaultValue = "1") int page,
+	public String getList(@RequestParam(value = "page", defaultValue = "0") int page,
 			@RequestParam(value = "limit", defaultValue = "4") int limit, HttpServletRequest request, Model model) {
 		Map<String, Object> map=new HashMap<>();
 		List<Map<String, Object>> list = loanOfferService.getLoanOfferList(map);
@@ -67,7 +67,7 @@ public class LoanPhaseFourController {
 	@RequestMapping("/editLoanOffer")
 	public String loanExamine(HttpServletRequest request, Model model) {
 		String loanOfferId = request.getParameter("loanOfferId");
-		LoanOffer loanOffer=loanOfferService.selectByPrimaryKey(loanOfferId);
+		Map<String, Object> loanOffer=loanOfferService.selectByPrimaryKey(loanOfferId);
 		model.addAttribute("loanOffer", loanOffer);
 		model.addAttribute("loanOfferId", loanOfferId);
 		return "loan/phaseFour/loanOfferEdit";
@@ -113,12 +113,12 @@ public class LoanPhaseFourController {
 					if(i==1) {								//第一个月时间
 						loanPlan.setInterest(String.valueOf(Integer.parseInt(offerMoney)*(Double.valueOf(monthScale)/100)));
 					}else if(i==Integer.parseInt(offerLimit)+1) {
-						date=DateUtil.addMonths(date, i);	//获取最后一个月时间
+						date=DateUtil.addMonths(date, i-1);	//获取最后一个月时间
 						date=DateUtil.addDays(date, -1);	//最后一个月减一天
 						loanPlan.setInterest("");
 						loanPlan.setPrincipal(offerMoney);
 					}else {									//中间月份的时间
-						date=DateUtil.addMonths(date, i);
+						date=DateUtil.addMonths(date, i-1);
 						loanPlan.setInterest(String.valueOf(Integer.parseInt(offerMoney)*(Double.valueOf(monthScale)/100)));
 					}
 					loanPlan.setPaymentTime(DateUtil.format(date));
@@ -204,7 +204,7 @@ public class LoanPhaseFourController {
 			User user = new SessionHelper(request).getLoginUser();
 			LoanStatus loanStatus=new LoanStatus();
 			loanStatus.setLoanId(loanId);
-			loanStatus.setLoanStatus(3);
+			loanStatus.setLoanStatus(5);
 			loanStatus.setCreateUserId(user.getUserId());
 			
 			loanStatusService.insert(loanStatus);

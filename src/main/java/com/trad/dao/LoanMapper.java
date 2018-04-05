@@ -19,7 +19,7 @@ public interface LoanMapper {
 
     int updateByPrimaryKey(Loan record);
     
-    List<Loan> getLoanAll();
+    List<Loan> getLoanAll(Map<String, Object> map);
     
     int getCount();
     

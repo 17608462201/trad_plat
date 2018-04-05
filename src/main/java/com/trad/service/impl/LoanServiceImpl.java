@@ -16,8 +16,8 @@ public class LoanServiceImpl implements LoanService {
 	private LoanMapper loanMapper;
 
 	@Override
-	public List<Loan> getLoanAll() {
-		return loanMapper.getLoanAll();
+	public List<Loan> getLoanAll(Map<String, Object> map) {
+		return loanMapper.getLoanAll(map);
 	}
 	
 	public int getCount() {

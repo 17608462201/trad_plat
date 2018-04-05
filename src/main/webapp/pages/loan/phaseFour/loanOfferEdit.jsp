@@ -27,6 +27,16 @@
 				</div>
 			</div>
 		</div>
+		<div class="layui-col-xs6">
+			<div class="grid-demo">
+				<div class="layui-form-item">
+					<label class="layui-form-label">产品：</label>
+					<div class="layui-input-block">
+						${loanOffer.productName }
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 	<div class="layui-row">
 		<div class="layui-col-xs6">

@@ -61,13 +61,14 @@
       <th lay-data="{field:'offerLimit', width:110}">放款期限</th>
       <th lay-data="{field:'monthPayMoney', width:110}">月应缴金额</th>
       <th lay-data="{field:'monthSerc', width:110}">月应缴担保费</th>
-      <th lay-data="{width:120, toolbar: '#barDemo'}">操作</th>
+      <th lay-data="{width:150, toolbar: '#barDemo'}">操作</th>
     </tr>
   </thead>
 </table>
 
 <script type="text/html" id="barDemo">
   {{ d.loanStatus == 5 ? '<a class="layui-btn layui-btn-xs" lay-event="examine">提交公证</a>' : '' }}
+  {{ d.loanStatus == 5 ? '<a class="layui-btn layui-btn-xs" lay-event="fallback">退回</a>' : '' }}
 </script>
 <script>
 layui.use('table', function(){
@@ -160,6 +161,35 @@ layui.use('table', function(){
 	          			  layer.msg("保存借款信息出错！");
 	          		  }
 	       	     });
+		    }else if(obj.event === 'fallback'){
+		    	layer.open({
+		              type: 2 //此处以iframe举例
+		              ,title: '查看借款单'
+		              ,area: ['300px', '300px']
+		              ,shade: 0
+		              ,maxmin: true
+		              ,offset: [
+		                   10
+		              ] 
+		              ,content: '${ctx}/loan/loanFallbackById?loanId='+data.loadId
+		              ,btn: ['保存','关闭']
+		              ,yes: function(){
+		            	  var body = layer.getChildFrame('body', 0);
+		        		  var id=body.find('input[name="id"]').val();
+		        		  var status=body.find('input[name="status"]:checked').val();
+		        		  var loanOpinion=body.find('textarea[name="loan_opinion"]').val();
+		        		  
+		            	  var jsonObj = {"id":id,"status":status,"loanOpinion":loanOpinion};
+		            	 $.post("${ctx}/loan/fallBack",jsonObj,function(text){
+		            		  if(text=='200'){
+		  	          			layer.closeAll();
+		  		          		  window.location.href ='${ctx }/loanPhaseFive/init';
+		  	          		  }else{
+		  	          			  layer.msg("保存借款信息出错！");
+		  	          		  }
+			       	     });
+		              }
+		    	})
 		    }
 	 })
 });

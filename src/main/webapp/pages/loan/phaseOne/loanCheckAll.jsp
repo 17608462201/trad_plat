@@ -22,7 +22,7 @@
   </ul>
   <div class="layui-tab-content">
 	  <div class="layui-tab-item layui-show">
-	       <iframe  id="tabFrame11" src="${ctx }/loan/loanCheck?loanId=${loanId}"  width="100%" height="100%" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes"></iframe>
+	       <iframe id="tabFrame11" src="${ctx }/loan/loanCheck?loanId=${loanId}" width="100%" height="100%" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes"></iframe>
 	  </div>
 	  <div class="layui-tab-item">
            <iframe  id="tabFrame22" src="${ctx }/loanPhaseTow/loanCheck?loanId=${loanId}"  width="100%" height="100%" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes"></iframe>
@@ -57,5 +57,19 @@ layui.use('element', function(){
 // 		  }
 		});
 	});	
+	
+var testFrame = document.getElementById('tabFrame11');
+testFrame.addEventListener('load', function() {
+  testFrame.height = getHeight(testFrame.contentDocument);;
+});
+
+function getHeight(doc) {
+  var body = doc.body,
+      html = doc.documentElement;
+
+  var height = Math.max( body.scrollHeight, body.offsetHeight,
+    html.clientHeight, html.scrollHeight, html.offsetHeight );
+  return height;
+}
 </script>
 <%@ include file="/pages/common/footer.jsp"%>

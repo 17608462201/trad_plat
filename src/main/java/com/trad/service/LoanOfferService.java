@@ -12,7 +12,7 @@ public interface LoanOfferService {
     
     int getCount(Map<String, Object> map);
     
-    LoanOffer selectByPrimaryKey(String id);
+    Map<String, Object> selectByPrimaryKey(String id);
     
     int updateByPrimaryKeySelective(LoanOffer loanOffer);
     

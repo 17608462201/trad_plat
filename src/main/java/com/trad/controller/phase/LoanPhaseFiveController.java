@@ -52,7 +52,7 @@ public class LoanPhaseFiveController {
 	
 	@RequestMapping("/getList")
 	@ResponseBody
-	public String getList(@RequestParam(value = "page", defaultValue = "1") int page,
+	public String getList(@RequestParam(value = "page", defaultValue = "0") int page,
 			@RequestParam(value = "limit", defaultValue = "4") int limit, HttpServletRequest request, Model model) {
 		Map<String, Object> map=new HashMap<>();
 		List<Map<String, Object>> list = loanOfferService.getLoanOfferList(map);
@@ -67,9 +67,9 @@ public class LoanPhaseFiveController {
 	@RequestMapping("/editLoanOffer")
 	public String loanExamine(HttpServletRequest request, Model model) {
 		String loanOfferId = request.getParameter("loanOfferId");
-		LoanOffer loanOffer=loanOfferService.selectByPrimaryKey(loanOfferId);
+		Map<String, Object> loanOffer=loanOfferService.selectByPrimaryKey(loanOfferId);
 		Map<String, Object> map=new HashMap<>();
-		map.put("loanId", loanOffer.getLoadId());
+		map.put("loanId", loanOffer.get("loadId"));
 		map.put("type", "3");
 		List<Map<String, Object>> fileList=commonFileuploadService.selFileByLoanId(map);
 		model.addAttribute("fileList", fileList);

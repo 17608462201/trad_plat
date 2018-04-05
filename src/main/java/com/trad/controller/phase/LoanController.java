@@ -19,18 +19,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.trad.bean.CommonGgdm;
 import com.trad.bean.Customer;
 import com.trad.bean.Loan;
 import com.trad.bean.LoanOffer;
 import com.trad.bean.LoanStatus;
+import com.trad.bean.ReceiptsLoanOffer;
 import com.trad.bean.User;
 import com.trad.bean.common.LayuiTable;
 import com.trad.service.CommonFileuploadService;
+import com.trad.service.CommonGgdmService;
 import com.trad.service.CustomerService;
 import com.trad.service.LoanOfferService;
 import com.trad.service.LoanService;
 import com.trad.service.LoanStatusService;
 import com.trad.service.ProductService;
+import com.trad.service.ReceiptsLoanOfferService;
 import com.trad.util.DateUtil;
 import com.trad.util.EntityToMap;
 import com.trad.util.ReplyCode;
@@ -57,6 +61,12 @@ public class LoanController {
 	
 	@Autowired
 	private ProductService productServiceImpl;
+	
+	@Autowired
+	private CommonGgdmService ggdmService;
+	
+	@Autowired
+	private ReceiptsLoanOfferService receiptsLoanOfferService;
 	Logger logger = LoggerFactory.getLogger(LoanController.class);
 
 	@RequestMapping("/init")
@@ -68,7 +78,23 @@ public class LoanController {
 	@ResponseBody
 	public String getList(@RequestParam(value = "page", defaultValue = "1") int page,
 			@RequestParam(value = "limit", defaultValue = "4") int limit, HttpServletRequest request, Model model) {
-		List<Loan> list = loanServiceImpl.getLoanAll();
+		Map<String, Object> map=new HashMap<>();
+		map.put("page", page-1);
+		map.put("pageSize", limit);
+		List<Loan> list = loanServiceImpl.getLoanAll(map);
+		String [] dmjbhArr = new String[] {"status"};
+		List<CommonGgdm> listGgdms = ggdmService.queryByDmjbh(dmjbhArr);
+		for (int i = 0; i < list.size(); i++) {
+			Loan loan=list.get(i);
+			loan.setStatus(loan.getLoanStatus());
+			for (int j = 0; j < listGgdms.size(); j++) {
+				CommonGgdm commonGgdm=listGgdms.get(j);
+				if(loan.getLoanStatus().equals(commonGgdm.getDm())) {
+					loan.setLoanStatus(commonGgdm.getDmnr());
+				}
+			}
+		}
+		
 		int count = loanServiceImpl.getCount();
 		LayuiTable returnMsg = new LayuiTable();
 		returnMsg.setData(list);
@@ -106,6 +132,7 @@ public class LoanController {
 				map.put("loanId", loanId);
 				map.put("type", "1");
 				List<Map<String, Object>> fileList=commonFileuploadService.selFileByLoanId(map);
+				
 				model.addAttribute("fileList", fileList);
 				model.addAttribute("loan", loan);
 				model.addAttribute("type", "EDIT");
@@ -146,6 +173,7 @@ public class LoanController {
 		Map<String, Object> map=new HashMap<>();
 		map.put("loanId", loanId);
 		map.put("type", type);
+		map.put("fileType", "1");
 		List<Map<String, Object>> fileList=commonFileuploadService.selFileByLoanId(map);
 		model.addAttribute("fileList", fileList);
 		return "loan/loanImg";
@@ -200,9 +228,13 @@ public class LoanController {
 			Map<String, Object> map=EntityToMap.ConvertObjToMap(loan);
 			map.put("loanStatus", "1");
 			
+			ReceiptsLoanOffer receiptsLoanOffer=new ReceiptsLoanOffer();
+			receiptsLoanOffer.setReceiptsLoadId(loan.getId());
+			
 			loanServiceImpl.insert(map);
 			loanStatusService.insert(loanStatus);
 			loanOfferService.insert(loanOffer);
+			receiptsLoanOfferService.insert(receiptsLoanOffer);
 			return ReplyCode.SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -258,6 +290,7 @@ public class LoanController {
 			loanServiceImpl.upLoanStatus(map);
 			return ReplyCode.SUCCESS;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return ReplyCode.INSIDEERROR;
 		}
 	}
@@ -272,6 +305,39 @@ public class LoanController {
 		map.put("type", type);
 		try {
 			commonFileuploadService.delFile(map);
+			return ReplyCode.SUCCESS;
+		} catch (Exception e) {
+			return ReplyCode.INSIDEERROR;
+		}
+	}
+	
+	@RequestMapping("loanFallbackById")
+	private String loanFallbackById(HttpServletRequest request,Model model) {
+		String loanId=request.getParameter("loanId");
+		String [] dmjbhArr = new String[] {"status"};
+		List<CommonGgdm> listGgdms = ggdmService.queryByDmjbh(dmjbhArr);
+		model.addAttribute("loanId", loanId);
+		model.addAttribute("listGgdms", listGgdms);
+		return "/loan/loanFallback";
+	}
+	
+	@RequestMapping("/fallBack")
+	@ResponseBody
+	public String fallBack(HttpServletRequest request,Model model) {
+		Map<String, Object> map=new HashMap<>();
+		map.put("loanId", request.getParameter("id"));
+		map.put("loanStatus", request.getParameter("status"));
+		map.put("loanOpinion", request.getParameter("loanOpinion"));
+		
+		User user = new SessionHelper(request).getLoginUser();
+		LoanStatus loanStatus=new LoanStatus();
+		loanStatus.setLoanId(request.getParameter("id"));
+		loanStatus.setLoanStatus(Integer.parseInt(request.getParameter("status")));
+		loanStatus.setCreateUserId(user.getUserId());
+		
+		try {
+			loanServiceImpl.upLoanStatus(map);
+			loanStatusService.insert(loanStatus);
 			return ReplyCode.SUCCESS;
 		} catch (Exception e) {
 			return ReplyCode.INSIDEERROR;

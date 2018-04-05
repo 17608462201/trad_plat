@@ -6,7 +6,7 @@ import java.util.Map;
 import com.trad.bean.Loan;
 
 public interface LoanService {
-	List<Loan> getLoanAll();
+	List<Loan> getLoanAll(Map<String, Object> map);
 	int getCount();
 	int deleteByPrimaryKey(String id);
 	Loan selectByPrimaryKey(String id);

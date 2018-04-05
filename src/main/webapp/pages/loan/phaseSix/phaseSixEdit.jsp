@@ -38,8 +38,8 @@
 					<tbody id="demoList">
 						<c:forEach items="${fileList }" var="fileList">
 							<tr id="upload-1522293012844-0">
-								<td>${ctx}${fileList.address }</td>
-								<td></td>
+								<td>${fileList.fileName }</td>
+					      		<td>${fileList.fileSize }</td>
 								<td><span style="color: #5FB878;">已经上传</span></td>
 								<td>
 									<button

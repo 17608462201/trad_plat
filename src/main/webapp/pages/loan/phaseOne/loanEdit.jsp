@@ -38,13 +38,6 @@
 			</select>
 		</div>
 	</div>
-	<!-- <div class="layui-form-item">
-		<label class="layui-form-label">借款人：</label>
-		<div class="layui-input-block">
-			<input type="text" name="loanPer" id="loanPer" value="${loan.loanPer }" placeholder=""
-				autocomplete="off" class="layui-input">
-		</div>
-	</div> -->
 	<div class="layui-form-item">
 		<label class="layui-form-label">借款人手机：</label>
 		<div class="layui-input-block">
@@ -116,15 +109,14 @@
 			      <tbody id="demoList">
 			      	<c:forEach items="${fileList }" var="fileList">
 			      		<tr id="upload-1522293012844-0">
-					      	<td>${ctx}${fileList.address }</td>
-					      	<td></td>
+					      	<td>${fileList.fileName }</td>
+					      	<td>${fileList.fileSize }</td>
 					      	<td><span style="color: #5FB878;">已经上传</span></td>
 					      	<td>
 						      	<button class="layui-btn layui-btn-mini layui-btn-danger demo-delete" id="delImage">删除</button>
 					      	</td>
 				      	</tr>
 			      	</c:forEach>
-			      	
 			      </tbody>
 			    </table>
 			  </div>

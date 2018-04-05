@@ -12,7 +12,7 @@ public interface LoanOfferMapper {
 
     int insertSelective(LoanOffer record);
 
-    LoanOffer selectByPrimaryKey(String id);
+    Map<String, Object> selectByPrimaryKey(String id);
 
     int updateByPrimaryKeySelective(LoanOffer loanOffer);
 

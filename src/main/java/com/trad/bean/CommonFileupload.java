@@ -12,6 +12,10 @@ public class CommonFileupload {
     private String address;
 
     private String uploadPer;
+    
+    private String fileName;
+    
+    private String fileSize;
 
     private Date uploadTime;
 
@@ -22,8 +26,34 @@ public class CommonFileupload {
     private String createPer;
 
     private String updatePer;
+    
+    private String fileType;
 
-    public Integer getId() {
+    public String getFileType() {
+		return fileType;
+	}
+
+	public void setFileType(String fileType) {
+		this.fileType = fileType;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public String getFileSize() {
+		return fileSize;
+	}
+
+	public void setFileSize(String fileSize) {
+		this.fileSize = fileSize;
+	}
+
+	public Integer getId() {
         return id;
     }
 
