@@ -23,42 +23,42 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
-import com.trad.bean.Product;
+import com.trad.bean.Payment;
 import com.trad.bean.common.LayuiTable;
 import com.trad.bean.common.PageStatus;
-import com.trad.bean.vo.ProductVo;
+import com.trad.bean.vo.PaymentVo;
 import com.trad.exception.TradBusinessException;
-import com.trad.service.ProductService;
+import com.trad.service.PaymentService;
 import com.trad.util.CommonUtils;
 import com.trad.util.ReplyCode;
 @Controller
-@RequestMapping("/product")
-public class ProductController {
+@RequestMapping("/payment")
+public class PaymentController {
 	
 	@Resource
-	private ProductService proService;
-	Logger logger = LoggerFactory.getLogger(ProductController.class);
+	private PaymentService payService;
+	Logger logger = LoggerFactory.getLogger(PaymentController.class);
 	
 	@RequestMapping("/init")
 	 public String init(HttpServletRequest request,Model model){  
-		return  "product/product"; 
+		return  "payment/payment"; 
 	}
 	
 	@RequestMapping("/add")
 	 public String add(HttpServletRequest request,Model model){  
-		return  "product/productEdit"; 
+		return  "payment/paymentEdit"; 
 	}
 	
-	@RequestMapping("/saveProduct")
+	@RequestMapping("/savePayment")
 	@ResponseBody
-	 public String saveProduct(HttpServletRequest request,Model model){
+	 public String savepayment(HttpServletRequest request,Model model){
 		try{
-			Product pro = new Product();
-			ServletRequestDataBinder binder = new ServletRequestDataBinder(pro);  
+			Payment pay = new Payment();
+			ServletRequestDataBinder binder = new ServletRequestDataBinder(pay);  
 			binder.bind(request); 
-			pro.setCreateTime(new Date());
-			pro.setUpdateTime(new Date());
-			int count = proService.saveProduct(pro);
+			pay.setCreateTime(new Date());
+			pay.setUpdateTime(new Date());
+			int count = payService.savePayment(pay);
 			if(count == 1){
 				  return ReplyCode.SUCCESS;
 			  }else{
@@ -83,33 +83,31 @@ public class ProductController {
 		    	  logger.info("传入的filter={}",filter);	
 		      }
 			  PageStatus pageSta = new PageStatus();
-		      int count = proService.count(filter);
+		      int count = payService.count(filter);
 		      pageSta.setCount(count);
 		      pageSta.setPage(page);
 		      pageSta.setLimit(limit);
-		    //mysql limit 后面是数据条数
-		      List<Product> pageProList = proService.queryByPaged(filter,pageSta.getStartNum(), limit);
-		      List<ProductVo>proVoList = new ArrayList<>();
-		      if(pageProList != null && pageProList.size()>0){
-		    	  for(Product pro : pageProList){
-		    		  ProductVo proVo =  new ProductVo();
-		    		  BeanUtils.copyProperties(proVo,pro);
-		    		  Date createTime = pro.getCreateTime();
-		    		  Date updateTime = pro.getCreateTime();
-		    		  proVo.setPayNameDec(pro.getGgdm1() ==null ? "": pro.getGgdm1().getDmnr());
-		    		  proVo.setPunishTypeDec(pro.getGgdm2() ==null ? "": pro.getGgdm2().getDmnr());
-		    		  proVo.setPayObjDec(pro.getGgdm3() ==null ? "": pro.getGgdm3().getDmnr());
-		    		  if(createTime != null){
-		    			  proVo.setCreateTimeStr(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(createTime));
-		    		  }
-		    		  if(updateTime != null){
-		    			  proVo.setUpdateTimeStr(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(updateTime));
-		    		  }
-		    		  proVoList.add(proVo);
-			      }
+		      //mysql limit 后面是数据条数
+		      List<Payment> pageProList = payService.queryByPaged(filter,pageSta.getStartNum(), limit);
+		      
+		      List<PaymentVo> payVoList = new ArrayList<>();
+		      for(Payment pay : pageProList){
+		    	  PaymentVo payVo = new PaymentVo();
+		    	  BeanUtils.copyProperties(payVo,pay);
+		    	  if(pay.getLoan() != null){
+		    		  payVo.setLoanName(pay.getLoan().getCustomerName());
+		    		  payVo.setProductName(pay.getLoan().getProductName());
+		    		  payVo.setPrecentStr(pay.getPaymentNum()+"/"+pay.getAllPrecent());
+		    	  }
+		    	  Date payDay = pay.getPaymentDay();
+		    	  if(payDay != null){
+	    			  payVo.setPaymentDayStr(new SimpleDateFormat("yyyy-MM-dd").format(payDay));
+	    		  }
+		    	  payVoList.add(payVo);
 		      }
-		      returnMsg.setData(proVoList);
+		      returnMsg.setData(payVoList);
 		      returnMsg.setCount(count);
+		      
       }catch(UnsupportedEncodingException e){
     	  e.printStackTrace();
       }catch (Exception e) {
@@ -121,33 +119,31 @@ public class ProductController {
 	@RequestMapping("/editPro")
 	 public String editPro(HttpServletRequest request,Model model){
      try{
-   	  String productId = request.getParameter("productId");
-   	  logger.info("传入的productId={}",productId);
-   	  if(!StringUtils.isEmpty(productId)){
-   		      Integer idInt = Integer.parseInt(productId);
-   			  Product pro = proService.selectByPrimaryKey(idInt);
-   			  model.addAttribute("pro", pro);
+   	  String paymentId = request.getParameter("paymentId");
+   	  logger.info("传入的paymentId={}",paymentId);
+   	  if(!StringUtils.isEmpty(paymentId)){
+   			  Payment pay = payService.selectByPrimaryKey(paymentId);
+   			  model.addAttribute("pro", pay);
    	  }
 	  }catch(Exception e){
 		  e.printStackTrace();
 		  logger.error("编辑产品详情出错！");
 	  }
-     return "product/productEdit";
+     return "payment/paymentEdit";
 	}
 	
 	@RequestMapping("/deletePros")
 	@ResponseBody
 	 public String deletePros(HttpServletRequest request,Model model){
      try{
-   	  String productId = request.getParameter("productId");
-   	  logger.info("传入的productId={}",productId);
-   	  if(!StringUtils.isEmpty(productId)){
-   		  String [] idStr = productId.split(",");
+   	  String paymentId = request.getParameter("paymentId");
+   	  logger.info("传入的paymentId={}",paymentId);
+   	  if(!StringUtils.isEmpty(paymentId)){
+   		  String [] idStr = paymentId.split(",");
    		  //批量删除菜单信息
    		  for(String id : idStr){
-   			  Integer idInt = Integer.parseInt(id);
        		  //删除菜单表
-   			  proService.deleteByPrimaryKey(idInt);
+   			  payService.deleteByPrimaryKey(id);
    		  }
    	  }
 		  return ReplyCode.SUCCESS;
@@ -169,11 +165,11 @@ public class ProductController {
 				  if(StringUtils.isEmpty(proID) || StringUtils.isEmpty(proFiled) || StringUtils.isEmpty(proValue)){
 					   return ReplyCode.INSIDEERROR;
 				  }
-				  Product pro = new Product();
+				  Payment pro = new Payment();
 				  CommonUtils.getInstance().setField(pro, proFiled, proValue);
-				  pro.setId(Integer.parseInt(proID));
+				  pro.setId(proID);
 				  pro.setUpdateTime(new Date());
-				  int count = proService.updateByPrimaryKeySelective(pro);
+				  int count = payService.updateByPrimaryKeySelective(pro);
 				  if(count == 1){
 					  return ReplyCode.SUCCESS;
 				  }

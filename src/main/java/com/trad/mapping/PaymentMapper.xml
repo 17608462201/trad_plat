@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.trad.dao.PaymentMapper" >
+  <resultMap id="BaseResultMap" type="com.trad.bean.Payment" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="contract_id" property="contractId" jdbcType="VARCHAR" />
+    <result column="payment_name" property="paymentName" jdbcType="VARCHAR" />
+    <result column="payment_phone" property="paymentPhone" jdbcType="VARCHAR" />
+    <result column="loan_id" property="loanId" jdbcType="VARCHAR" />
+    <result column="loan_phone" property="loanPhone" jdbcType="VARCHAR" />
+    <result column="manager_id" property="managerId" jdbcType="VARCHAR" />
+    <result column="manager_name" property="managerName" jdbcType="VARCHAR" />
+    <result column="payment_day" property="paymentDay" jdbcType="TIMESTAMP" />
+    <result column="payment_time" property="paymentTime" jdbcType="TIMESTAMP" />
+    <result column="payment_money" property="paymentMoney" jdbcType="VARCHAR" />
+    <result column="default_inter" property="defaultInter" jdbcType="VARCHAR" />
+    <result column="really_payment" property="reallyPayment" jdbcType="VARCHAR" />
+    <result column="payment_advance" property="paymentAdvance" jdbcType="VARCHAR" />
+    <result column="payment_status" property="paymentStatus" jdbcType="CHAR" />
+    <result column="handler_name" property="handlerName" jdbcType="VARCHAR" />
+    <result column="loan_precent" property="loanPrecent" jdbcType="VARCHAR" />
+    <result column="payment_num" property="paymentNum" jdbcType="VARCHAR" />
+    <result column="payment_way" property="paymentWay" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="create_per" property="createPer" jdbcType="VARCHAR" />
+    <result column="update_per" property="updatePer" jdbcType="VARCHAR" />
+    <result column="loan_per" property="loanPer" jdbcType="VARCHAR" />
+    <result column="all_precent" property="allPrecent" jdbcType="VARCHAR" />
+    <association property="loan" javaType="com.trad.bean.Loan">  
+        <id column="id" jdbcType="VARCHAR" property="id" />
+	    <result column="loan_contract_no" jdbcType="VARCHAR" property="loanContractNo" />
+	    <result column="product_id" jdbcType="VARCHAR" property="productId" />
+	    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+	    <result column="loan_per" jdbcType="VARCHAR" property="loanPer" />
+	    <result column="loan_mobile" jdbcType="VARCHAR" property="loanMobile" />
+      </association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, contract_id, payment_name, payment_phone, loan_id, loan_phone, manager_id, manager_name, 
+    payment_day, payment_time, payment_money, default_inter, really_payment, payment_advance, 
+    payment_status, handler_name, loan_precent, payment_num, payment_way, remark, create_time, 
+    update_time, create_per, update_per, loan_per
+  </sql>
+	   <select id="selectPayName" resultType="com.trad.bean.Loan" parameterType="java.lang.String" >
+   select * from t_loan  loan where loan.id= #{loantId,jdbcType=VARCHAR}
+ </select>
+   <select id="queryByPaged"   resultMap="BaseResultMap" > 
+      SELECT pay.*,loan.*,t.all_precent FROM t_payment pay LEFT JOIN t_loan loan ON pay.`loan_id` = loan.`id` 
+      JOIN (SELECT loan_id,COUNT(1) all_precent FROM t_payment GROUP BY loan_id ) t ON pay.`loan_id` = t.loan_id
+     <if test="filter != null and filter != ''" >
+        where paymentPhone like #{filter,jdbcType=VARCHAR} 
+      </if>
+     LIMIT #{1} , #{2}
+  </select>
+  <select id="count" resultType="java.lang.Integer">
+    select count(1) cnt  from t_product
+      <if test="filter != null and filter !='' ">
+        where paymentPhone like #{filter,jdbcType=VARCHAR}
+      </if>
+  </select> 
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_payment
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_payment
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.trad.bean.Payment" >
+    insert into t_payment (id, contract_id, payment_name, 
+      payment_phone, loan_id, loan_phone, 
+      manager_id, manager_name, payment_day, 
+      payment_time, payment_money, default_inter, 
+      really_payment, payment_advance, payment_status, 
+      handler_name, loan_precent, payment_num, 
+      payment_way, remark, create_time, 
+      update_time, create_per, update_per, 
+      loan_per)
+    values (#{id,jdbcType=VARCHAR}, #{contractId,jdbcType=VARCHAR}, #{paymentName,jdbcType=VARCHAR}, 
+      #{paymentPhone,jdbcType=VARCHAR}, #{loanId,jdbcType=VARCHAR}, #{loanPhone,jdbcType=VARCHAR}, 
+      #{managerId,jdbcType=VARCHAR}, #{managerName,jdbcType=VARCHAR}, #{paymentDay,jdbcType=TIMESTAMP}, 
+      #{paymentTime,jdbcType=TIMESTAMP}, #{paymentMoney,jdbcType=VARCHAR}, #{defaultInter,jdbcType=VARCHAR}, 
+      #{reallyPayment,jdbcType=VARCHAR}, #{paymentAdvance,jdbcType=VARCHAR}, #{paymentStatus,jdbcType=CHAR}, 
+      #{handlerName,jdbcType=VARCHAR}, #{loanPrecent,jdbcType=VARCHAR}, #{paymentNum,jdbcType=VARCHAR}, 
+      #{paymentWay,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{createPer,jdbcType=VARCHAR}, #{updatePer,jdbcType=VARCHAR}, 
+      #{loanPer,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.trad.bean.Payment" >
+    insert into t_payment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="contractId != null" >
+        contract_id,
+      </if>
+      <if test="paymentName != null" >
+        payment_name,
+      </if>
+      <if test="paymentPhone != null" >
+        payment_phone,
+      </if>
+      <if test="loanId != null" >
+        loan_id,
+      </if>
+      <if test="loanPhone != null" >
+        loan_phone,
+      </if>
+      <if test="managerId != null" >
+        manager_id,
+      </if>
+      <if test="managerName != null" >
+        manager_name,
+      </if>
+      <if test="paymentDay != null" >
+        payment_day,
+      </if>
+      <if test="paymentTime != null" >
+        payment_time,
+      </if>
+      <if test="paymentMoney != null" >
+        payment_money,
+      </if>
+      <if test="defaultInter != null" >
+        default_inter,
+      </if>
+      <if test="reallyPayment != null" >
+        really_payment,
+      </if>
+      <if test="paymentAdvance != null" >
+        payment_advance,
+      </if>
+      <if test="paymentStatus != null" >
+        payment_status,
+      </if>
+      <if test="handlerName != null" >
+        handler_name,
+      </if>
+      <if test="loanPrecent != null" >
+        loan_precent,
+      </if>
+      <if test="paymentNum != null" >
+        payment_num,
+      </if>
+      <if test="paymentWay != null" >
+        payment_way,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="createPer != null" >
+        create_per,
+      </if>
+      <if test="updatePer != null" >
+        update_per,
+      </if>
+      <if test="loanPer != null" >
+        loan_per,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="contractId != null" >
+        #{contractId,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentName != null" >
+        #{paymentName,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentPhone != null" >
+        #{paymentPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="loanId != null" >
+        #{loanId,jdbcType=VARCHAR},
+      </if>
+      <if test="loanPhone != null" >
+        #{loanPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="managerId != null" >
+        #{managerId,jdbcType=VARCHAR},
+      </if>
+      <if test="managerName != null" >
+        #{managerName,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentDay != null" >
+        #{paymentDay,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paymentTime != null" >
+        #{paymentTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paymentMoney != null" >
+        #{paymentMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultInter != null" >
+        #{defaultInter,jdbcType=VARCHAR},
+      </if>
+      <if test="reallyPayment != null" >
+        #{reallyPayment,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentAdvance != null" >
+        #{paymentAdvance,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentStatus != null" >
+        #{paymentStatus,jdbcType=CHAR},
+      </if>
+      <if test="handlerName != null" >
+        #{handlerName,jdbcType=VARCHAR},
+      </if>
+      <if test="loanPrecent != null" >
+        #{loanPrecent,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentNum != null" >
+        #{paymentNum,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentWay != null" >
+        #{paymentWay,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createPer != null" >
+        #{createPer,jdbcType=VARCHAR},
+      </if>
+      <if test="updatePer != null" >
+        #{updatePer,jdbcType=VARCHAR},
+      </if>
+      <if test="loanPer != null" >
+        #{loanPer,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.trad.bean.Payment" >
+    update t_payment
+    <set >
+      <if test="contractId != null" >
+        contract_id = #{contractId,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentName != null" >
+        payment_name = #{paymentName,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentPhone != null" >
+        payment_phone = #{paymentPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="loanId != null" >
+        loan_id = #{loanId,jdbcType=VARCHAR},
+      </if>
+      <if test="loanPhone != null" >
+        loan_phone = #{loanPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="managerId != null" >
+        manager_id = #{managerId,jdbcType=VARCHAR},
+      </if>
+      <if test="managerName != null" >
+        manager_name = #{managerName,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentDay != null" >
+        payment_day = #{paymentDay,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paymentTime != null" >
+        payment_time = #{paymentTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paymentMoney != null" >
+        payment_money = #{paymentMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultInter != null" >
+        default_inter = #{defaultInter,jdbcType=VARCHAR},
+      </if>
+      <if test="reallyPayment != null" >
+        really_payment = #{reallyPayment,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentAdvance != null" >
+        payment_advance = #{paymentAdvance,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentStatus != null" >
+        payment_status = #{paymentStatus,jdbcType=CHAR},
+      </if>
+      <if test="handlerName != null" >
+        handler_name = #{handlerName,jdbcType=VARCHAR},
+      </if>
+      <if test="loanPrecent != null" >
+        loan_precent = #{loanPrecent,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentNum != null" >
+        payment_num = #{paymentNum,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentWay != null" >
+        payment_way = #{paymentWay,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createPer != null" >
+        create_per = #{createPer,jdbcType=VARCHAR},
+      </if>
+      <if test="updatePer != null" >
+        update_per = #{updatePer,jdbcType=VARCHAR},
+      </if>
+      <if test="loanPer != null" >
+        loan_per = #{loanPer,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.trad.bean.Payment" >
+    update t_payment
+    set contract_id = #{contractId,jdbcType=VARCHAR},
+      payment_name = #{paymentName,jdbcType=VARCHAR},
+      payment_phone = #{paymentPhone,jdbcType=VARCHAR},
+      loan_id = #{loanId,jdbcType=VARCHAR},
+      loan_phone = #{loanPhone,jdbcType=VARCHAR},
+      manager_id = #{managerId,jdbcType=VARCHAR},
+      manager_name = #{managerName,jdbcType=VARCHAR},
+      payment_day = #{paymentDay,jdbcType=TIMESTAMP},
+      payment_time = #{paymentTime,jdbcType=TIMESTAMP},
+      payment_money = #{paymentMoney,jdbcType=VARCHAR},
+      default_inter = #{defaultInter,jdbcType=VARCHAR},
+      really_payment = #{reallyPayment,jdbcType=VARCHAR},
+      payment_advance = #{paymentAdvance,jdbcType=VARCHAR},
+      payment_status = #{paymentStatus,jdbcType=CHAR},
+      handler_name = #{handlerName,jdbcType=VARCHAR},
+      loan_precent = #{loanPrecent,jdbcType=VARCHAR},
+      payment_num = #{paymentNum,jdbcType=VARCHAR},
+      payment_way = #{paymentWay,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_per = #{createPer,jdbcType=VARCHAR},
+      update_per = #{updatePer,jdbcType=VARCHAR},
+      loan_per = #{loanPer,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

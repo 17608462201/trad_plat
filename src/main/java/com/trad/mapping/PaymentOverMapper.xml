@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.trad.dao.PaymentOverMapper" >
+  <resultMap id="BaseResultMap" type="com.trad.bean.PaymentOver" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="loan_id" property="loanId" jdbcType="VARCHAR" />
+    <result column="pay_num" property="payNum" jdbcType="VARCHAR" />
+    <result column="pay_day" property="payDay" jdbcType="TIMESTAMP" />
+    <result column="orgin_day" property="orginDay" jdbcType="VARCHAR" />
+    <result column="overdue" property="overdue" jdbcType="VARCHAR" />
+    <result column="origin_pay" property="originPay" jdbcType="VARCHAR" />
+    <result column="default_inter" property="defaultInter" jdbcType="VARCHAR" />
+    <result column="sum_money" property="sumMoney" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="create_per" property="createPer" jdbcType="VARCHAR" />
+    <result column="update_per" property="updatePer" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, loan_id, pay_num, pay_day, orgin_day, overdue, origin_pay, default_inter, sum_money, 
+    remark, create_time, update_time, create_per, update_per
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_payment_over
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_payment_over
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.trad.bean.PaymentOver" >
+    insert into t_payment_over (id, loan_id, pay_num, 
+      pay_day, orgin_day, overdue, 
+      origin_pay, default_inter, sum_money, 
+      remark, create_time, update_time, 
+      create_per, update_per)
+    values (#{id,jdbcType=VARCHAR}, #{loanId,jdbcType=VARCHAR}, #{payNum,jdbcType=VARCHAR}, 
+      #{payDay,jdbcType=TIMESTAMP}, #{orginDay,jdbcType=VARCHAR}, #{overdue,jdbcType=VARCHAR}, 
+      #{originPay,jdbcType=VARCHAR}, #{defaultInter,jdbcType=VARCHAR}, #{sumMoney,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{createPer,jdbcType=VARCHAR}, #{updatePer,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.trad.bean.PaymentOver" >
+    insert into t_payment_over
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="loanId != null" >
+        loan_id,
+      </if>
+      <if test="payNum != null" >
+        pay_num,
+      </if>
+      <if test="payDay != null" >
+        pay_day,
+      </if>
+      <if test="orginDay != null" >
+        orgin_day,
+      </if>
+      <if test="overdue != null" >
+        overdue,
+      </if>
+      <if test="originPay != null" >
+        origin_pay,
+      </if>
+      <if test="defaultInter != null" >
+        default_inter,
+      </if>
+      <if test="sumMoney != null" >
+        sum_money,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="createPer != null" >
+        create_per,
+      </if>
+      <if test="updatePer != null" >
+        update_per,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="loanId != null" >
+        #{loanId,jdbcType=VARCHAR},
+      </if>
+      <if test="payNum != null" >
+        #{payNum,jdbcType=VARCHAR},
+      </if>
+      <if test="payDay != null" >
+        #{payDay,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orginDay != null" >
+        #{orginDay,jdbcType=VARCHAR},
+      </if>
+      <if test="overdue != null" >
+        #{overdue,jdbcType=VARCHAR},
+      </if>
+      <if test="originPay != null" >
+        #{originPay,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultInter != null" >
+        #{defaultInter,jdbcType=VARCHAR},
+      </if>
+      <if test="sumMoney != null" >
+        #{sumMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createPer != null" >
+        #{createPer,jdbcType=VARCHAR},
+      </if>
+      <if test="updatePer != null" >
+        #{updatePer,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.trad.bean.PaymentOver" >
+    update t_payment_over
+    <set >
+      <if test="loanId != null" >
+        loan_id = #{loanId,jdbcType=VARCHAR},
+      </if>
+      <if test="payNum != null" >
+        pay_num = #{payNum,jdbcType=VARCHAR},
+      </if>
+      <if test="payDay != null" >
+        pay_day = #{payDay,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orginDay != null" >
+        orgin_day = #{orginDay,jdbcType=VARCHAR},
+      </if>
+      <if test="overdue != null" >
+        overdue = #{overdue,jdbcType=VARCHAR},
+      </if>
+      <if test="originPay != null" >
+        origin_pay = #{originPay,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultInter != null" >
+        default_inter = #{defaultInter,jdbcType=VARCHAR},
+      </if>
+      <if test="sumMoney != null" >
+        sum_money = #{sumMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createPer != null" >
+        create_per = #{createPer,jdbcType=VARCHAR},
+      </if>
+      <if test="updatePer != null" >
+        update_per = #{updatePer,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.trad.bean.PaymentOver" >
+    update t_payment_over
+    set loan_id = #{loanId,jdbcType=VARCHAR},
+      pay_num = #{payNum,jdbcType=VARCHAR},
+      pay_day = #{payDay,jdbcType=TIMESTAMP},
+      orgin_day = #{orginDay,jdbcType=VARCHAR},
+      overdue = #{overdue,jdbcType=VARCHAR},
+      origin_pay = #{originPay,jdbcType=VARCHAR},
+      default_inter = #{defaultInter,jdbcType=VARCHAR},
+      sum_money = #{sumMoney,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_per = #{createPer,jdbcType=VARCHAR},
+      update_per = #{updatePer,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

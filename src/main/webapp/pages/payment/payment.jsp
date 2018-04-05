@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%  
      //页面标题设置
-	request.setAttribute("pageTitle","菜单列表");  
+	request.setAttribute("pageTitle","还款列表");  
 	//设置查询标题
-	request.setAttribute("QUERY_TILE","支持菜单名称/描述搜索内容");  
+	request.setAttribute("QUERY_TILE","支持借款人/还款人手机搜索内容");  
 	//如果不需要公用的css,请使用下面代码 (默认是为true)
 	request.setAttribute("SHOW_EDIT",true);  
 	//request.setAttribute("INCLUDE_SKIN",false);
@@ -14,24 +14,44 @@
 %>
 <%@ include file="/pages/common/header.jsp" %>
 <%@ include file="/pages/common/listHeader.jsp" %>
-<table class="layui-table" lay-data="{height:478,url:'${ctx }/product/list', page:true, limit:10, id:'tables'}" lay-filter="tree_filter">
+<table class="layui-table" lay-data="{height:478,url:'${ctx }/payment/list', page:true, limit:10, id:'tables'}" lay-filter="tree_filter">
   <thead>
     <tr>
       <th lay-data="{checkbox:true, fixed: true}"></th>
-      <th lay-data="{field:'id', width:80,sort: true}">产品ID</th>
-      <th lay-data="{field:'name', width:200,sort: true}">产品名称</th>
-      <th lay-data="{field:'payNameDec', width:100,sort: true,edit: 'text'}">还款方式</th>
-      <th lay-data="{field:'payTimes', width:100, sort: true,edit: 'text'}">还款期数</th>
-      <th lay-data="{field:'trad', width:100, sort: true,edit: 'text'}">利率</th>
-      <th lay-data="{field:'mostmon', width:100, sort: true,edit: 'text'}">最高贷款金额</th>
-      <th lay-data="{field:'updatePer', width:120, sort: true}">最后更新人</th>
-      <th lay-data="{field:'updateTimeStr', width:150, sort: true}">更新时间</th>
-       <th lay-data="{field:'recordStatus', width:100,templet: '#checkboxTpl', unresize: true}">是否有效</th>
+      <th lay-data="{field:'contractId', width:160,sort: true}">合同编号</th>
+      <th lay-data="{field:'loanPer', width:100,sort: true}">借款人</th>
+      <th lay-data="{field:'loanPhone', width:120,sort: true,edit: 'text'}">手机</th>
+      <th lay-data="{field:'paymentName', width:100, sort: true,edit: 'text'}">还款人</th>
+      <th lay-data="{field:'paymentPhone', width:120, sort: true,edit: 'text'}">手机</th>
+      <th lay-data="{field:'paymentMoney', width:100, sort: true,edit: 'text'}">放款金额</th>
+      <th lay-data="{field:'productName', width:150, sort: true}">贷款产品</th>
+      <th lay-data="{field:'paymentMoney', width:150, sort: true}">应还金额</th>
+      <th lay-data="{field:'defaultInter', width:100, sort: true}">罚息</th>
+      <th lay-data="{field:'reallyPayment', width:100, sort: true}">实际还款金额</th>
+      <th lay-data="{field:'paymentDayStr', width:150,templet: '#payDayTpl', sort: true}">还款日</th>
+      <th lay-data="{field:'precentStr', width:150, sort: true}">已还/借款期数</th>
+      <th lay-data="{field:'managerName', width:100, sort: true}">客户经理</th>
+       <th lay-data="{field:'recordStatus', width:100,templet: '#checkboxTpl', unresize: true}">操作</th>
     </tr>
   </thead>
 </table>
  <script type="text/html" id="checkboxTpl">
   <input type="checkbox" {{ d.recordStatus == 1 ? 'checked' : '' }} name="recordStatus" lay-skin="switch" lay-filter="validFilter" lay-text="是|否">
+</script>
+<script type="text/html" id="payDayTpl">
+   {{var nowTimes = new Date().getTime();
+   var payTime;
+   if(d.paymentDayStr) { 
+      var arr1 = d.paymentDayStr.split(" "); 
+      var sdate = arr1[0].split('-'); 
+      var date = new Date(sdate[0], sdate[1]-1, sdate[2]); 
+      payTime = date.getTime();
+  } 
+ #  if(12222 <= nowTimes){ }}
+    <span style="color: #F581B1;font-weight: lighter;">{{ d.paymentDayStr }}</span>
+  {{#  } else { }}
+    {{ d.paymentDayStr }}
+  {{#  } }}
 </script>
 <script>
 layui.use('table', function(){
