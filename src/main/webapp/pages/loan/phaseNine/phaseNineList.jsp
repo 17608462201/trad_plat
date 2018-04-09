@@ -69,7 +69,7 @@
 			<th lay-data="{field:'receiptsMonthScale', width:155}">借款利率%（月）</th>
 			<th lay-data="{field:'receiptsOfferLimit', width:100}">放款期限</th>
 			<th lay-data="{field:'applyTime', width:110}">申请时间</th>
-			<th lay-data="{width:120, toolbar: '#barDemo'}">操作</th>
+			<th lay-data="{width:170, toolbar: '#barDemo'}">操作</th>
 		</tr>
 	</thead>
 </table>
@@ -183,10 +183,10 @@
 		table.on('tool(tree_filter)', function(obj){
 		    var data = obj.data;
 		    if(obj.event === 'examine'){
-		    	$.post("${ctx}/loanPhaseFour/upLoanStatus?loanId="+data.loadId,function(text){
+		    	$.post("${ctx}/loanPhaseNine/upLoanStatus?loanId="+data.receiptsLoadId,function(text){
 	          		  if(text=='200'){
 	          			  layer.closeAll();
-		          		  window.location.href ='${ctx }/loanPhaseFour/init';
+		          		  window.location.href ='${ctx }/loanPhaseNine/init';
 	          		  }else{
 	          			  layer.msg("保存借款信息出错！");
 	          		  }

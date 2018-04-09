@@ -24,4 +24,6 @@ public interface LoanMapper {
     int getCount();
     
     void upLoanStatus(Map<String, Object> map);
+    
+    List<Map<String, Object>> selPlanByLoanId(Map<String, Object> map);
 }

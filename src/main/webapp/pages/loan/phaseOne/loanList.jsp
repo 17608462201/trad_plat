@@ -61,7 +61,6 @@
 
 <script type="text/html" id="barDemo">
   {{ d.status == 1 ? '<a class="layui-btn layui-btn-xs" lay-event="examine">提交待下户</a>' : '' }}
-  {{ d.status == 1 ? '<a class="layui-btn layui-btn-xs" lay-event="fallback">退回</a>' : '' }}
 </script>
 <script>
 layui.use('table', function(){

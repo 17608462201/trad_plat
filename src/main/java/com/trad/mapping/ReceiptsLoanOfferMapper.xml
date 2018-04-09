@@ -31,7 +31,7 @@
   	r.receipts_offer_pound receiptsOfferPound, r.receipts_zh_money receiptsZhMoney, 
   	r.receipts_plat_money receiptsPlatMoney, r.create_time createTime,r.update_time updateTime, r.create_per createPer, r.update_per updatePer,
 	o.offer_money receiptsOfferMoney,o.month_scale receiptsMonthScale,o.offer_limit receiptsOfferLimit,
-    l.customer_name customerName,l.loan_status loanStatus,l.apply_time applyTime
+    l.customer_name customerName,l.loan_status loanStatus,l.apply_time applyTime,l.id loanId
   	from t_receipts_loan_offer r LEFT JOIN t_loan l ON r.receipts_load_id=l.id LEFT JOIN t_loan_offer o ON o.load_id=l.id limit #{page},#{pageSize}
   </select>
   <select id="getCount" resultType="java.lang.Integer" parameterType="map">

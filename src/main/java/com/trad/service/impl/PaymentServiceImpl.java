@@ -45,4 +45,9 @@ public class PaymentServiceImpl implements PaymentService{
 		return payDao.selectByPrimaryKey(id);
 	}
 
+	@Override
+	public int insert(Payment record) {
+		return payDao.insert(record);
+	}
+
 }

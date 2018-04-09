@@ -18,4 +18,5 @@ public interface PaymentService {
   	
   	public Payment selectByPrimaryKey(String id);
   	
+  	int insert(Payment record);
 }

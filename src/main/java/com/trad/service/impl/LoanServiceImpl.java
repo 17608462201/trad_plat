@@ -48,4 +48,9 @@ public class LoanServiceImpl implements LoanService {
 	public void upLoanStatus(Map<String, Object> map) {
 		loanMapper.upLoanStatus(map);
 	}
+
+	@Override
+	public List<Map<String, Object>> selPlanByLoanId(Map<String, Object> map) {
+		return loanMapper.selPlanByLoanId(map);
+	}
 }
