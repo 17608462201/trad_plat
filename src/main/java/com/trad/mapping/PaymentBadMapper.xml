@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.trad.bean.PaymentBad" >
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="payment_id" property="paymentId" jdbcType="VARCHAR" />
+    <result column="loan_id" property="loanId" jdbcType="VARCHAR" />
     <result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
     <result column="bad_debt_status" property="badDebtStatus" jdbcType="CHAR" />
     <result column="is_settle" property="isSettle" jdbcType="CHAR" />
@@ -15,9 +16,29 @@
     <result column="update_per" property="updatePer" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, payment_id, pay_time, bad_debt_status, is_settle, remark, handler, create_time, 
+    id, payment_id, loan_id, pay_time, bad_debt_status, is_settle, remark, handler, create_time, 
     update_time, create_per, update_per
   </sql>
+  
+  <select id="selPaymentBad" parameterType="map" resultType="map">
+  	select id, payment_id, loan_id, left(pay_time,10) pay_time, bad_debt_status, is_settle, remark, handler, create_time, 
+    update_time, create_per, update_per from t_payment_bad where loan_id=#{loanId} limit #{page} , #{pageSize}
+  </select>
+  
+  <select id="countPaymentBad" resultType="java.lang.Integer" parameterType="map">
+  	select count(*) from t_payment_bad where loan_id=#{loanId}
+  </select>
+  
+  <select id="selPaymentBadAll" parameterType="map" resultType="map">
+  	select * from t_payment_bad b LEFT JOIN t_loan l ON b.loan_id=l.id LEFT JOIN t_loan_offer o ON l.id=o.load_id 
+  	LEFT JOIN t_loan_plan p ON l.id=p.loan_id GROUP BY l.id limit #{page} , #{pageSize}
+  </select>
+  
+  <select id="countPaymentBadAll" parameterType="map" resultType="java.lang.Integer">
+  	select count(*) from t_payment_bad b LEFT JOIN t_loan l ON b.loan_id=l.id LEFT JOIN t_loan_offer o ON l.id=o.load_id 
+  	LEFT JOIN t_loan_plan p ON l.id=p.loan_id GROUP BY l.id
+  </select>
+  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
@@ -29,11 +50,11 @@
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.trad.bean.PaymentBad" >
-    insert into t_payment_bad (id, payment_id, pay_time, 
+    insert into t_payment_bad (id, payment_id, loan_id, pay_time, 
       bad_debt_status, is_settle, remark, 
       handler, create_time, update_time, 
       create_per, update_per)
-    values (#{id,jdbcType=VARCHAR}, #{paymentId,jdbcType=VARCHAR}, #{payTime,jdbcType=TIMESTAMP}, 
+    values (#{id,jdbcType=VARCHAR}, #{paymentId,jdbcType=VARCHAR}, #{loanId,jdbcType=VARCHAR}, #{payTime,jdbcType=TIMESTAMP}, 
       #{badDebtStatus,jdbcType=CHAR}, #{isSettle,jdbcType=CHAR}, #{remark,jdbcType=VARCHAR}, 
       #{handler,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{createPer,jdbcType=VARCHAR}, #{updatePer,jdbcType=VARCHAR})

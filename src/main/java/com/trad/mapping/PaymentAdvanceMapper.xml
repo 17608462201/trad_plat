@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.trad.bean.PaymentAdvance" >
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="payment_id" property="paymentId" jdbcType="VARCHAR" />
+    <result column="loan_id" property="loanId" jdbcType="VARCHAR" />
     <result column="pay_money" property="payMoney" jdbcType="VARCHAR" />
     <result column="real_pay_money" property="realPayMoney" jdbcType="VARCHAR" />
     <result column="settle_time" property="settleTime" jdbcType="TIMESTAMP" />
@@ -14,9 +15,21 @@
     <result column="update_per" property="updatePer" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, payment_id, pay_money, real_pay_money, settle_time, remark, create_time, update_time, 
+    id, payment_id, loan_id, pay_money, real_pay_money, settle_time, remark, create_time, update_time, 
     create_per, update_per
   </sql>
+  <select id="selPaymentAdvance" resultType="map" parameterType="map">
+	select *,SUM(p.interest) interests,sum(p.principal) principals from t_payment_advance a 
+	LEFT JOIN t_loan l ON a.loan_id=l.id LEFT JOIN t_loan_offer o ON l.id=o.load_id 
+	LEFT JOIN t_loan_plan p ON l.id=p.loan_id GROUP BY l.id limit #{page} , #{pageSize}
+  </select>
+  
+  <select id="countPaymentAdvance" resultType="java.lang.Integer" parameterType="map">
+  	select count(*) from t_payment_advance a 
+	LEFT JOIN t_loan l ON a.loan_id=l.id LEFT JOIN t_loan_offer o ON l.id=o.load_id 
+	LEFT JOIN t_loan_plan p ON l.id=p.loan_id GROUP BY l.id
+  </select>
+  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
@@ -28,11 +41,11 @@
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.trad.bean.PaymentAdvance" >
-    insert into t_payment_advance (id, payment_id, pay_money, 
+    insert into t_payment_advance (id, payment_id, loan_id, pay_money, 
       real_pay_money, settle_time, remark, 
       create_time, update_time, create_per, 
       update_per)
-    values (#{id,jdbcType=VARCHAR}, #{paymentId,jdbcType=VARCHAR}, #{payMoney,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=VARCHAR}, #{paymentId,jdbcType=VARCHAR}, #{loanId,jdbcType=VARCHAR}, #{payMoney,jdbcType=VARCHAR}, 
       #{realPayMoney,jdbcType=VARCHAR}, #{settleTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{createPer,jdbcType=VARCHAR}, 
       #{updatePer,jdbcType=VARCHAR})

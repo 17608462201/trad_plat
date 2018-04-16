@@ -55,9 +55,19 @@ public class Payment {
     
     private Loan loan;
     
+    private LoanOffer loanOffer;
+    
     private String allPrecent;
 
-    public String getId() {
+    public LoanOffer getLoanOffer() {
+		return loanOffer;
+	}
+
+	public void setLoanOffer(LoanOffer loanOffer) {
+		this.loanOffer = loanOffer;
+	}
+
+	public String getId() {
         return id;
     }
 

@@ -111,14 +111,16 @@ public class LoanPhaseFourController {
 				for (int i = 1; i < Integer.parseInt(offerLimit)+2; i++) {
 					Date date = date=DateUtil.parse(firstPayment);
 					if(i==1) {								//第一个月时间
+						loanPlan.setPrincipal("0");
 						loanPlan.setInterest(String.valueOf(Integer.parseInt(offerMoney)*(Double.valueOf(monthScale)/100)));
 					}else if(i==Integer.parseInt(offerLimit)+1) {
 						date=DateUtil.addMonths(date, i-1);	//获取最后一个月时间
 						date=DateUtil.addDays(date, -1);	//最后一个月减一天
-						loanPlan.setInterest("");
+						loanPlan.setInterest("0");
 						loanPlan.setPrincipal(offerMoney);
 					}else {									//中间月份的时间
 						date=DateUtil.addMonths(date, i-1);
+						loanPlan.setPrincipal("0");
 						loanPlan.setInterest(String.valueOf(Integer.parseInt(offerMoney)*(Double.valueOf(monthScale)/100)));
 					}
 					loanPlan.setPaymentTime(DateUtil.format(date));
@@ -131,12 +133,14 @@ public class LoanPhaseFourController {
 					Date date = date=DateUtil.parse(firstPayment);
 					if(i==1) {								//第一个月时间
 						loanPlan.setInterest(String.valueOf(Integer.parseInt(offerMoney)*(Double.valueOf(monthScale)/100)));
+						loanPlan.setPrincipal("0");
 					}else if(i==Integer.parseInt(offerLimit)) {
 						date=DateUtil.addMonths(date, i);	//获取最后一个月时间
 						loanPlan.setPrincipal(offerMoney);
 						loanPlan.setInterest(String.valueOf(Integer.parseInt(offerMoney)*(Double.valueOf(monthScale)/100)));
 					}else {									//中间月份的时间
 						date=DateUtil.addMonths(date, i);
+						loanPlan.setPrincipal("0");
 						loanPlan.setInterest(String.valueOf(Integer.parseInt(offerMoney)*(Double.valueOf(monthScale)/100)));
 					}
 					loanPlan.setPaymentTime(DateUtil.format(date));

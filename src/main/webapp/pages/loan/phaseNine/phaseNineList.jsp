@@ -76,7 +76,7 @@
 
 <script type="text/html" id="barDemo">
   {{ d.loanStatus == 9 ? '<a class="layui-btn layui-btn-xs" lay-event="examine">提交确认放款</a>' : '' }}
-  {{ d.loanStatus == 9 ? '<a class="layui-btn layui-btn-xs" lay-event="examine">退回</a>' : '' }}
+  {{ d.loanStatus == 9 ? '<a class="layui-btn layui-btn-xs" lay-event="fallback">退回</a>' : '' }}
 </script>
 <script>
 	layui.use('table', function() {

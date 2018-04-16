@@ -335,7 +335,7 @@
 		     success: function(data){
 		   		 var jsonData  = eval(data);
 		   		 $.each(jsonData['type'],function(index,val){
-		   			 $("#loadType").append('<option value="'+val.dmnr+'">'+val.dmnr+'</option>');
+		   			 $("#loadType").append('<option value="'+val.dm+'">'+val.dmnr+'</option>');
 		   		 });
 		     }
 		 });

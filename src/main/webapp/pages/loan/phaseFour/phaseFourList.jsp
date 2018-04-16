@@ -164,11 +164,7 @@ layui.use('table', function(){
     	    		  var offerLimit=body.find('input[name="offerLimit"]').val();
     	    		  var monthSerc=body.find('input[name="monthSerc"]').val();
     	    		  
-//     	    		  var loadTypeId=body.find('select[name="loadType"]').val();
-//     	    		  var id=body.find('input[name="id"]').val();
-//     	    		  var id=body.find('input[name="id"]').val();
-//     	    		  var id=body.find('input[name="id"]').val();
-    	    		  
+    	    		  console.log(loadType);
           			  var jsonObj = {"id":id,"paymentName":paymentName,"paymentContract":paymentContract,"bailScale":bailScale,"bailMoney":bailMoney,
             	    		  "evalueMoney":evalueMoney,"offerPound":offerPound,"zhMoney":zhMoney,"platMoney":platMoney,
             	    		  "offerDay":offerDay,"offerMoney":offerMoney,"monthScale":monthScale,"firstPayment":firstPayment,"lastPayment":lastPayment,"offerLimit":offerLimit,"monthSerc":monthSerc};

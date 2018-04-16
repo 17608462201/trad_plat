@@ -11,8 +11,7 @@
 %>
 <%@ include file="/pages/common/header.jsp" %>
 <form class="layui-form" action="#" method="post">
-	<input type="hidden" id="id" name="id" value="${payment.id }">
-     <div class="layui-form-item">
+	<div class="layui-form-item">
           <label class="layui-form-label">还款期数：</label>
           <div class="layui-input-inline">
                ${payment.paymentNum} 期
@@ -21,7 +20,7 @@
      <div class="layui-form-item">
           <label class="layui-form-label">实际还款时间：</label>
           <div class="layui-input-inline">
-          	   <input type="text" name="paymentTime" id="paymentTime" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+          	${payment.paymentTime }
           </div>
      </div>
       <div class="layui-form-item">
@@ -33,33 +32,25 @@
       <div class="layui-form-item">
 	    <label class="layui-form-label">实际还款金额（元）：</label>
 	    <div class="layui-input-inline">
-	      <input type="text" name="reallyPayment" value="${payment.reallyPayment }" id="reallyPayment"  lay-verify="required" placeholder="" autocomplete="off" class="layui-input"> (元)
+	    	${payment.reallyPayment }
 	    </div>
 	  </div>
 	  <div class="layui-form-item">
 	    <label class="layui-form-label">还款状态：</label>
 	    <div class="layui-input-inline">
-	      <select id="paymentStatus" name="paymentStatus" autocomplete="off" class="layui-input">
-				<option>请选择</option>
-				<option value="1">本期已还</option>
-				<option value="2">本期未还</option>
-			</select>
+	    	${payment.paymentStatus }
 	    </div>
 	  </div>
 	  <div class="layui-form-item">
 	    <label class="layui-form-label">过桥垫资金额：</label>
 	      <div class="layui-input-inline">
-	          <input type="text" name="paymentAdvance" id="paymentAdvance" value="${payment.paymentAdvance }"  lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+	          ${payment.paymentAdvance }
 	    </div>
 	  </div>
 	  <div class="layui-form-item">
 	    <label class="layui-form-label">还款方式：</label>
 	    <div class="layui-input-inline">
-	     	<select id="paymentWay" name="paymentWay" autocomplete="off" class="layui-input">
-				<option>请选择</option>
-				<option value="0">等额本息</option>
-				<option value="1">先息后本</option>
-			</select>
+	    	${payment.paymentWay }
 	      </div>
 	  </div>
 	  <div class="layui-form-item">
@@ -77,7 +68,7 @@
      <div class="layui-form-item">
           <label class="layui-form-label">备注：</label>
           <div class="layui-input-block">
-               <input type="text" name="remark" id="remark" value="${payment.remark }"  lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+          		${payment.remark }
           </div>
      </div>
 </form>

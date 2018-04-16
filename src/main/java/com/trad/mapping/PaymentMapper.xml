@@ -29,12 +29,15 @@
     <result column="loan_per" property="loanPer" jdbcType="VARCHAR" />
     <result column="all_precent" property="allPrecent" jdbcType="VARCHAR" />
     <association property="loan" javaType="com.trad.bean.Loan">  
-        <id column="id" jdbcType="VARCHAR" property="id" />
-	    <result column="loan_contract_no" jdbcType="VARCHAR" property="loanContractNo" />
+        <id column="id" jdbcType="VARCHAR" property="id" />	    
+        <result column="loan_contract_no" jdbcType="VARCHAR" property="loanContractNo" />
 	    <result column="product_id" jdbcType="VARCHAR" property="productId" />
 	    <result column="product_name" jdbcType="VARCHAR" property="productName" />
-	    <result column="loan_per" jdbcType="VARCHAR" property="loanPer" />
+	    <result column="customer_id" jdbcType="VARCHAR" property="customerId" />
 	    <result column="loan_mobile" jdbcType="VARCHAR" property="loanMobile" />
+      </association>
+      <association property="loanOffer" javaType="com.trad.bean.LoanOffer">
+      	<result column="offer_money" property="offerMoney" jdbcType="VARCHAR" />
       </association>
   </resultMap>
   <sql id="Base_Column_List" >
@@ -43,23 +46,98 @@
     payment_status, handler_name, loan_precent, payment_num, payment_way, remark, create_time, 
     update_time, create_per, update_per, loan_per
   </sql>
-	   <select id="selectPayName" resultType="com.trad.bean.Loan" parameterType="java.lang.String" >
-   select * from t_loan  loan where loan.id= #{loantId,jdbcType=VARCHAR}
- </select>
-   <select id="queryByPaged"   resultMap="BaseResultMap" > 
-      SELECT pay.*,loan.*,t.all_precent FROM t_payment pay LEFT JOIN t_loan loan ON pay.`loan_id` = loan.`id` 
-      JOIN (SELECT loan_id,COUNT(1) all_precent FROM t_payment GROUP BY loan_id ) t ON pay.`loan_id` = t.loan_id
-     <if test="filter != null and filter != ''" >
-        where paymentPhone like #{filter,jdbcType=VARCHAR} 
-      </if>
-     LIMIT #{1} , #{2}
+  
+  <select id="selPaymentStatus" resultType="com.trad.bean.Payment">
+  	select * from t_payment WHERE payment_status=0
   </select>
-  <select id="count" resultType="java.lang.Integer">
-    select count(1) cnt  from t_product
-      <if test="filter != null and filter !='' ">
-        where paymentPhone like #{filter,jdbcType=VARCHAR}
+  
+  <select id="selectPayName" resultType="com.trad.bean.Loan" parameterType="java.lang.String" >
+   select * from t_loan  loan where loan.id= #{loantId,jdbcType=VARCHAR}
+  </select>
+   <select id="queryByPaged" parameterType="map" resultMap="BaseResultMap" > 
+      SELECT pay.*,loan.*,o.*,t.all_precent FROM t_payment pay LEFT JOIN t_loan loan ON pay.`loan_id` = loan.`id` 
+      LEFT JOIN t_loan_offer o ON loan.id=o.load_id
+	  JOIN (SELECT loan_id,COUNT(1) all_precent FROM t_payment GROUP BY loan_id ) t ON pay.`loan_id` = t.loan_id
+      where 1=1
+     <if test="filter != null and filter != ''" >
+        and payment_phone like #{filter,jdbcType=VARCHAR} 
       </if>
-  </select> 
+      <if test="paymentDay!=null and paymentDay!=''">
+      	and month(payment_day)=#{paymentDay}
+      </if>
+      <if test="paymentStatus!=null and paymentStatus!=''">
+      	and payment_status=#{paymentStatus}
+      </if>
+      GROUP BY loan.id
+     LIMIT #{page} , #{pageSize}
+  </select>
+  <select id="count" parameterType="map" resultType="java.lang.Integer">
+     SELECT count(*) FROM t_payment pay LEFT JOIN t_loan loan ON pay.`loan_id` = loan.`id` 
+     LEFT JOIN t_loan_offer o ON loan.id=o.load_id
+	 JOIN (SELECT loan_id,COUNT(1) all_precent FROM t_payment GROUP BY loan_id ) t ON pay.`loan_id` = t.loan_id
+     where 1=1
+     <if test="filter != null and filter != ''" >
+        and payment_phone like #{filter,jdbcType=VARCHAR} 
+      </if>
+      <if test="paymentDay!=null and paymentDay!=''">
+      	and month(payment_day)=#{paymentDay}
+      </if>
+      <if test="paymentStatus!=null and paymentStatus!=''">
+      	and payment_status=#{paymentStatus}
+      </if>
+      GROUP BY loan.id
+  </select>
+  <update id="updatePaymentStatus" parameterType="map">
+  	update t_payment set payment_status=#{status} where id=#{paymentId}
+  </update>
+  <select id="selPaymentById" parameterType="String" resultType="map">
+  	select id, contract_id contractId, payment_name paymentName, payment_phone paymentPhone, loan_id loanId, loan_phone loanPhone, 
+  	manager_id managerId, manager_name managerName, 
+    payment_day paymentDay, payment_time paymentTime, payment_money paymentMoney, 
+    default_inter defaultInter, really_payment reallyPayment, payment_advance paymentAdvance, 
+    payment_status paymentStatus, handler_name handlerName, loan_precent loanPrecent, 
+    payment_num paymentNum, payment_way paymentWay, remark, create_time createTime, 
+    loan_per loanPer from t_payment where id=#{id}
+  </select>
+  
+  <select id="selPaymentSum" parameterType="String" resultType="String">
+  	select sum(payment_money) paymentMoney from t_payment where payment_status!=1 AND loan_id=#{loanId}
+  </select>
+  
+  <select id="selPaymentByLoanId" parameterType="map" resultMap="BaseResultMap" > 
+      SELECT pay.*,loan.*,o.*,t.all_precent FROM t_payment pay LEFT JOIN t_loan loan ON pay.`loan_id` = loan.`id` 
+      LEFT JOIN t_loan_offer o ON loan.id=o.load_id
+	  JOIN (SELECT loan_id,COUNT(1) all_precent FROM t_payment GROUP BY loan_id ) t ON pay.`loan_id` = t.loan_id
+      where loan.id=#{loanId}
+      LIMIT #{page} , #{pageSize}
+  </select>
+  <select id="countPaymentByLoanId" parameterType="map" resultType="java.lang.Integer">
+     SELECT count(*) FROM t_payment pay LEFT JOIN t_loan loan ON pay.`loan_id` = loan.`id` 
+     LEFT JOIN t_loan_offer o ON loan.id=o.load_id
+	 JOIN (SELECT loan_id,COUNT(1) all_precent FROM t_payment GROUP BY loan_id ) t ON pay.`loan_id` = t.loan_id
+     where loan.id=#{loanId}
+  </select>
+  
+  <select id="selPaymentPlan" parameterType="map" resultType="map">
+  	select * from t_payment p left join t_loan_plan l on p.loan_id=l.loan_id where p.loan_id=#{loanId} GROUP BY p.id
+  </select>
+  
+  <select id="countPaymentPlan" parameterType="map" resultType="java.lang.Integer">
+  	select count(*) from (select p.loan_id from t_payment p left join t_loan_plan l on p.loan_id=l.loan_id 
+	where p.loan_id=#{loanId} GROUP BY p.id) a
+  </select>
+  
+  <select id="selPaymentDetails" parameterType="map" resultType="map">
+  	select * from t_payment WHERE loan_id=#{loanId} limit #{page} , #{pageSize}
+  </select>
+  
+  <select id="countPaymentDetails" parameterType="map" resultType="java.lang.Integer">
+  	select count(*) from t_payment WHERE loan_id=#{loanId}
+  </select>
+  
+  <select id="selOffMoney" parameterType="String" resultType="String">
+  	select o.offer_money from t_loan l LEFT JOIN t_loan_offer o ON l.id=o.load_id where l.id=#{id}
+  </select>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 

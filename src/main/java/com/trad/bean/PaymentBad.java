@@ -6,6 +6,8 @@ public class PaymentBad {
     private String id;
 
     private String paymentId;
+    
+    private String loanId;
 
     private Date payTime;
 
@@ -25,7 +27,15 @@ public class PaymentBad {
 
     private String updatePer;
 
-    public String getId() {
+    public String getLoanId() {
+		return loanId;
+	}
+
+	public void setLoanId(String loanId) {
+		this.loanId = loanId;
+	}
+
+	public String getId() {
         return id;
     }
 

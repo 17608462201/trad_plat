@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.trad.bean.PaymentOver" >
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="loan_id" property="loanId" jdbcType="VARCHAR" />
+    <result column="payment_id" property="paymentId" jdbcType="VARCHAR" />
     <result column="pay_num" property="payNum" jdbcType="VARCHAR" />
     <result column="pay_day" property="payDay" jdbcType="TIMESTAMP" />
     <result column="orgin_day" property="orginDay" jdbcType="VARCHAR" />
@@ -18,9 +19,37 @@
     <result column="update_per" property="updatePer" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, loan_id, pay_num, pay_day, orgin_day, overdue, origin_pay, default_inter, sum_money, 
+    id, loan_id, payment_id, pay_num, pay_day, orgin_day, overdue, origin_pay, default_inter, sum_money, 
     remark, create_time, update_time, create_per, update_per
   </sql>
+  
+  <select id="selOver" resultType="map">
+  	select * from t_payment_over o LEFT JOIN t_payment p ON p.id=o.payment_id where p.payment_status=2
+  </select>
+  
+  <select id="getOverAll" parameterType="map" resultType="map">
+  	select * from t_payment_over where loan_id=#{loanId} limit #{page}, #{pageSize}
+  </select>
+  <select id="countOver" parameterType="map" resultType="java.lang.Integer">
+  	select count(*) from t_payment_over where loan_id=#{loanId}
+  </select>
+  
+  <select id="selPaymentOver" parameterType="map" resultType="map">
+  	select * from t_payment_over pv LEFT JOIN t_loan l ON pv.loan_id=l.id 
+  	LEFT JOIN t_loan_offer o ON o.load_id=pv.loan_id
+  	<where>
+  		<if test="productId!=null and productId!=''">
+	  		l.product_id=#{productId}
+  		</if>
+  	</where>
+  	ORDER BY overdue limit #{page} , #{pageSize}
+  </select>
+  
+  <select id="countPaymentOver" parameterType="map" resultType="java.lang.Integer">
+  	select count(*) from t_payment_over pv LEFT JOIN t_loan l ON pv.loan_id=l.id 
+  	LEFT JOIN t_loan_offer o ON o.load_id=pv.loan_id ORDER BY overdue
+  </select>
+  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
@@ -32,12 +61,12 @@
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.trad.bean.PaymentOver" >
-    insert into t_payment_over (id, loan_id, pay_num, 
+    insert into t_payment_over (id, loan_id, payment_id, pay_num, 
       pay_day, orgin_day, overdue, 
       origin_pay, default_inter, sum_money, 
       remark, create_time, update_time, 
       create_per, update_per)
-    values (#{id,jdbcType=VARCHAR}, #{loanId,jdbcType=VARCHAR}, #{payNum,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=VARCHAR}, #{loanId,jdbcType=VARCHAR}, #{paymentId,jdbcType=VARCHAR}, #{payNum,jdbcType=VARCHAR}, 
       #{payDay,jdbcType=TIMESTAMP}, #{orginDay,jdbcType=VARCHAR}, #{overdue,jdbcType=VARCHAR}, 
       #{originPay,jdbcType=VARCHAR}, #{defaultInter,jdbcType=VARCHAR}, #{sumMoney,jdbcType=VARCHAR}, 
       #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 

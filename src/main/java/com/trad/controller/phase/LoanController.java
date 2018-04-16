@@ -215,6 +215,7 @@ public class LoanController {
 			
 			ServletRequestDataBinder binder = new ServletRequestDataBinder(loan);
 			binder.bind(request);
+			loan.setLoanContractNo(UUID.randomUUID().toString().replaceAll("-", ""));
 			
 			LoanOffer loanOffer=new LoanOffer();
 			loanOffer.setId(UUID.randomUUID().toString().replaceAll("-", ""));

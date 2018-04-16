@@ -6,6 +6,8 @@ public class PaymentOver {
     private String id;
 
     private String loanId;
+    
+    private String paymentId;
 
     private String payNum;
 
@@ -39,7 +41,15 @@ public class PaymentOver {
         this.id = id == null ? null : id.trim();
     }
 
-    public String getLoanId() {
+    public String getPaymentId() {
+		return paymentId;
+	}
+
+	public void setPaymentId(String paymentId) {
+		this.paymentId = paymentId;
+	}
+
+	public String getLoanId() {
         return loanId;
     }
 

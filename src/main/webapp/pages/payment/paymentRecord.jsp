@@ -14,48 +14,16 @@
 %>
 <%@ include file="/pages/common/header.jsp" %>
 
+
 <div class="layui-form-item">
-	<label class="layui-form-label">还款人手机</label>
-	<div class="layui-input-inline" style="width: 150px;padding-left: 5px;">
-		<input type="text" id="filter" name="filter" value="" lay-verify="" placeholder="${requestScope.QUERY_TILE }" autocomplete="off" class="layui-input">
-	</div>
-	<label class="layui-form-label">月份</label>
-	<div class="layui-input-inline" style="width: 80px;padding-left: 5px;">
-		<select id="paymentDay" name="paymentDay" autocomplete="off" class="layui-input">
-			<option>请选择</option>
-			<option value="1">1月</option>
-			<option value="2">2月</option>
-			<option value="3">3月</option>
-			<option value="4">4月</option>
-			<option value="5">5月</option>
-			<option value="6">6月</option>
-			<option value="7">7月</option>
-			<option value="8">8月</option>
-			<option value="9">9月</option>
-			<option value="10">10月</option>
-			<option value="11">11月</option>
-			<option value="12">12月</option>
-		</select>
-	</div>
-	<label class="layui-form-label">还款状态</label>
-	<div class="layui-input-inline" style="width: 85px;padding-left: 5px;">
-		<select id="paymentStatus" name="paymentStatus" autocomplete="off" class="layui-input">
-			<option>请选择</option>
-			<option value="0">待还款</option>
-			<option value="1">正常还款</option>
-			<option value="2">逾期还款</option>
-			<option value="3">坏账</option>
-			<option value="4">提前结清</option>
-		</select>
-	</div>
+	<input type="hidden" id="loanId" name="loanId" value="${loanId }">
 	<div class="layui-input-inline">
-		<button class="layui-btn" id="search" name="search"><i class="layui-icon">&#xe615;</i>搜索 </button>
+		<button class="layui-btn" id="refresh"><i class="layui-icon">&#x1002;</i>刷新</button>
 	</div>
 </div>
-<button class="layui-btn" id="refresh"><i class="layui-icon">&#x1002;</i>刷新</button>
-<button class="layui-btn" id="check"><i class="layui-icon">&#xe615;</i>查看还款详情</button>
+
   
-<table class="layui-table" lay-data="{height:478,url:'${ctx }/payment/list', page:true, limit:10, id:'tables'}" lay-filter="tree_filter">
+<table class="layui-table" lay-data="{height:478,url:'${ctx }/payment/paymentRecord?loanId=${loanId }', page:true, limit:10, id:'tables'}" lay-filter="tree_filter">
   <thead>
     <tr>
       <th lay-data="{checkbox:true, fixed: true}"></th>
@@ -106,36 +74,26 @@ layui.use('table', function(){
 	  var val = $("#filter").val();
 	  //刷新表格
 	  table.reload('tables', {
-		  url: '${ctx }/payment/list?filter='+encodeURI(encodeURI(val))
+		  url: '${ctx }/payment/paymentRecord?loandId='+$('#loanId').val()
 		});
 	});
-  
-   $("#search").on("click",function() {
-		var val = $("#filter").val();
-		//刷新表格
-		  table.reload('tables', {
-			  //encodeURI加密
-			  url: '${ctx }/payment/list?filter='+encodeURI(encodeURI(val))+'&paymentDay='+$('#paymentDay').val()+'&paymentStatus='+$('#paymentStatus').val()
-		  });
-	 });
    
    $("#check").on("click",function(){
 		  var datas = table.checkStatus('tables').data;
 		  if(datas.length>1){
 	    	  layer.alert("不支持同时查看多行，请只选中一行！");
 	      }else{
-	    	  var paymentId = datas[0].id;
-	    	  var loanId = datas[0].loanId;
+	    	  var ids = datas[0].id;
 	    	  layer.open({
 	              type: 2 //此处以iframe举例
 	              ,title: '查看借款单'
-	              ,area: ['1000px', '610px']
+	              ,area: ['800px', '650px']
 	              ,shade: 0
 	              ,maxmin: true
 	              ,offset: [
 	                   10
 	              ] 
-	              ,content: '${ctx}/payment/PaymentCheck?paymentId='+paymentId+"&loanId="+loanId
+	              ,content: '${ctx}/payment/PaymentCheck?paymentId='+ids+"&type=EDIT"
 	              ,btn: ['关闭']
 		    	  ,zIndex: layer.zIndex //重点1
 		          ,success: function(layero){
@@ -151,18 +109,39 @@ layui.use('table', function(){
 	    	if(data.length>1){
 		    	  layer.alert("不支持同时查看多行，请只选中一行！");
 		      }else{
-		    	  var ids = data.loanId;
+		    	  var ids = data.id;
 		    	  layer.open({
 		              type: 2 //此处以iframe举例
 		              ,title: '查看借款单'
-		              ,area: ['1000px', '650px']
+		              ,area: ['800px', '500px']
 		              ,shade: 0
 		              ,maxmin: true
 		              ,offset: [
 		                   10
 		              ] 
-		              ,content: '${ctx}/payment/getPaymentByLoanId?loanId='+ids+"&type=EDIT"
-		              ,btn: ['关闭']
+		              ,content: '${ctx}/payment/toUpPayment?paymentId='+ids+"&type=EDIT"
+		              ,btn: ['提交','关闭']
+		              ,yes: function(){
+		            	  	var body = layer.getChildFrame('body', 0);
+		            	  	var id=body.find('input[name="id"]').val();
+			          		var reallyPayment=body.find('input[name="reallyPayment"]').val();
+			          		var paymentTime=body.find('input[name="paymentTime"]').val();
+			          		var paymentStatus=body.find('select[name="paymentStatus"]').find("option:selected").val();
+			          		var paymentAdvance=body.find('input[name="paymentAdvance"]').val();
+			          		var paymentWay=body.find('select[name="paymentWay"]').find("option:selected").text();
+			          		var remark=body.find('input[name="remark"]').val();
+			          		
+			          		var json={"id":id,"reallyPayment":reallyPayment,"paymentTime":paymentTime,"paymentStatus":paymentStatus,"paymentAdvance":paymentAdvance,"paymentWay":paymentWay,"remark":remark};
+			          		console.log(id+"   "+reallyPayment+"    "+paymentTime+"   "+paymentStatus+"   "+paymentAdvance+"     "+paymentWay+"    "+remark)
+			          		$.post("${ctx}/payment/upPayment?paymentTime="+paymentTime,json,function(text){
+			             		  if(text=='200'){
+			             			 layer.closeAll();
+			  		          		 window.location.href ='${ctx }/payment/getPaymentByLoanId?loanId='+data.loanId;
+			             		  }else{
+			             			  layer.msg("保存借款信息出错！");
+			             		  }
+			          	    });
+		              }
 			    	  ,zIndex: layer.zIndex //重点1
 			          ,success: function(layero){
 			            layer.setTop(layero); //重点2

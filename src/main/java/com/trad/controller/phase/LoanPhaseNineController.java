@@ -125,7 +125,7 @@ public class LoanPhaseNineController {
 				Map<String, Object> planMap=planList.get(i);
 				Payment payment=new Payment();
 				payment.setId(UUID.randomUUID().toString().replaceAll("-", ""));
-				payment.setContractId(planMap.get("customer_id").toString());
+				payment.setContractId(planMap.get("id").toString());
 				payment.setPaymentName(planMap.get("payment_name").toString());
 				payment.setPaymentPhone(planMap.get("payment_contract").toString());
 				payment.setLoanId(planMap.get("id").toString());
@@ -138,6 +138,7 @@ public class LoanPhaseNineController {
 					double interest=Double.valueOf(planMap.get("interest").toString());
 					payment.setPaymentMoney(String.valueOf(add(principal, interest)));
 				}
+				payment.setLoanPer(planMap.get("customer_id").toString());
 				payment.setPaymentStatus("0");
 				payment.setHandlerName(user.getUserName());
 				payment.setLoanPrecent(planMap.get("month_scale").toString());
