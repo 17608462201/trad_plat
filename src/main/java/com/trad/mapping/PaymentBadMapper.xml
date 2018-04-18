@@ -35,8 +35,8 @@
   </select>
   
   <select id="countPaymentBadAll" parameterType="map" resultType="java.lang.Integer">
-  	select count(*) from t_payment_bad b LEFT JOIN t_loan l ON b.loan_id=l.id LEFT JOIN t_loan_offer o ON l.id=o.load_id 
-  	LEFT JOIN t_loan_plan p ON l.id=p.loan_id GROUP BY l.id
+  	select count(*) from (select count(*) from t_payment_bad b LEFT JOIN t_loan l ON b.loan_id=l.id LEFT JOIN t_loan_offer o ON l.id=o.load_id 
+  	LEFT JOIN t_loan_plan p ON l.id=p.loan_id GROUP BY l.id) a
   </select>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
