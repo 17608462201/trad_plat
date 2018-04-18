@@ -72,7 +72,7 @@
      LIMIT #{page} , #{pageSize}
   </select>
   <select id="count" parameterType="map" resultType="java.lang.Integer">
-     SELECT count(*) FROM t_payment pay LEFT JOIN t_loan loan ON pay.`loan_id` = loan.`id` 
+     select count(*) from (SELECT count(*) FROM t_payment pay LEFT JOIN t_loan loan ON pay.`loan_id` = loan.`id` 
      LEFT JOIN t_loan_offer o ON loan.id=o.load_id
 	 JOIN (SELECT loan_id,COUNT(1) all_precent FROM t_payment GROUP BY loan_id ) t ON pay.`loan_id` = t.loan_id
      where 1=1
@@ -85,7 +85,7 @@
       <if test="paymentStatus!=null and paymentStatus!=''">
       	and payment_status=#{paymentStatus}
       </if>
-      GROUP BY loan.id
+      GROUP BY loan.id) a
   </select>
   <update id="updatePaymentStatus" parameterType="map">
   	update t_payment set payment_status=#{status} where id=#{paymentId}
