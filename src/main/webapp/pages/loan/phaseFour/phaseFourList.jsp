@@ -34,6 +34,7 @@
 			<!-- <button class="layui-btn layui-btn-danger" id="delete"><i class="layui-icon">&#xe640;</i>删除 </button> -->
 			<button class="layui-btn" id="refresh"><i class="layui-icon">&#x1002;</i>刷新</button>
 			<button class="layui-btn" id="check"><i class="layui-icon">&#xe615;</i>查看</button>
+			<button class="layui-btn" id="downloadExecl"><i class="layui-icon">&#xe615;</i>下载还款计划书</button>
       </div>
     </div>
   </div>
@@ -117,6 +118,17 @@ layui.use('table', function(){
               ,content: '${ctx}/loan/toLoanCheck?loanId='+ids+"&type=EDIT"
               ,btn: ['关闭']
     	  })
+      }
+  })
+  
+  $('#downloadExecl').on('click', function(){
+	  var datas = table.checkStatus('tables').data;
+	  if(datas.length>1){
+    	  layer.alert("不支持同时查看多行，请只选中一行！");
+      }else{
+    	  var ids = datas[0].loadId;
+    	  console.log(datas[0].loadId)
+    	  location.href="${ctx}/loanPhaseFour/downExcel?loanId="+ids;
       }
   })
   
