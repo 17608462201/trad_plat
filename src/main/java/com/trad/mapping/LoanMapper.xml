@@ -44,6 +44,10 @@
     examine_money examineMoney, examine_limit examineLimit, loan_notarization_time loanNotarizationTime,loan_opinion loanOpinion
   </sql>
   
+  <select id="getId" resultType="String">
+  	select id from t_loan ORDER BY id LIMIT 1
+  </select>
+  
   <select id="getLoanAll" resultType="com.trad.bean.Loan" parameterType="map">
   	select l.id,l.loan_contract_no loanContractNo,l.product_id productId,l.product_name productName,l.loan_mobile loanMobile,l.loan_money loanMoney,
   	l.loan_limit loanLimit,l.loan_status loanStatus,l.apply_time applyTime,l.customer_id customerId,l.customer_name customerName,l.manager_id managerId,l.manager_name managerName,

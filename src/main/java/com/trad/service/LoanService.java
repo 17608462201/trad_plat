@@ -14,4 +14,5 @@ public interface LoanService {
 	int updateByPrimaryKeySelective(Map<String, Object> map);
 	void upLoanStatus(Map<String, Object> map);
 	List<Map<String, Object>> selPlanByLoanId(Map<String, Object> map);
+	String getId();
 }

@@ -37,6 +37,7 @@ import com.trad.service.ProductService;
 import com.trad.service.ReceiptsLoanOfferService;
 import com.trad.util.DateUtil;
 import com.trad.util.EntityToMap;
+import com.trad.util.IDGenerator;
 import com.trad.util.ReplyCode;
 import com.trad.util.SessionHelper;
 
@@ -145,8 +146,12 @@ public class LoanController {
 	
 	@RequestMapping("/addLoan")
 	public String addLoan(HttpServletRequest request, Model model) {
+		String id=loanServiceImpl.getId();
+		if(id.equals("") && id!=null) {
+			id=DateUtil.format(new Date());
+		}
 		Loan loan=new Loan();
-		loan.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+		loan.setId(IDGenerator.getPrivateId(id));
 		model.addAttribute("loan", loan);
 		model.addAttribute("type", "ADD");
 		return "loan/phaseOne/loanEdit";

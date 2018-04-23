@@ -26,4 +26,6 @@ public interface LoanMapper {
     void upLoanStatus(Map<String, Object> map);
     
     List<Map<String, Object>> selPlanByLoanId(Map<String, Object> map);
+    
+    String getId();
 }
