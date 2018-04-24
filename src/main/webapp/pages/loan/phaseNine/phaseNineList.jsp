@@ -160,7 +160,49 @@
 							var offerPound = body.find('input[name="offerPound"]').val();
 							var zhMoney = body.find('input[name="zhMoney"]').val();
 							var platMoney = body.find('input[name="platMoney"]').val();
-							console.log(zhMoney)
+							
+							if(bailScale!=''){
+		          				  if(isNaN(bailScale)){
+		          					  layer.msg("保证金比例必须为数字不包含小数点！");
+		          					  return false;
+		          				  }
+		          			}
+							
+							if(bailMoney!=''){
+		          				  if(isNaN(bailMoney)){
+		          					  layer.msg("保证金金额必须为数字不包含小数点！");
+		          					  return false;
+		          				  }
+		          			  }
+							
+							if(evalueMoney!=''){
+		          				  if(isNaN(evalueMoney)){
+		          					  layer.msg("评估费必须为数字不包含小数点！");
+		          					  return false;
+		          				  }
+		          			  }
+							
+							if(offerPound!=''){
+		          				  if(isNaN(offerPound)){
+		          					  layer.msg("放款手续费必须为数字不包含小数点！");
+		          					  return false;
+		          				  }
+		          			  }
+							
+							if(zhMoney!=''){
+		          				  if(isNaN(zhMoney)){
+		          					  layer.msg("综合收费必须为数字不包含小数点！");
+		          					  return false;
+		          				  }
+		          			  }
+							
+							if(platMoney!=''){
+		          				  if(isNaN(platMoney)){
+		          					  layer.msg("平台服务费必须为数字不包含小数点！");
+		          					  return false;
+		          				  }
+		          			  }
+							
 							var jsonObj = {"receiptsId":receiptsId,"receiptsBailScale":bailScale,"receiptsBailMoney":bailMoney,
 									"receiptsEvalueMoney":evalueMoney,"receiptsOfferPound":offerPound,"receiptsZhMoney":zhMoney,
 									"receiptsPlatMoney":platMoney};

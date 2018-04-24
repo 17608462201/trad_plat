@@ -69,6 +69,9 @@ public class LoanPhaseFourController {
 	public String getList(@RequestParam(value = "page", defaultValue = "0") int page,
 			@RequestParam(value = "limit", defaultValue = "4") int limit, HttpServletRequest request, Model model) {
 		Map<String, Object> map = new HashMap<>();
+		map.put("page", page-1);
+		map.put("pageSize", limit);
+		map.put("loanStatus", 4);
 		List<Map<String, Object>> list = loanOfferService.getLoanOfferList(map);
 		int count = loanOfferService.getCount(map);
 
@@ -82,6 +85,8 @@ public class LoanPhaseFourController {
 	public String loanExamine(HttpServletRequest request, Model model) {
 		String loanOfferId = request.getParameter("loanOfferId");
 		Map<String, Object> loanOffer = loanOfferService.selectByPrimaryKey(loanOfferId);
+		String mobile=loanOfferService.selMobile(loanOfferId);
+		model.addAttribute("mobile", mobile);
 		model.addAttribute("loanOffer", loanOffer);
 		model.addAttribute("loanOfferId", loanOfferId);
 		return "loan/phaseFour/loanOfferEdit";

@@ -133,23 +133,36 @@ layui.use('table', function(){
 		            	 var examineMoney = body.find('input[name="examineMoney"]').val();
 		            	 var examineLimit = body.find('input[name="examineLimit"]').val();
 		            	 var isStatus = body.find('input[name="isStatus"]:checked').val();
+		            	 
+		            	 if(examineMoney!=''){
+		            		 if(isNaN(examineMoney)){
+		            			 layer.msg("借款金额必须为数字不包含小数点！");
+		            			 return false;
+		            		 }
+		            	 }else{
+		            		 layer.msg("借款金额不能为空！");
+		            		 return false;
+		            	 }
+		            	 
+		            	 if(examineLimit!=''){
+		            		 if(isNaN(examineLimit)){
+		            			 layer.msg("还款期限必须为数字不包含小数点！");
+		            			 return false;
+		            		 }
+		            	 }else{
+		            		 layer.msg("还款期限不能为空！");
+		            		 return false;
+		            	 }
+		            	 
 		            	 var loanId = body.find('input[name="loanId"]').val();
-		            	 console.log(examineMoney)
 		            	 $.post("${ctx}/loanPhaseThree/upLoanStatus?loanId="+loanId+"&examineMoney="+examineMoney+"&examineLimit="+examineLimit+"&isStatus="+isStatus,function(text){
 			          		  if(text=='200'){
 			          			layer.closeAll();
 				          		  window.location.href ='${ctx }/loanPhaseThree/init';
 			          		  }else{
-			          			  layer.msg("保存借款信息出错！");
+			          			  layer.msg("审核信息出错！");
 			          		  }
 			       	     });
-		            }
-		            ,btn2: function(){
-		              layer.closeAll();
-		            }
-		            ,zIndex: layer.zIndex //重点1
-		            ,success: function(layero){
-		              layer.setTop(layero); //重点2
 		            }
 		          });
 		    }else if(obj.event === 'fallback'){

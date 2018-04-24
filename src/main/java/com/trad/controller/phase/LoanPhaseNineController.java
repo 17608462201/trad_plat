@@ -69,6 +69,7 @@ public class LoanPhaseNineController {
 		Map<String, Object> map=new HashMap<>();
 		map.put("page", page-1);
 		map.put("pageSize", limit);
+		map.put("loanStatus", 9);
 		List<Map<String, Object>> list = receiptsLoanOfferService.selReceiptsLoanOfferAll(map);
 		int count = receiptsLoanOfferService.getCount(map);
 		LayuiTable returnMsg = new LayuiTable();

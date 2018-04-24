@@ -111,7 +111,7 @@ layui.use('table', function(){
     	  var ids = datas[0].id;
     	  layer.open({
               type: 2 //此处以iframe举例
-              ,title: '查看借款单'
+              ,title: '查看'
               ,area: ['750px', '600px']
               ,shade: 0
               ,maxmin: true
@@ -136,7 +136,7 @@ layui.use('table', function(){
     		//新增
         	  layer.open({
                   type: 2 //此处以iframe举例
-                  ,title: '修改借款'
+                  ,title: '添加下户信息'
                   ,area: ['750px', '600px']
                   ,shade: 0
                   ,maxmin: true
@@ -152,14 +152,55 @@ layui.use('table', function(){
     	    		  var loanPurpose=body.find('input[name="loanPurpose"]').val();
     	    		  var loanSource=body.find('input[name="loanSource"]').val();
     	    		  var loanOperate=body.find('input[name="loanOperate"]').val();
-          			  console.log(loanState+"   "+loanPurpose+"    "+loanSource +"    "+loanOperate)
-          			  var jsonObj = {"id":id,"loanState":loanState,"loanPurpose":loanPurpose,"loanSource":loanSource,"loanOperate":loanOperate};
+    	    		  var pauperRemark=body.find('input[name="pauperRemark"]').val();
+    	    		  
+    	    		  if(loanState!=''){
+    	    			  if(loanState.length>=50){
+	    	    			  layer.msg("房屋状况长度必须小于等于50个中文字！");
+	    	    			  return false;
+    	    			  }
+    	    		  }else{
+    	    			  layer.msg("房屋状况不能为空！");
+    	    			  return false;
+    	    		  }
+    	    		  
+    	    		  if(loanPurpose!=''){
+    	    			  if(loanPurpose.length>=50){
+	    	    			  layer.msg("借款用途长度必须小于等于50个中文字！");
+	    	    			  return false;
+    	    			  }
+    	    		  }else{
+    	    			  layer.msg("借款用途不能为空！");
+    	    			  return false;
+    	    		  }
+    	    		  
+    	    		  if(loanSource!=''){
+    	    			  if(loanSource.length>=50){
+	    	    			  layer.msg("还款来源长度必须小于等于50个中文字！");
+	    	    			  return false;
+    	    			  }
+    	    		  }else{
+    	    			  layer.msg("还款来源不能为空！");
+    	    			  return false;
+    	    		  }
+    	    		  
+    	    		  if(loanOperate!=''){
+    	    			  if(loanOperate.length>=50){
+	    	    			  layer.msg("经营状况长度必须小于等于50个中文字！");
+	    	    			  return false;
+    	    			  }
+    	    		  }else{
+    	    			  layer.msg("经营状况不能为空！");
+    	    			  return false;
+    	    		  }
+    	    		  
+          			  var jsonObj = {"id":id,"loanState":loanState,"loanPurpose":loanPurpose,"loanSource":loanSource,"loanOperate":loanOperate,"pauperRemark":pauperRemark};
     	    		  $.post("${ctx}/loanPhaseTow/upLoan",jsonObj,function(text){
     	          		  if(text=='200'){
     	          			layer.closeAll();
     		          		  window.location.href ='${ctx }/loanPhaseTow/init';
     	          		  }else{
-    	          			  layer.msg("保存借款信息出错！");
+    	          			  layer.msg("保存下户信息出错！");
     	          		  }
     	       	     });
     	    	  }

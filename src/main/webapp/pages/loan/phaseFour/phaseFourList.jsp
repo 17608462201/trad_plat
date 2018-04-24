@@ -146,7 +146,7 @@ layui.use('table', function(){
     		//新增
         	  layer.open({
                   type: 2 //此处以iframe举例
-                  ,title: '修改借款'
+                  ,title: '添加费用核算'
                   ,area: ['850px', '600px']
                   ,shade: 0
                   ,maxmin: true
@@ -176,7 +176,114 @@ layui.use('table', function(){
     	    		  var offerLimit=body.find('input[name="offerLimit"]').val();
     	    		  var monthSerc=body.find('input[name="monthSerc"]').val();
     	    		  
-    	    		  console.log(loadType);
+    	    		  if(paymentName!=''){
+    	    			  if(paymentName.length>=9){
+    	    				  layer.msg("还款人姓名长度必须小于等于9个中文字！");
+    	    				  return false;
+    	    			  }
+    	    		  }else{
+    	    			  layer.msg("还款人姓名不能为空！");
+    	    			  return false;
+    	    		  }
+    	    		  
+    	    		  
+    	    		  if(paymentContract==''){
+    	    			  layer.msg("还款人联系方式不能为空！");
+          				  return false;
+          			  }else if(paymentContract.length!=11){
+    	    			   layer.msg("还款人联系方式长度必须等于11个中文字！");
+          				  return false;
+          			  }
+    	    		  
+    	    		  if(bailScale!=''){
+          				  if(isNaN(bailScale)){
+          					  layer.msg("保证金比例必须为数字不包含小数点！");
+          					  return false;
+          				  }
+          			  }
+    	    		  
+    	    		  if(bailMoney!=''){
+          				  if(isNaN(bailMoney)){
+          					  layer.msg("保证金金额必须为数字不包含小数点！");
+          					  return false;
+          				  }
+          			  }
+    	    		  
+    	    		  if(evalueMoney!=''){
+          				  if(isNaN(evalueMoney)){
+          					  layer.msg("评估费必须为数字不包含小数点！");
+          					  return false;
+          				  }
+          			  }
+    	    		  
+    	    		  if(offerPound!=''){
+          				  if(isNaN(offerPound)){
+          					  layer.msg("放款手续费必须为数字不包含小数点！");
+          					  return false;
+          				  }
+          			  }
+    	    		  
+    	    		  if(zhMoney!=''){
+          				  if(isNaN(zhMoney)){
+          					  layer.msg("综合收费必须为数字不包含小数点！");
+          					  return false;
+          				  }
+          			  }
+    	    		  
+    	    		  if(platMoney!=''){
+          				  if(isNaN(platMoney)){
+          					  layer.msg("平台服务费必须为数字不包含小数点！");
+          					  return false;
+          				  }
+          			  }
+    	    		  
+    	    		  if(offerDay==''){
+          				  layer.msg("放款日不能为空！");
+          				  return false;
+          			  }
+    	    		  
+    	    		  if(offerMoney!=''){
+          				  if(isNaN(offerMoney)){
+          					  layer.msg("放款金额必须为数字不包含小数点！");
+          					  return false;
+          				  }
+          			  }else{
+          				layer.msg("放款金额不能为空！");
+          				return false;
+          			  }
+    	    		  
+    	    		  if(monthScale!=''){
+          				  if(isNaN(monthScale)){
+          					  layer.msg("借款利率必须为数字不包含小数点！");
+          					  return false;
+          				  }
+          			  }else{
+          				layer.msg("借款利率不能为空！");
+          				return false;
+          			  }
+    	    		  
+    	    		  if(firstPayment==''){
+          				  layer.msg("首个还款日不能为空！");
+          				  return false;
+          			  }
+    	    		  
+    	    		  if(offerLimit!=''){
+          				  if(isNaN(offerLimit)){
+          					  layer.msg("放款期限必须为数字不包含小数点！");
+          					  return false;
+          				  }
+          			  }else{
+          				layer.msg("放款期限不能为空！");
+          				return false;
+          			  }
+    	    		  
+    	    		  if(monthSerc!=''){
+          				  if(isNaN(monthSerc)){
+          					  layer.msg("月应缴担保费必须为数字不包含小数点！");
+          					  return false;
+          				  }
+          			  }
+    	    		  
           			  var jsonObj = {"id":id,"paymentName":paymentName,"paymentContract":paymentContract,"bailScale":bailScale,"bailMoney":bailMoney,
             	    		  "evalueMoney":evalueMoney,"offerPound":offerPound,"zhMoney":zhMoney,"platMoney":platMoney,
             	    		  "offerDay":offerDay,"offerMoney":offerMoney,"monthScale":monthScale,"firstPayment":firstPayment,"lastPayment":lastPayment,"offerLimit":offerLimit,"monthSerc":monthSerc};

@@ -69,7 +69,18 @@
 			</div>
 		</div>
 	</div>
+	<div class="layui-col-xs6">
+		<div class="grid-demo grid-demo-bg1">
+			<div class="layui-form-item">
+				<label class="layui-form-label">下户备注：</label>
+				<div class="layui-input-inline">
+					${loan.pauperRemark }
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
+
 
 <div class="layui-row">
 	<div class="layui-col-xs6">

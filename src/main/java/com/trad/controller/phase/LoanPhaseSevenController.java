@@ -52,6 +52,7 @@ public class LoanPhaseSevenController {
 		Map<String, Object> map=new HashMap<>();
 		map.put("page", page);
 		map.put("pageSize", limit);
+		map.put("loanStatus", 7);
 		List<Loan> list = loanServiceImpl.getLoanAll(map);
 		String [] dmjbhArr = new String[] {"status"};
 		List<CommonGgdm> listGgdms = ggdmService.queryByDmjbh(dmjbhArr);

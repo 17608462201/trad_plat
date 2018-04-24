@@ -12,21 +12,6 @@
 %>
 <%@ include file="/pages/common/header.jsp"%>
 <form class="layui-form" action="#" method="post">
-	<!-- <div class="layui-row" style="padding-top: 10px; padding-bottom: 5px;">
-		<div class="layui-col-xs6">
-			<div class="grid-demo grid-demo-bg1">&nbsp;</div>
-		</div>
-		<div class="layui-col-xs3">
-			<div class="grid-demo grid-demo-bg1">&nbsp;</div>
-		</div>
-		<div class="layui-col-xs3">
-			<div class="grid-demo grid-demo-bg1">
-				<button class="layui-btn" lay-submit lay-filter="*">
-					<i class="layui-icon">&#xe61a;</i>保存
-				</button>
-			</div>
-		</div>
-	</div> -->
 	<hr>
 	<input type="hidden" name="type" id="type" value="${type }">
 	<input type="hidden" name="id" id="id" value="${loan.id }">
@@ -59,20 +44,6 @@
 				autocomplete="off" class="layui-input">
 		</div>
 	</div>
-	<!-- <div class="layui-form-item">
-		<label class="layui-form-label">借款状态：</label>
-		<div class="layui-input-block">
-			<select name="loanStatus" id="loanStatus" value="${loan.loanStatus }" lay-verify="required">
-			</select>
-		</div>
-	</div>
-	<div class="layui-form-item">
-		<label class="layui-form-label">申请时间：</label>
-		<div class="layui-input-block">
-			<input type="text" name="applyTime" id="applyTime" value="${loan.applyTime }" placeholder=""
-				autocomplete="off" class="layui-input">
-		</div>
-	</div> -->
 	<div class="layui-form-item">
 		<label class="layui-form-label">客户名称：</label>
 		<div class="layui-input-block">

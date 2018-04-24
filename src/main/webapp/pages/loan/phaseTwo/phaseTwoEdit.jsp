@@ -44,6 +44,13 @@
 		</div>
 	</div>
 	<div class="layui-form-item">
+		<label class="layui-form-label">下户备注：</label>
+		<div class="layui-input-block">
+			<input type="text" name="pauperRemark" id="pauperRemark" value="${loan.pauperRemark }" placeholder=""
+				autocomplete="off" class="layui-input">
+		</div>
+	</div>
+	<div class="layui-form-item">
 		<label class="layui-form-label">下戶图上传：</label>
 		<div class="layui-upload">
 			<button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>

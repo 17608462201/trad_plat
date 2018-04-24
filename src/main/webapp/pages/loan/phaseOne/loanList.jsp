@@ -208,7 +208,7 @@ layui.use('table', function(){
     	          			layer.closeAll();
     		          		  window.location.href ='${ctx }/loan/init';
     	          		  }else{
-    	          			  layer.msg("保存借款信息出错！");
+    	          			  layer.msg("修改借款信息出错！");
     	          		  }
     	       	     });
     	    	  }
@@ -223,7 +223,7 @@ layui.use('table', function(){
 		//新增
 		layer.open({
               type: 2 //此处以iframe举例
-              ,title: '修改借款'
+              ,title: '添加借款'
               ,area: ['850px', '600px']
               ,shade: 0
               ,maxmin: true
@@ -246,6 +246,48 @@ layui.use('table', function(){
       			  var customerName=body.find('select[name="customerName"]').find("option:selected").text();
       			  var pawnAdd=body.find('input[name="pawnAdd"]').val();
       			  var remark=body.find('input[name="remark"]').val();
+      			  
+      			  
+      			  if(loanMobile==''){
+      				  layer.msg("借款人手机不能为空！");
+      				  return false;
+      			  }else if(loanMobile.length!=11){
+      				  layer.msg("借款人手机必须为11位！");
+      				  return false;
+      			  }
+      			  if(loanMoney!=''){
+      				  if(isNaN(loanMoney)){
+      					  layer.msg("借款金额必须为数字不包含小数点！");
+      					  return false;
+      				  }
+      			  }else{
+      				layer.msg("借款金额不能为空！");
+      				return false;
+      			  }
+      			  if(loanLimit!=''){
+      				  if(isNaN(loanLimit)){
+      					  layer.msg("借款期限必须为数字！");
+      					  return false;
+      				  }
+      			  }else{
+      			  	  layer.msg("借款期限不能为空！");
+      				  return false;
+      			  }
+      			  if(customerId==''){
+      				layer.msg("客户名称必须选择一项！");
+      				return false;
+      			  }
+      			  if(managerId==''){
+      				layer.msg("客户经理名称必须选择一项！");
+      				return false;
+      			  }
+      			  if(pawnAdd==''){
+      				layer.msg("抵押物地址不能为空！");
+      				return false;
+      			  }else if(pawnAdd.length>=100){
+      				layer.msg("抵押物地址长度不能超过100个中文字或数组！");
+      				return false;
+      			  }
       			  
 				  var jsonObj = {"id":id,"productId":productId,"productName":productName,"managerId":managerId,"managerName":managerName,
 		      			  "loanMobile":loanMobile,"loanMoney":loanMoney,"loanLimit":loanLimit,"customerId":customerId,"customerName":customerName,

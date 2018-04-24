@@ -112,7 +112,7 @@ layui.use('table', function(){
 		    	  var ids = data.id;
 		    	  layer.open({
 		              type: 2 //此处以iframe举例
-		              ,title: '查看借款单'
+		              ,title: '查看还款信息'
 		              ,area: ['800px', '500px']
 		              ,shade: 0
 		              ,maxmin: true
@@ -131,21 +131,49 @@ layui.use('table', function(){
 			          		var paymentWay=body.find('select[name="paymentWay"]').find("option:selected").text();
 			          		var remark=body.find('input[name="remark"]').val();
 			          		
+			          		if(paymentTime==''){
+			          			layer.msg("实际还款时间不能为空！");
+			          			return false;
+			          		}
+			          		
+			          		if(reallyPayment!=''){
+			      				  if(isNaN(reallyPayment)){
+			      					  layer.msg("实际还款金额必须为数字不包含小数点！");
+			      					  return false;
+			      				  }
+			      			  }else{
+			      				layer.msg("实际还款金额不能为空！");
+			      				return false;
+			      			  }
+			          		
+			          		if(paymentStatus=='请选择'){
+			      				layer.msg("还款状态必须选择一项！");
+			      				return false;
+			      			  }
+			          		
+			          		
+			          		if(paymentAdvance!=''){
+			      				  if(isNaN(paymentAdvance)){
+			      					  layer.msg("过桥垫资金额必须为数字不包含小数点！");
+			      					  return false;
+			      				  }
+			      			  }
+			          		
+			          		if(paymentWay=='请选择'){
+			      				layer.msg("还款方式必须选择一项！");
+			      				return false;
+			      			  }
+			          		
 			          		var json={"id":id,"reallyPayment":reallyPayment,"paymentTime":paymentTime,"paymentStatus":paymentStatus,"paymentAdvance":paymentAdvance,"paymentWay":paymentWay,"remark":remark};
-			          		console.log(id+"   "+reallyPayment+"    "+paymentTime+"   "+paymentStatus+"   "+paymentAdvance+"     "+paymentWay+"    "+remark)
 			          		$.post("${ctx}/payment/upPayment?paymentTime="+paymentTime,json,function(text){
 			             		  if(text=='200'){
 			             			 layer.closeAll();
 			  		          		 window.location.href ='${ctx }/payment/getPaymentByLoanId?loanId='+data.loanId;
 			             		  }else{
-			             			  layer.msg("保存借款信息出错！");
+			             			  layer.msg("确认还款信息出错！");
 			             		  }
 			          	    });
 		              }
-			    	  ,zIndex: layer.zIndex //重点1
-			          ,success: function(layero){
-			            layer.setTop(layero); //重点2
-			          }
 		    	  })
 		      }
 	    }

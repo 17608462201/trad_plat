@@ -55,7 +55,7 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label">还款人联系方式：</label>
 					<div class="layui-input-block">
-						<input type="text" name="paymentContract" id="paymentContract" value="${loanOffer.paymentContract }" placeholder=""
+						<input type="text" name="paymentContract" id="paymentContract" value="${mobile }" placeholder=""
 							autocomplete="off" class="layui-input">
 					</div>
 				</div>

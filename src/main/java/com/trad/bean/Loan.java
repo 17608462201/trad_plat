@@ -36,6 +36,8 @@ public class Loan {
     private String pawnAdd;
 
     private String remark;
+    
+    private String pauperRemark;
 
     private Date createTime;
 
@@ -63,7 +65,15 @@ public class Loan {
     
     private String loanOpinion;
     
-    public String getLoanOpinion() {
+    public String getPauperRemark() {
+		return pauperRemark;
+	}
+
+	public void setPauperRemark(String pauperRemark) {
+		this.pauperRemark = pauperRemark;
+	}
+
+	public String getLoanOpinion() {
 		return loanOpinion;
 	}
 

@@ -42,17 +42,17 @@
   <thead>
     <tr>
       <th lay-data="{checkbox:true, fixed: true}"></th>
-      <th lay-data="{field:'id', width:75}">借款ID</th>
-      <th lay-data="{field:'productName', width:90}">产品名称</th>
-      <th lay-data="{field:'customerName', width:85}">客户名称</th>
-      <th lay-data="{field:'loanMobile', width:100}">借款人手机</th>
-      <th lay-data="{field:'loanMoney', width:90}">借款金额</th>
+      <th lay-data="{field:'id', width:130}">借款ID</th>
+      <th lay-data="{field:'productName', width:150}">产品名称</th>
+      <th lay-data="{field:'customerName', width:100}">客户名称</th>
+      <th lay-data="{field:'loanMobile', width:120}">借款人手机</th>
+      <th lay-data="{field:'loanMoney', width:110}">借款金额</th>
       <th lay-data="{field:'loanLimit', width:90}">借款期限</th>
       <th lay-data="{field:'loanStatus', width:90}">借款状态</th>
-      <th lay-data="{field:'managerName', width:100}">客户经理名称</th>
+      <th lay-data="{field:'managerName', width:120}">客户经理名称</th>
       <th lay-data="{field:'pawnAdd', width:100}">抵押物地址</th>
       <th lay-data="{field:'applyTime', width:110}">申请时间</th>
-      <th lay-data="{fixed: 'right', width:170, toolbar: '#barDemo'}"></th>
+      <th lay-data="{fixed: 'right', width:180, toolbar: '#barDemo'}">操作</th>
     </tr>
   </thead>
 </table>

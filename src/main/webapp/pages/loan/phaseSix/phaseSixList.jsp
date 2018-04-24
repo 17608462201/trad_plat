@@ -44,17 +44,17 @@
   <thead>
     <tr>
       <th lay-data="{checkbox:true, fixed: true}"></th>
-      <th lay-data="{field:'id', width:75}">借款ID</th>
-      <th lay-data="{field:'productName', width:90}">产品名称</th>
-      <th lay-data="{field:'customerName', width:85}">客户名称</th>
-      <th lay-data="{field:'loanMobile', width:100}">借款人手机</th>
-      <th lay-data="{field:'loanMoney', width:90}">借款金额</th>
+      <th lay-data="{field:'id', width:130}">借款ID</th>
+      <th lay-data="{field:'productName', width:150}">产品名称</th>
+      <th lay-data="{field:'customerName', width:100}">客户名称</th>
+      <th lay-data="{field:'loanMobile', width:120}">借款人手机</th>
+      <th lay-data="{field:'loanMoney', width:110}">借款金额</th>
       <th lay-data="{field:'loanLimit', width:90}">借款期限</th>
       <th lay-data="{field:'loanStatus', width:90}">借款状态</th>
-      <th lay-data="{field:'managerName', width:100}">客户经理名称</th>
+      <th lay-data="{field:'managerName', width:120}">客户经理名称</th>
       <th lay-data="{field:'pawnAdd', width:100}">抵押物地址</th>
       <th lay-data="{field:'applyTime', width:110}">申请时间</th>
-      <th lay-data="{fixed: 'right', width:160, toolbar: '#barDemo'}"></th>
+      <th lay-data="{fixed: 'right', width:180, toolbar: '#barDemo'}">操作</th>
     </tr>
   </thead>
 </table>
@@ -125,7 +125,7 @@ layui.use('table', function(){
     		//新增
         	  layer.open({
                   type: 2 //此处以iframe举例
-                  ,title: '修改借款'
+                  ,title: '添加公证信息'
                   ,area: ['750px', '600px']
                   ,shade: 0
                   ,maxmin: true
@@ -138,6 +138,12 @@ layui.use('table', function(){
     	    		  var body = layer.getChildFrame('body', 0);
     	    		  var id=body.find('input[name="id"]').val();
     	    		  var loanNotarizationTime=body.find('input[name="loanNotarizationTime"]').val();
+    	    		  
+    	    		  if(loanNotarizationTime==''){
+    	    			  layer.msg("公证时间不能为空！");
+    	    			  return false;
+    	    		  }
+    	    		  
           			  var jsonObj = {"id":id,"loanNotarizationTime":loanNotarizationTime};
     	    		  $.post("${ctx}/loanPhaseSix/upLoan",jsonObj,function(text){
     	          		  if(text=='200'){

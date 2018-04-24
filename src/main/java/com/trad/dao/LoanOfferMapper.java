@@ -23,4 +23,6 @@ public interface LoanOfferMapper {
     int getCount(Map<String, Object> map);
     
     Map<String, Object> selloanOfferByloanId(String loanId);
+    
+    String selMobile(String id);
 }

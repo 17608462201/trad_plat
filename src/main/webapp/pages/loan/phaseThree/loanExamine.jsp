@@ -49,8 +49,8 @@
 		<div class="layui-inline">
 			<label class="layui-form-label">是否同意：</label>
 			<div class="layui-input-block">
-				<input type="radio" name="isStatus" value="1" title="是">
-	      		<input type="radio" name="isStatus" value="2" title="否" checked>
+				<input type="radio" name="isStatus" value="1" title="是" checked>
+	      		<input type="radio" name="isStatus" value="2" title="否">
 			</div>
 		</div>
 	</div>

@@ -45,5 +45,10 @@ public class LoanOfferServiceImpl implements LoanOfferService {
 	public Map<String, Object> selloanOfferByloanId(String loanId) {
 		return loanOfferMapper.selloanOfferByloanId(loanId);
 	}
+
+	@Override
+	public String selMobile(String id) {
+		return loanOfferMapper.selMobile(id);
+	}
 	
 }

@@ -17,4 +17,6 @@ public interface LoanOfferService {
     int updateByPrimaryKeySelective(LoanOffer loanOffer);
     
     Map<String, Object> selloanOfferByloanId(String loanId);
+    
+    String selMobile(String id);
 }
