@@ -17,11 +17,11 @@
 	<div class="layui-row">
 		<div class="layui-col-xs6">
 			<div class="grid-demo grid-demo-bg1">
-				<div class="layui-form-item">
+				<div class="layui-inline">
 					<label class="layui-form-label">类型：</label>
-					<div class="layui-input-block">
+					<div class="layui-input-inline">
 						<input type="hidden" name="loadTypeId" id="loadTypeId" value="${loanOffer.loadType }">
-						<select name="loadType" id="loadType" lay-verify="required">
+						<select name="loadType" id="loadType" lay-verify="required" lay-search="">
 						</select>
 					</div>
 				</div>

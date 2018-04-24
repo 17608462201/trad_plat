@@ -32,7 +32,7 @@
 	<input type="hidden" name="id" id="id" value="${loan.id }">
 	<div class="layui-form-item">
 		<label class="layui-form-label">产品：</label>
-		<div class="layui-input-inline">
+		<div class="layui-input-block">
 			<input type="hidden" name="productId" id="productId" value="${loan.productId }">
 			<select name="productName" id="productName" lay-verify="required">
 			</select>

@@ -43,7 +43,7 @@
   <thead>
     <tr>
       <th lay-data="{checkbox:true, fixed: true}"></th>
-      <th lay-data="{field:'id', width:75}">借款ID</th>
+      <th lay-data="{field:'loadId', width:75}">借款ID</th>
       <th lay-data="{field:'customerName', width:85}">客户名称</th>
       <th lay-data="{field:'productName', width:90}">产品名称</th>
       <th lay-data="{field:'loanMoney', width:90}">借款金额</th>

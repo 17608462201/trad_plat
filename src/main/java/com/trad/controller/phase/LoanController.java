@@ -147,7 +147,7 @@ public class LoanController {
 	@RequestMapping("/addLoan")
 	public String addLoan(HttpServletRequest request, Model model) {
 		String id=loanServiceImpl.getId();
-		if(id.equals("") && id!=null) {
+		if(id==null || id=="") {
 			id=DateUtil.format(new Date());
 		}
 		Loan loan=new Loan();
