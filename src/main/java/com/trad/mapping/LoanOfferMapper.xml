@@ -37,7 +37,7 @@
   <select id="getLoanOfferList" resultType="map" parameterType="map">
   	select o.id,o.load_id loadId,o.load_type loadType,o.payment_name paymentName,o.payment_contract paymentContract,o.bail_scale bailScale,
 	o.bail_money bailMoney,o.evalue_money evalueMoney,o.offer_pound offerPound,o.zh_money zhMoney,o.plat_money platMoney,
-	o.offer_day offerDay,o.offer_money offerMoney,o.month_scale monthScale,o.first_payment firstPayment,o.last_payment lastPayment,
+	left(o.offer_day,10) offerDay,o.offer_money offerMoney,o.month_scale monthScale,left(o.first_payment,10) firstPayment,left(o.last_payment,10) lastPayment,
 	o.offer_limit offerLimit,o.month_pay_money monthPayMoney,o.month_serc monthSerc,o.payment_plan paymentPlan,
 	o.create_time createTime,o.update_time updateTime,o.create_per createPer,o.update_per updatePer,
 	l.customer_name customerName,l.loan_money loanMoney,l.product_name productName,l.loan_money loanMoney,l.loan_status loanStatus,
