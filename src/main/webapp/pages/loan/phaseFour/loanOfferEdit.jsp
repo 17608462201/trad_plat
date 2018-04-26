@@ -216,6 +216,9 @@
 	
 	<button class="layui-btn layui-btn-normal" id="userSelect">生成还款计划书</button>
 	<table class="layui-hide" id="test" lay-filter="test"></table>
+	<script type="text/html" id="barDemo">
+		<a class="layui-btn layui-btn-xs" lay-event="examine">删除</a>
+	</script>
 <script>
 	layui.use(['form','laydate','table'], function() {
 		var laydate = layui.laydate;
@@ -246,8 +249,26 @@
 		      ,{field:'interest', title: '利息（元）', width: 120} //minWidth：局部定义当前单元格的最小宽度，layui 2.2.1 新增
 		      ,{field:'guarantee', title: '担保费（元）', width: 120}
 		      ,{field:'service', title: '服务费（元）', width: 120}
+		      ,{field:'lock', title:'操作', width:150, toolbar: '#barDemo'}
 		    ]]
 		});
+		  
+		  table.on('tool(test)', function(obj){
+			    var data = obj.data;
+			    console.log(data.planId)
+			    layer.confirm('确认删除么？删除后将刷新页面请先保存后删除！！！', function(index){
+			    	if(obj.event === 'examine'){
+				    	$.post("${ctx}/loanPhaseFour/delPlanById?id="+data.planId,function(text){
+			          		  if(text=='200'){
+			          			  layer.closeAll();
+				          		  window.location.href ='${ctx}/loanPhaseFour/editLoanOffer?loanOfferId='+$('#id').val();
+			          		  }else{
+			          			  layer.msg("删除信息出错！");
+			          		  }
+			       	     });
+				    }
+			    })
+		  })
 		//监听单元格编辑
 		  table.on('edit(test)', function(obj){
 		    var value = obj.value //得到修改后的值

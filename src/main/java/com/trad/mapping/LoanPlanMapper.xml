@@ -25,7 +25,7 @@
     from t_loan_plan
     where plan_id = #{planId,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" parameterType="String">
     delete from t_loan_plan
     where plan_id = #{planId,jdbcType=INTEGER}
   </delete>

@@ -179,6 +179,20 @@ public class LoanPhaseFourController {
 			return ReplyCode.INSIDEERROR;
 		}
 	}
+	
+	
+	@RequestMapping("/delPlanById")
+	@ResponseBody
+	public String delPlanById(HttpServletRequest request, Model model) {
+		try {
+			String loanPlanId=request.getParameter("id");
+			loanPlanService.deleteByPrimaryKey(loanPlanId);
+			return ReplyCode.SUCCESS;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ReplyCode.INSIDEERROR;
+		}
+	}
 
 	@RequestMapping("/getPlanAll")
 	@ResponseBody

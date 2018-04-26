@@ -6,7 +6,7 @@ import java.util.Map;
 import com.trad.bean.LoanPlan;
 
 public interface LoanPlanMapper {
-    int deleteByPrimaryKey(Integer loanPlanId);
+    int deleteByPrimaryKey(String loanPlanId);
 
     int insert(LoanPlan record);
 

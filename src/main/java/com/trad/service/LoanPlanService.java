@@ -9,4 +9,5 @@ public interface LoanPlanService {
 	int insert(LoanPlan record);
 	List<Map<String, Object>> selPlanByLoanId(String loanId);
 	int updateByPrimaryKeySelective(LoanPlan record);
+	int deleteByPrimaryKey(String loanPlanId);
 }

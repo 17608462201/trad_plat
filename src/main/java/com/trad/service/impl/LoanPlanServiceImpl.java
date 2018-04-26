@@ -30,5 +30,10 @@ public class LoanPlanServiceImpl implements LoanPlanService {
 	public int updateByPrimaryKeySelective(LoanPlan record) {
 		return loanPlanMapper.updateByPrimaryKeySelective(record);
 	}
+
+	@Override
+	public int deleteByPrimaryKey(String loanPlanId) {
+		return loanPlanMapper.deleteByPrimaryKey(loanPlanId);
+	}
 	
 }

@@ -217,6 +217,7 @@ layui.use(['element','table'], function(){
 	      ,{field:'service', title: '服务费（元）', width: 120}
 	    ]]
 	});
+  
 });	
 </script>
 <%@ include file="/pages/common/footer.jsp"%>
