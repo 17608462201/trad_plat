@@ -157,6 +157,13 @@ public class LoanController {
 		return "loan/phaseOne/loanEdit";
 	}
 	
+	@RequestMapping("/upload")
+	public String upload(HttpServletRequest request, Model model) {
+		String id=request.getParameter("id");
+		model.addAttribute("id", id);
+		return "loan/phaseOne/upload";
+	}
+	
 	@RequestMapping("/getProductAll")
 	@ResponseBody
 	public String getProductAll(HttpServletRequest request, Model model) {
@@ -230,6 +237,12 @@ public class LoanController {
 			User user = new SessionHelper(request).getLoginUser();
 			loanStatus.setLoanId(loan.getId());
 			loanStatus.setCreateUserId(user.getUserId());
+			
+			String id=loanServiceImpl.getId();
+			if(id==null || id=="") {
+				id=DateUtil.format(new Date())+"001";
+			}
+			loan.setId(IDGenerator.getPrivateId(id));
 			
 			Map<String, Object> map=EntityToMap.ConvertObjToMap(loan);
 			map.put("loanStatus", "1");

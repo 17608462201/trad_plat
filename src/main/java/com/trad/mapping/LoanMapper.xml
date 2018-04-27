@@ -47,7 +47,7 @@
   </sql>
   
   <select id="getId" resultType="String">
-  	select id from t_loan ORDER BY id desc LIMIT 1
+  	select id from t_loan ORDER BY cast(id as UNSIGNED INTEGER) desc LIMIT 1
   </select>
   
   <select id="getLoanAll" resultType="com.trad.bean.Loan" parameterType="map">

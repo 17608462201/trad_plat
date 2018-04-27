@@ -30,6 +30,7 @@
       <div class="grid-demo">
        <div class="layui-form-item">
   	 		<button class="layui-btn" id="add"><i class="layui-icon">&#xe654;</i>添加</button>
+  	 		<button class="layui-btn" id="upload">上传图片</button>
   	 		<c:if test="${requestScope.SHOW_EDIT eq true}">
   	 		<button class="layui-btn" id="edit"><i class="layui-icon">&#xe642;</i>编辑</button>
   	 		</c:if>
@@ -218,6 +219,28 @@ layui.use('table', function(){
     	  }
  	 }
 });
+  
+  $("#upload").on("click",function(){
+	  var datas = table.checkStatus('tables').data;
+	  if(datas.length>1){
+    	  layer.alert("不支持同时编辑多行，请只选中一行！");
+      }else{
+    	var ids = datas[0].id;
+    	//新增
+  		layer.open({
+              type: 2 //此处以iframe举例
+              ,title: '上传图片'
+              ,area: ['850px', '600px']
+              ,shade: 0
+              ,maxmin: true
+              ,offset: [
+                   10
+              ] 
+              ,content: '${ctx}/loan/upload?id='+ids
+              ,btn: ['关闭']
+       	});
+      }
+	});
   
   $("#add").on("click",function(){
 		//新增
