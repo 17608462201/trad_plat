@@ -13,6 +13,7 @@
 <%@ include file="/pages/common/header.jsp"%>
 	<hr>
 	<input type="hidden" id="receiptsId" name="receiptsId" value="${receiptsLoanOffer.receiptsId }">
+	<input type="hidden" id="loanId" name="loanId" value="${loanId }">
 	<div class="layui-row">
 		<div class="layui-col-xs6">
 			<div class="grid-demo grid-demo-bg1">
@@ -65,7 +66,7 @@
 		<div class="layui-col-xs6">
 			<div class="grid-demo grid-demo-bg1">
 				<div class="layui-form-item">
-					<label class="layui-form-label">综合收费：</label>
+					<label class="layui-form-label">杂费：</label>
 					<div class="layui-input-block">
 						<input type="text" name="zhMoney" id="zhMoney" value="${receiptsLoanOffer.receiptsZhMoney }" placeholder="" autocomplete="off" class="layui-input">
 					</div>
@@ -83,6 +84,31 @@
 				</div>
 			</div>
 		</div>
+		
+		<div class="layui-col-xs6">
+			<div class="grid-demo">
+				<div class="layui-form-item">
+					<label class="layui-form-label">代收费用：</label>
+					<div class="layui-input-block">
+						<input type="text" name="loanCollection" id="loanCollection" value="${receiptsLoanOffer.loanCollection }" placeholder=""
+							autocomplete="off" class="layui-input">
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="layui-col-xs6">
+			<div class="grid-demo">
+				<div class="layui-form-item">
+					<label class="layui-form-label">其他费用：</label>
+					<div class="layui-input-block">
+						<input type="text" name="loanExpenses" id="loanExpenses" value="${receiptsLoanOffer.loanExpenses }" placeholder=""
+							autocomplete="off" class="layui-input">
+					</div>
+				</div>
+			</div>
+		</div>
+		
 	</div>
 <script>
 	layui.use(['form','table'], function() {

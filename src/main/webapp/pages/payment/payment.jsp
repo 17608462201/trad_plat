@@ -61,7 +61,6 @@
       <th lay-data="{checkbox:true, fixed: true}"></th>
       <th lay-data="{field:'contractId', width:160,sort: true}">合同编号</th>
       <th lay-data="{field:'loanPer', width:100,sort: true}">借款人</th>
-      <th lay-data="{field:'loanPhone', width:120,sort: true}">手机</th>
       <th lay-data="{field:'paymentName', width:100, sort: true}">还款人</th>
       <th lay-data="{field:'paymentPhone', width:120, sort: true}">手机</th>
       <th lay-data="{field:'offerMoney', width:100, sort: true}">放款金额</th>

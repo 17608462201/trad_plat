@@ -108,7 +108,7 @@
       SELECT pay.*,loan.*,o.*,t.all_precent FROM t_payment pay LEFT JOIN t_loan loan ON pay.`loan_id` = loan.`id` 
       LEFT JOIN t_loan_offer o ON loan.id=o.load_id
 	  JOIN (SELECT loan_id,COUNT(1) all_precent FROM t_payment GROUP BY loan_id ) t ON pay.`loan_id` = t.loan_id
-      where loan.id=#{loanId}
+      where loan.id=#{loanId} ORDER BY pay.payment_day
       LIMIT #{page} , #{pageSize}
   </select>
   <select id="countPaymentByLoanId" parameterType="map" resultType="java.lang.Integer">
@@ -119,7 +119,11 @@
   </select>
   
   <select id="selPaymentPlan" parameterType="map" resultType="map">
-  	select * from t_payment p left join t_loan_plan l on p.loan_id=l.loan_id where p.loan_id=#{loanId} GROUP BY p.id
+  	select p.id,p.contract_id,p.payment_name,p.payment_phone,p.loan_id,p.loan_phone,p.manager_id,p.manager_name,left(p.payment_day,10) payment_day,left(p.payment_time,10) payment_time,
+	p.payment_money,p.default_inter,p.really_payment,p.payment_advance,p.payment_status,p.handler_name,p.loan_precent,p.payment_num,p.payment_way,
+	p.remark,p.create_time,p.update_time,p.create_per,p.update_per,p.loan_per,
+	l.plan_id,l.loan_id,l.stage_number,l.payment_time,l.principal,l.interest,l.guarantee,l.service
+	from t_payment p left join t_loan_plan l on p.loan_id=l.loan_id where p.loan_id=#{loanId} GROUP BY p.id order by p.payment_day
   </select>
   
   <select id="countPaymentPlan" parameterType="map" resultType="java.lang.Integer">
@@ -128,7 +132,10 @@
   </select>
   
   <select id="selPaymentDetails" parameterType="map" resultType="map">
-  	select * from t_payment WHERE loan_id=#{loanId} limit #{page} , #{pageSize}
+  	select id, contract_id, payment_name, payment_phone, loan_id, loan_phone, manager_id, manager_name, 
+    left(payment_day,10) payment_day, left(payment_time,10) payment_time, payment_money, default_inter, really_payment, payment_advance, 
+    payment_status, handler_name, loan_precent, payment_num, payment_way, remark, create_time, 
+    update_time, create_per, update_per, loan_per from t_payment WHERE loan_id=#{loanId} order by payment_day limit #{page} , #{pageSize}
   </select>
   
   <select id="countPaymentDetails" parameterType="map" resultType="java.lang.Integer">

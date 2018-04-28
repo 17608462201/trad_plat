@@ -15,8 +15,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">借款单编号：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">借款单编号：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${loan.id }
 				</div>
 			</div>
@@ -28,8 +28,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">复核金额：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">复核金额：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${loan.examineMoney }
 				</div>
 			</div>
@@ -38,8 +38,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">复核还款期限：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">复核还款期限：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${loan.examineLimit }
 				</div>
 			</div>

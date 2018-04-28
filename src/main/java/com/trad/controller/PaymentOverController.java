@@ -97,8 +97,10 @@ public class PaymentOverController {
 				List<CommonGgdm> listGgdms = ggdmService.queryByDmjbh(dmjbhArr);
 					for (int j = 0; j < listGgdms.size(); j++) {
 						CommonGgdm commonGgdm=listGgdms.get(j);
-						if(map.get("load_type").toString().equals(commonGgdm.getDm())) {
-							map.put("load_type", commonGgdm.getDmnr());
+						if(map.get("load_type")!=null) {
+							if(map.get("load_type").toString().equals(commonGgdm.getDm())) {
+								map.put("load_type", commonGgdm.getDmnr());
+							}
 						}
 					}
 				

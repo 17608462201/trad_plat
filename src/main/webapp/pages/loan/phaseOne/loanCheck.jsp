@@ -15,8 +15,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">借款单编号：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">借款单编号：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${loan.id }
 					<input type="hidden" name="id" id="id" value="${loan.id }">
 				</div>
@@ -26,8 +26,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">产品：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">产品：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${loan.productName }
 				</div>
 			</div>
@@ -39,8 +39,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">客户名称：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">客户名称：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${loan.customerName }
 				</div>
 			</div>
@@ -49,8 +49,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">借款人手机号：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">借款人手机号：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${loan.loanMobile }
 				</div>
 			</div>
@@ -62,8 +62,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">借款金额：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">借款金额：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${loan.loanMoney }
 				</div>
 			</div>
@@ -72,8 +72,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">借款期限：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">借款期限：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${loan.loanLimit }
 				</div>
 			</div>
@@ -85,8 +85,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">借款状态：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">借款状态：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${loan.loanStatus }
 				</div>
 			</div>
@@ -95,8 +95,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">客户经理名称：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">客户经理名称：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${loan.managerName }
 				</div>
 			</div>
@@ -108,8 +108,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">申请时间：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">申请时间：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${loan.applyTime }
 				</div>
 			</div>
@@ -118,8 +118,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">借款抵押物地址：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">借款抵押物地址：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${loan.pawnAdd }
 				</div>
 			</div>
@@ -128,16 +128,17 @@
 </div>
 
 	<div class="layui-form-item">
-		<label class="layui-form-label">借款抵押物：</label>
+		<label class="layui-form-label" style="width: 120px;">借款抵押物：</label>
 		<div class="layui-input-inline">
 			<!--<c:forEach items="${fileList }" var="fileList">
 				<img alt="" src="${ctx}${fileList.address }">
 			</c:forEach>-->
 			<button type="button" class="layui-btn" id="loanImg">查看</button>
-			<div class="layui-upload-list">
+			<div class="layui-upload-list" style="width: 600px;">
 			    <table class="layui-table">
 			      <thead>
-			        <tr><th>文件名</th>
+			        <tr>
+			        <th>文件名</th>
 			        <th>大小</th>
 			        <th>状态</th>
 			      </tr></thead>

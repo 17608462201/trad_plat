@@ -63,7 +63,7 @@
 			<th lay-data="{field:'receiptsBailMoney', width:160}">放款实收保证金金额</th>
 			<th lay-data="{field:'receiptsEvalueMoney', width:130}">放款实收评估费</th>
 			<th lay-data="{field:'receiptsOfferPound', width:160}">放款实收放款手续费</th>
-			<th lay-data="{field:'receiptsZhMoney', width:150}">放款实收综合收费</th>
+			<th lay-data="{field:'receiptsZhMoney', width:150}">放款实收杂费</th>
 			<th lay-data="{field:'receiptsPlatMoney', width:160}">放款实收平台服务费</th>
 			<th lay-data="{field:'receiptsOfferMoney', width:100}">放款金额</th>
 			<th lay-data="{field:'receiptsMonthScale', width:155}">借款利率%（月）</th>
@@ -140,6 +140,7 @@
 			} else {
 				var ids = datas[0].receiptsId;
 				var loanStatus = datas[0].loanStatus;
+				var loanId=datas[0].loanId
 				if (loanStatus == 9) {
 					//新增
 					layer.open({
@@ -149,7 +150,7 @@
 						shade : 0,
 						maxmin : true,
 						offset : [ 10 ],
-						content : '${ctx}/loanPhaseNine/upReceiptsLoanOffer?receiptsId='+ ids+ "&type=EDIT",
+						content : '${ctx}/loanPhaseNine/upReceiptsLoanOffer?receiptsId='+ ids+ "&type=EDIT&loanId="+loanId,
 						btn : [ '保存','关闭' ],
 						yes : function() {
 							var body = layer.getChildFrame('body', 0);
@@ -160,7 +161,9 @@
 							var offerPound = body.find('input[name="offerPound"]').val();
 							var zhMoney = body.find('input[name="zhMoney"]').val();
 							var platMoney = body.find('input[name="platMoney"]').val();
-							
+							var loanExpenses = body.find('input[name="loanExpenses"]').val();
+							var loanCollection = body.find('input[name="loanCollection"]').val();
+							var loanId = body.find('input[name="loanId"]').val();
 							if(bailScale!=''){
 		          				  if(isNaN(bailScale)){
 		          					  layer.msg("保证金比例必须为数字不包含小数点！");
@@ -191,7 +194,7 @@
 							
 							if(zhMoney!=''){
 		          				  if(isNaN(zhMoney)){
-		          					  layer.msg("综合收费必须为数字不包含小数点！");
+		          					  layer.msg("杂费必须为数字不包含小数点！");
 		          					  return false;
 		          				  }
 		          			  }
@@ -203,9 +206,9 @@
 		          				  }
 		          			  }
 							
-							var jsonObj = {"receiptsId":receiptsId,"receiptsBailScale":bailScale,"receiptsBailMoney":bailMoney,
+							var jsonObj = {"receiptsId":receiptsId,"receiptsLoadId":loanId,"receiptsBailScale":bailScale,"receiptsBailMoney":bailMoney,
 									"receiptsEvalueMoney":evalueMoney,"receiptsOfferPound":offerPound,"receiptsZhMoney":zhMoney,
-									"receiptsPlatMoney":platMoney};
+									"receiptsPlatMoney":platMoney,"loanExpenses":loanExpenses,"loanCollection":loanCollection};
 							$.post("${ctx}/loanPhaseNine/upLoan", jsonObj, function(text) {
 									if (text == '200') {
 										layer.closeAll();
@@ -225,7 +228,7 @@
 		table.on('tool(tree_filter)', function(obj){
 		    var data = obj.data;
 		    if(obj.event === 'examine'){
-		    	$.post("${ctx}/loanPhaseNine/upLoanStatus?loanId="+data.receiptsLoadId,function(text){
+		    	$.post("${ctx}/loanPhaseNine/upLoanStatus?loanId="+data.loanId,function(text){
 	          		  if(text=='200'){
 	          			  layer.closeAll();
 		          		  window.location.href ='${ctx }/loanPhaseNine/init';

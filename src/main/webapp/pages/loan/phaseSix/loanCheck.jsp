@@ -15,9 +15,9 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">公证抵押信息：</label>
+				<label class="layui-form-label" style="width: 120px;">公证抵押信息：</label>
 				<div class="layui-input-inline">
-					<div class="layui-upload-list">
+					<div class="layui-upload-list" style="width: 600px;">
 						<input type="hidden" name="id" id="id" value="${loan.id }">
 						<table class="layui-table">
 							<thead>

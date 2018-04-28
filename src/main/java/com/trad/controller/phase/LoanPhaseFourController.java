@@ -6,6 +6,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -145,6 +146,7 @@ public class LoanPhaseFourController {
 								String.valueOf(Integer.parseInt(offerMoney) * (Double.valueOf(monthScale) / 100)));
 					}
 					loanPlan.setPaymentTime(DateUtil.format(date));
+					loanPlan.setInterest(scale(Double.valueOf(loanPlan.getInterest())));
 					loanPlan.setStageNumber(i);
 					loanPlanService.insert(loanPlan);
 					System.out.println(DateUtil.format(date));
@@ -167,6 +169,7 @@ public class LoanPhaseFourController {
 						loanPlan.setInterest(
 								String.valueOf(Integer.parseInt(offerMoney) * (Double.valueOf(monthScale) / 100)));
 					}
+					loanPlan.setInterest(scale(Double.valueOf(loanPlan.getInterest())));
 					loanPlan.setPaymentTime(DateUtil.format(date));
 					System.out.println(DateUtil.format(date));
 					loanPlan.setStageNumber(i);
@@ -180,6 +183,11 @@ public class LoanPhaseFourController {
 		}
 	}
 	
+	public String scale(double f) {
+		BigDecimal   b   =   new   BigDecimal(f);    
+		double   f1   =   b.setScale(2,   BigDecimal.ROUND_HALF_UP).doubleValue();
+		return String.valueOf(f1);
+	}
 	
 	@RequestMapping("/delPlanById")
 	@ResponseBody

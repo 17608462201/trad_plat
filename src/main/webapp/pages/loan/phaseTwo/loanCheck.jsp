@@ -15,8 +15,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">借款单编号：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">借款单编号：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${loan.id }
 					<input type="hidden" name="id" id="id" value="${loan.id }">
 				</div>
@@ -26,8 +26,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">房屋状况：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">房屋状况：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${loan.loanState }
 				</div>
 			</div>
@@ -39,8 +39,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">借款用途：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">借款用途：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${loan.loanPurpose }
 				</div>
 			</div>
@@ -49,8 +49,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">还款来源：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">还款来源：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${loan.loanSource }
 				</div>
 			</div>
@@ -62,8 +62,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">经营状况：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">经营状况：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${loan.loanOperate }
 				</div>
 			</div>
@@ -72,8 +72,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">下户备注：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">下户备注：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${loan.pauperRemark }
 				</div>
 			</div>
@@ -89,7 +89,7 @@
 				<label class="layui-form-label">下户图：</label>
 				<div class="layui-input-inline">
 					<button type="button" class="layui-btn" id="loanImg">查看</button>
-					<div class="layui-upload-list">
+					<div class="layui-upload-list" style="width: 600px;">
 					    <table class="layui-table">
 					      <thead>
 					        <tr><th>文件名</th>

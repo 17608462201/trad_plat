@@ -16,9 +16,9 @@
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
 				<input type="hidden" name="id" id="id" value="${loan.id }">
-				<label class="layui-form-label">签约合同附件：</label>
+				<label class="layui-form-label" style="width: 120px;">签约合同附件：</label>
 				<div class="layui-input-inline">
-					<div class="layui-upload-list">
+					<div class="layui-upload-list" style="width: 600px;">
 						<table class="layui-table">
 							<thead>
 								<tr>

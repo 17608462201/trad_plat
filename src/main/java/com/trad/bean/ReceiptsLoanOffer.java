@@ -24,6 +24,10 @@ public class ReceiptsLoanOffer {
     private String receiptsMonthScale;
 
     private String receiptsOfferLimit;
+    
+    private String loanExpenses;
+    
+    private String loanCollection;
 
     private Date createTime;
 
@@ -33,7 +37,23 @@ public class ReceiptsLoanOffer {
 
     private String updatePer;
 
-    public String getReceiptsId() {
+    public String getLoanExpenses() {
+		return loanExpenses;
+	}
+
+	public void setLoanExpenses(String loanExpenses) {
+		this.loanExpenses = loanExpenses;
+	}
+
+	public String getLoanCollection() {
+		return loanCollection;
+	}
+
+	public void setLoanCollection(String loanCollection) {
+		this.loanCollection = loanCollection;
+	}
+
+	public String getReceiptsId() {
         return receiptsId;
     }
 

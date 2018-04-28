@@ -15,8 +15,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">产品：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">产品：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${map.product_name }
 				</div>
 			</div>
@@ -25,8 +25,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">客户经理：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">客户经理：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${map.manager_name }
 				</div>
 			</div>
@@ -37,8 +37,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">类型：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">类型：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${map.load_type }
 				</div>
 			</div>
@@ -50,8 +50,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">借款单编号：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">借款单编号：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${map.load_id }
 				</div>
 			</div>
@@ -60,8 +60,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">还款人姓名：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">还款人姓名：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${map.payment_name }
 				</div>
 			</div>
@@ -73,8 +73,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">还款人联系方式：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">还款人联系方式：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${map.payment_contract }
 				</div>
 			</div>
@@ -83,8 +83,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">保证金比例：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">保证金比例：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${map.bail_scale }
 				</div>
 			</div>
@@ -96,8 +96,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">保证金金额：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">保证金金额：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${map.bail_money }
 				</div>
 			</div>
@@ -106,8 +106,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">评估费：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">评估费：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${map.evalue_money }
 				</div>
 			</div>
@@ -119,8 +119,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">放款手续费：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">放款手续费：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${map.offer_pound }
 				</div>
 			</div>
@@ -129,8 +129,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">综合收费：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">综合收费：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${map.zh_money }
 				</div>
 			</div>
@@ -142,8 +142,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">平台服务费：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">平台服务费：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${map.plat_money }
 				</div>
 			</div>
@@ -152,8 +152,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">放款日：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">放款日：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${map.offer_day }
 				</div>
 			</div>
@@ -165,8 +165,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">放款金额：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">放款金额：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${map.offer_money }
 				</div>
 			</div>
@@ -175,8 +175,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">借款利率%（月）：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">借款利率%（月）：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${map.month_scale }
 				</div>
 			</div>
@@ -188,8 +188,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">首个还款日：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">首个还款日：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${map.first_payment }
 				</div>
 			</div>
@@ -198,8 +198,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">放款期限（期）：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">放款期限（期）：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${map.offer_limit }
 				</div>
 			</div>
@@ -211,8 +211,8 @@
 	<div class="layui-col-xs6">
 		<div class="grid-demo grid-demo-bg1">
 			<div class="layui-form-item">
-				<label class="layui-form-label">月应缴担保费（元）：</label>
-				<div class="layui-input-inline">
+				<label class="layui-form-label" style="width: 120px;">月应缴担保费（元）：</label>
+				<div class="layui-input-inline" style="margin-top: 10px;">
 					${map.month_serc }
 				</div>
 			</div>

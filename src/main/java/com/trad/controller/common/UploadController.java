@@ -89,6 +89,7 @@ public class UploadController {
 			json.put("data", path);
 			return json.toString();
 		} catch (Exception e) {
+			e.printStackTrace();
 			JSONObject json=new JSONObject();
 			json.put("code", 0);
 			json.put("msg", "上传成功");

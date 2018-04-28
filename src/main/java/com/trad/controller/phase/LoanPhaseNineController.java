@@ -81,9 +81,11 @@ public class LoanPhaseNineController {
 	@RequestMapping("/upReceiptsLoanOffer")
 	public String upReceiptsLoanOffer(HttpServletRequest request, Model model) {
 		String receiptsId = request.getParameter("receiptsId");
+		String loanId=request.getParameter("loanId");
 		ReceiptsLoanOffer receiptsLoanOffer=receiptsLoanOfferService.selReceiptsLoanOffer(receiptsId);
 		model.addAttribute("receiptsLoanOffer", receiptsLoanOffer);
 		model.addAttribute("loanOfferId", receiptsId);
+		model.addAttribute("loanId", loanId);
 		return "loan/phaseNine/loanNineEdit";
 	}
 	
@@ -94,8 +96,11 @@ public class LoanPhaseNineController {
 			ReceiptsLoanOffer receiptsLoanOffer=new ReceiptsLoanOffer();
 			ServletRequestDataBinder binder = new ServletRequestDataBinder(receiptsLoanOffer);
 			binder.bind(request);
-			
-			receiptsLoanOfferService.updateByPrimaryKeySelective(receiptsLoanOffer);
+			if(receiptsLoanOffer.getReceiptsId()!=""){
+				receiptsLoanOfferService.updateByPrimaryKeySelective(receiptsLoanOffer);
+			}else {
+				receiptsLoanOfferService.insert(receiptsLoanOffer);
+			}
 			return ReplyCode.SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();

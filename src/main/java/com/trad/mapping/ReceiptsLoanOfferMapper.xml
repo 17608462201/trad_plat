@@ -13,6 +13,8 @@
     <result column="receipts_offer_money" property="receiptsOfferMoney" jdbcType="VARCHAR" />
     <result column="receipts_month_scale" property="receiptsMonthScale" jdbcType="VARCHAR" />
     <result column="receipts_offer_limit" property="receiptsOfferLimit" jdbcType="VARCHAR" />
+    <result column="loan_expenses" jdbcType="VARCHAR" property="loanExpenses" />
+    <result column="loan_collection" jdbcType="VARCHAR" property="loanCollection" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="create_per" property="createPer" jdbcType="VARCHAR" />
@@ -22,17 +24,17 @@
     receipts_id, receipts_load_id, receipts_bail_scale, receipts_bail_money, receipts_evalue_money, 
     receipts_offer_pound, receipts_zh_money, receipts_plat_money, receipts_offer_money, 
     receipts_month_scale, receipts_offer_limit, create_time, update_time, create_per, 
-    update_per
+    update_per,loan_expenses,loan_collection
   </sql>
   
   <select id="selReceiptsLoanOfferAll" resultType="map" parameterType="map">
   	select r.receipts_id receiptsId, r.receipts_load_id receiptsLoadId, r.receipts_bail_scale receiptsBailScale, 
-  	r.receipts_bail_money receiptsBailMoney, r.receipts_evalue_money receiptsEvalueMoney,
-  	r.receipts_offer_pound receiptsOfferPound, r.receipts_zh_money receiptsZhMoney, 
-  	r.receipts_plat_money receiptsPlatMoney, r.create_time createTime,r.update_time updateTime, r.create_per createPer, r.update_per updatePer,
-	o.offer_money receiptsOfferMoney,o.month_scale receiptsMonthScale,o.offer_limit receiptsOfferLimit,
-    l.customer_name customerName,l.loan_status loanStatus,l.apply_time applyTime,l.id loanId
-  	from t_receipts_loan_offer r LEFT JOIN t_loan l ON r.receipts_load_id=l.id LEFT JOIN t_loan_offer o ON o.load_id=l.id limit #{page},#{pageSize}
+r.receipts_bail_money receiptsBailMoney, r.receipts_evalue_money receiptsEvalueMoney,
+r.receipts_offer_pound receiptsOfferPound, r.receipts_zh_money receiptsZhMoney, 
+r.receipts_plat_money receiptsPlatMoney, r.create_time createTime,r.update_time updateTime, r.create_per createPer, r.update_per updatePer,
+o.offer_money receiptsOfferMoney,o.month_scale receiptsMonthScale,o.offer_limit receiptsOfferLimit,
+l.customer_name customerName,l.loan_status loanStatus,l.apply_time applyTime,l.id loanId,r.loan_expenses,r.loan_collection
+from t_loan l LEFT JOIN t_receipts_loan_offer r ON r.receipts_load_id=l.id LEFT JOIN t_loan_offer o ON o.load_id=l.id where l.loan_status &gt;=#{loanStatus} limit #{page},#{pageSize}
   </select>
   <select id="getCount" resultType="java.lang.Integer" parameterType="map">
   	select count(*) countx from t_receipts_loan_offer r LEFT JOIN t_loan l ON r.receipts_load_id=l.id LEFT JOIN t_loan_offer o ON o.load_id=l.id
@@ -43,7 +45,7 @@
   	r.receipts_bail_money receiptsBailMoney, r.receipts_evalue_money receiptsEvalueMoney,
   	r.receipts_offer_pound receiptsOfferPound, r.receipts_zh_money receiptsZhMoney, 
   	r.receipts_plat_money receiptsPlatMoney, r.receipts_offer_money receiptsOfferMoney, 
-    r.receipts_month_scale receiptsMonthScale, r.receipts_offer_limit receiptsOfferLimit, 
+    r.receipts_month_scale receiptsMonthScale, r.receipts_offer_limit receiptsOfferLimit, r.loan_expenses loanExpenses,r.loan_collection loanCollection,
     r.create_time createTime,r.update_time updateTime, r.create_per createPer, r.update_per updatePer
     from t_receipts_loan_offer r where receipts_id=#{receiptsId}
   </select>
@@ -59,13 +61,13 @@
     where receipts_id = #{receiptsId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.trad.bean.ReceiptsLoanOffer" >
-    insert into t_receipts_loan_offer (receipts_id, receipts_load_id, receipts_bail_scale, 
+    insert into t_receipts_loan_offer (receipts_load_id, receipts_bail_scale, 
       receipts_bail_money, receipts_evalue_money, 
       receipts_offer_pound, receipts_zh_money, receipts_plat_money, 
       receipts_offer_money, receipts_month_scale, 
       receipts_offer_limit, create_time, update_time, 
       create_per, update_per)
-    values (#{receiptsId,jdbcType=VARCHAR}, #{receiptsLoadId,jdbcType=VARCHAR}, #{receiptsBailScale,jdbcType=VARCHAR}, 
+    values (#{receiptsLoadId,jdbcType=VARCHAR}, #{receiptsBailScale,jdbcType=VARCHAR}, 
       #{receiptsBailMoney,jdbcType=VARCHAR}, #{receiptsEvalueMoney,jdbcType=VARCHAR}, 
       #{receiptsOfferPound,jdbcType=VARCHAR}, #{receiptsZhMoney,jdbcType=VARCHAR}, #{receiptsPlatMoney,jdbcType=VARCHAR}, 
       #{receiptsOfferMoney,jdbcType=VARCHAR}, #{receiptsMonthScale,jdbcType=VARCHAR}, 

@@ -85,7 +85,7 @@
   
   <select id="selPlanByLoanId" parameterType="map" resultType="map">
   	SELECT l.customer_id,o.payment_name,o.payment_contract,l.id,l.loan_mobile,l.manager_id,l.manager_name,
-	p.payment_time,p.principal,p.interest,o.month_scale,p.stage_number,l.pauper_remark pauperRemark,
+	p.payment_time,p.principal,p.interest,o.month_scale,p.stage_number,l.pauper_remark pauperRemark
 	from t_loan l LEFT JOIN t_loan_offer o ON l.id=o.load_id LEFT JOIN t_loan_plan p ON l.id=p.loan_id WHERE l.id=#{loanId}
   </select>
   
