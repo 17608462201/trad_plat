@@ -39,6 +39,7 @@ import com.trad.util.SessionHelper;
 public class CustomerController {
 	@Resource
 	private CustomerService customerService;
+	private SimpleDateFormat sf=new SimpleDateFormat("yyyy-MM-dd");
 	Logger logger = LoggerFactory.getLogger(CustomerService.class);
 
 	@RequestMapping("/init")
@@ -332,6 +333,16 @@ public class CustomerController {
 			ServletRequestDataBinder binder = new ServletRequestDataBinder(cusWork);  
 			binder.bind(request); 
 			cusWork.setUpdateTime(new Date());
+			String startDateStr = request.getParameter("startTime");
+			if(!StringUtils.isEmpty(startDateStr)){
+				Date startDate = sf.parse(startDateStr);
+				cusWork.setStartTime(startDate);
+			}
+			String payTimeStr = request.getParameter("payTime");
+			if(!StringUtils.isEmpty(payTimeStr)){
+				Date payDate = sf.parse(payTimeStr);
+				cusWork.setPayTime(payDate);
+			}
 			Integer id = cusWork.getId();
 			//id不为空时更新，id为空时保存
 			if(id !=null && id > 0){
@@ -340,6 +351,9 @@ public class CustomerController {
 				cusWork = customerService.queryWorkById(Integer.parseInt(customerId));
 			}else{
 				cusWork.setCreateTime(new Date());
+				if(cusWork.getCustomerId() == null){
+					cusWork.setCustomerId(Integer.parseInt(customerId));
+				}
 				customerService.insertWork(cusWork);
 			}
 			model.addAttribute("customerWork", cusWork);
@@ -388,6 +402,11 @@ public class CustomerController {
 			cp.setUpdateTime(new Date());
 			cp.setUpdatePer(user == null ? "": user.getRealName());
 			Integer customerId = cp.getCustomerId();
+			String registerTimeStr = request.getParameter("registerTime");
+			if(!StringUtils.isEmpty(registerTimeStr)){
+				Date registerTime = sf.parse(registerTimeStr);
+				cp.setRegisterTime(registerTime);
+			}
 			//id不为空时更新，id为空时保存
 			if(customerId !=null && customerId > 0){
 				cp.setCustomerId(customerId);
@@ -475,6 +494,13 @@ public class CustomerController {
 			Integer customerId = cus.getId();
 			cus.setCreatePer(user == null ? "": user.getRealName());
 			cus.setUpdatePer(user == null ? "": user.getRealName());
+			
+			String birthdayStr = request.getParameter("birthday");
+			if(!StringUtils.isEmpty(birthdayStr)){
+				Date birthdayDate = sf.parse(birthdayStr);
+				cus.setBirthday(birthdayDate);
+			}
+			
 			//id不为空时更新，id为空时保存
 			if(customerId !=null && customerId > 0){
 				customerService.updateByPrimaryKeySelective(cus);

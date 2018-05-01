@@ -74,7 +74,7 @@
 				      <label class="layui-form-label">出生日期：</label>
 				      <fmt:formatDate var="birth" value="${customer.birthday }" pattern="yyyy-MM-dd"/>
 				      <div class="layui-input-inline">
-				        <input type="text" name="birthdayName" value="${birth }" onchange="changeDate();" id="birthdayName" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+				        <input type="text" name="birthdayName" value="${birth }" id="birthdayName" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
 				        <input type="hidden" id="birthday" name="birthday" value=""/>
 				      </div>
 				  </div>
@@ -234,6 +234,10 @@ layui.use(['form','laydate'], function(){
 	  
 	  laydate.render({
 	    elem: '#birthdayName'
+   	    ,done: function(value, date){
+   	    	var birValue = $("#birthdayName").val();
+	   		$("#birthday").val(birValue);
+   	    }
 	  });
 	  
 	  initGroupSelect(form);
@@ -286,14 +290,6 @@ function initGroupSelect(form){
    		form.render('select');
 	     }
 	 });
-}
-
-//$("#birthdayName").on("keyup",);
-
-var changeDate = function(){
-	var birValue = $("#birthdayName").val();
-	layer.msg(birValue);
-	$("#birthday").val(birValue);
 }
 
 $("#userSelect").on("click",function(){

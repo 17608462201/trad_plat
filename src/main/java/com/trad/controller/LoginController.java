@@ -138,8 +138,8 @@ public class LoginController{
 							User userRoles = userService.selectUserRole(record.getUserId());
 							if(userRoles ==null || userRoles.getUserRoles() == null || userRoles.getUserRoles().size()<=0){
 								logger.error("查询出的当前用户的菜单为空,请检查菜单配置！");
-								request.setAttribute("failedText", "查询出的当前用户的菜单为空,请检查菜单配置！");
-								return "/login/init";
+								session.setAttribute("failedText", "查询出的当前用户的菜单为空,请检查菜单配置！");
+								return "redirect:/login/init";
 							}
 							List<TreeVo> treeVoList =  getTreeVo(userRoles.getUserRoles());
 							logger.info("获取到的该用户菜单树为："+JSONObject.toJSON(treeVoList));
@@ -147,12 +147,12 @@ public class LoginController{
                             model.addAttribute("treeListVo", treeVoList);
 						    return "index";
 					}else{
-						request.setAttribute("failedText", "对不起，用户名或密码输入错误，请重试！");
-						return "/login/init";
+						session.setAttribute("failedText", "对不起，用户名或密码输入错误，请重试！");
+						return "redirect:/login/init";
 					}
 				}else{
-					request.setAttribute("failedText", "验证码输入错误，请重试！");
-					return "/login/init";
+					session.setAttribute("failedText", "验证码输入错误，请重试！");
+					return "redirect:/login/init";
 				}
 			
 		}catch (IllegalAccessException e) {

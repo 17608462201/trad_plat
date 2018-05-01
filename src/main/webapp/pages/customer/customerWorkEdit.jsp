@@ -29,7 +29,7 @@
 		    </div>
          </div>
         <hr>
-         <input type="hidden" id="customerId" name="customerId" value="${customerWork.customerId }">
+         <input type="hidden" name="customerId" value="${customerId }">
          <input type="hidden" id="id" name="id" value="${customerWork.id }">
 	      <div class="layui-row">
 		    <div class="layui-col-xs6">
@@ -79,9 +79,10 @@
 		      <div class="grid-demo grid-demo-bg1">
 		          <div class="layui-form-item">
 				    <label class="layui-form-label">入职时间：</label>
-				    <fmt:formatDate var="startTime" value="${customerWork.startTime }" pattern="yyyy-MM-dd"/>
+				    <fmt:formatDate var="startTimeName" value="${customerWork.startTime }" pattern="yyyy-MM-dd"/>
 				    <div class="layui-input-inline">
-				        <input type="text" name="startTime" value="${startTime }" id="startTime" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+				        <input type="text" name="startTimeName" value="${startTimeName }" id="startTimeName" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+				        <input type="hidden" id="startTime" name="startTime" value=""/>
 				      </div>
 				 </div>
 		      </div>
@@ -102,9 +103,10 @@
 		      <div class="grid-demo grid-demo-bg1">
 		        <div class="layui-inline">
 				      <label class="layui-form-label">发薪日期：</label>
-				      <fmt:formatDate var="payTime" value="${customerWork.payTime }" pattern="yyyy-MM-dd"/>
+				      <fmt:formatDate var="payTimeName" value="${customerWork.payTime }" pattern="yyyy-MM-dd"/>
 				       <div class="layui-input-inline">
-				        <input type="text" name="payTime" value="${payTime }" lay-verify="date" id="payTime" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+				        <input type="text" name="payTimeName" value="${payTimeName }" lay-verify="date" id="payTimeName" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+				        <input type="hidden" id="payTime" name="payTime" value=""/>
 				      </div>
 				  </div>
 		      </div>
@@ -128,7 +130,7 @@
 		         <div class="layui-form-item">
 				      <label class="layui-form-label">家庭收入（元）：</label>
 				      <div class="layui-input-inline">
-			               <input type="text" name="homePayMonth" id="homePayMonth" value="${homePayMonth.address }" lay-verify="required\number" placeholder="请输入家庭月收入" autocomplete="off" class="layui-input">
+			               <input type="text" name="homePayMonth" id="homePayMonth" value="${customerWork.homePayMonth }" lay-verify="required\number" placeholder="请输入家庭月收入" autocomplete="off" class="layui-input">
 				      </div>
 				  </div>
 		      </div>
@@ -153,11 +155,19 @@ layui.use(['form','laydate'], function(){
 	  ,laydate = layui.laydate;
 	  
 	  laydate.render({
-	    elem: '#startTime'
+	    elem: '#startTimeName'
+    	,done: function(value, date){
+   	    	var startTime = $("#startTimeName").val();
+	   		$("#startTime").val(startTime);
+   	    }
 	  });
 	  
 	  laydate.render({
-		    elem: '#payTime'
+		    elem: '#payTimeName'
+	    	,done: function(value, date){
+	   	    	var payTime = $("#payTimeName").val();
+		   		$("#payTime").val(payTime);
+	   	    }
 		  });
 	  
 	  initGroupSelect(form);

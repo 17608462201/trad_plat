@@ -28,7 +28,8 @@
 		         <div class="layui-form-item">
 		           <label class="layui-form-label">注册时间：</label>
 		           <div class="layui-input-inline">
-		                <input type="text" name="registerTime" id="registerTime" lay-verify="required"  lay-verify="date"  placeholder="请输入注册时间" autocomplete="off" class="layui-input">
+		                <input type="text" name="registerTimeName" id="registerTimeName" lay-verify="required"  lay-verify="date"  placeholder="请输入注册时间" autocomplete="off" class="layui-input">
+		                <input type="hidden" name="registerTime" id="registerTime"/>
 		           </div>
 		        </div> 
 		        <div class="layui-form-item">
@@ -65,7 +66,11 @@ layui.use(['form','laydate'], function(){
 	  ,laydate = layui.laydate;
 	  
 	  laydate.render({
-	    elem: '#registerTime'
+	    elem: '#registerTimeName'
+    	,done: function(value, date){
+   	    	var registerTime = $("#registerTimeName").val();
+	   		$("#registerTime").val(registerTime);
+   	    }
 	  });
 	  
 	  form.verify({
