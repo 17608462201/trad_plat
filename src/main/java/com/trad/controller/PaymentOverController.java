@@ -103,7 +103,6 @@ public class PaymentOverController {
 							}
 						}
 					}
-				
 				model.addAttribute("map", map);
 			}
 		} catch (Exception e) {

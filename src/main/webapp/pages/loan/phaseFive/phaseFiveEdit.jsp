@@ -13,7 +13,28 @@
 <%@ include file="/pages/common/header.jsp"%>
 <form class="layui-form" action="#" method="post">
 	<hr>
-	<input type="hidden" value="${loanOffer.loadId }" name="loadId" id="loadId">
+	<input type="hidden" value="${loanOffer.loadId }" name="id" id="id">
+	<div class="layui-form-item">
+		<label class="layui-form-label">还款卡号：</label>
+		<div class="layui-input-block">
+			<input type="text" name="bankCard" id="bankCard" value="${loanOffer.bankCard }" placeholder=""
+				autocomplete="off" class="layui-input">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">开户行：</label>
+		<div class="layui-input-block">
+			<input type="text" name="bankName" id="bankName" value="${loanOffer.bankName }" placeholder=""
+				autocomplete="off" class="layui-input">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">开户姓名：</label>
+		<div class="layui-input-block">
+			<input type="text" name="bankUserName" id="bankUserName" value="${loanOffer.bankUserName }" placeholder=""
+				autocomplete="off" class="layui-input">
+		</div>
+	</div>
 	<div class="layui-form-item">
 		<label class="layui-form-label">合同附件上传：</label>
 		<div class="layui-input-block">

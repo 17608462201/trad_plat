@@ -135,7 +135,7 @@ layui.use('table', function(){
         	  layer.open({
                   type: 2 //此处以iframe举例
                   ,title: '修改借款'
-                  ,area: ['850px', '600px']
+                  ,area: ['500px', '400px']
                   ,shade: 0
                   ,maxmin: true
                   ,offset: [
@@ -143,6 +143,23 @@ layui.use('table', function(){
                   ] 
                   ,content: '${ctx}/loanPhaseFive/editLoanOffer?loanOfferId='+ids
                   ,btn: ['保存', '关闭']
+	        	  ,yes: function(){
+	        		  var body = layer.getChildFrame('body', 0);
+    	    		  var id=body.find('input[name="id"]').val();
+    	    		  var bankCard=body.find('input[name="bankCard"]').val();
+    	    		  var bankName=body.find('input[name="bankName"]').val();
+    	    		  var bankUserName=body.find('input[name="bankUserName"]').val();
+    	    		  
+    	    		  var jsonObj = {"id":id,"bankCard":bankCard,"bankName":bankName,"bankUserName":bankUserName};
+    	    		  $.post("${ctx}/loanPhaseTow/upLoan",jsonObj,function(text){
+    	          		  if(text=='200'){
+    	          			layer.closeAll();
+    		          		  window.location.href ='${ctx }/loanPhaseFive/init';
+    	          		  }else{
+    	          			  layer.msg("保存下户信息出错！");
+    	          		  }
+    	       	     });
+	        	  }
            });
     	  }else{
     		  layer.alert("数据已提交，不支持修改！");

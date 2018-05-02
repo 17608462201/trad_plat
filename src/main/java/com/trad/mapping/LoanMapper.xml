@@ -26,6 +26,11 @@
     <result column="create_per" jdbcType="VARCHAR" property="createPer" />
     <result column="update_per" jdbcType="VARCHAR" property="updatePer" />
     
+    <result column="bank_card" jdbcType="VARCHAR" property="bankCard" />
+    <result column="bank_name" jdbcType="VARCHAR" property="bankName" />
+    <result column="bank_user_name" jdbcType="VARCHAR" property="bankUserName" />
+    
+    
     <result column="loan_state" jdbcType="VARCHAR" property="loanState" />
     <result column="loan_purpose" jdbcType="VARCHAR" property="loanPurpose" />
     <result column="loan_source" jdbcType="VARCHAR" property="loanSource" />
@@ -43,7 +48,7 @@
   	id, loan_contract_no, product_id, product_name, loan_examine, manager_examine, loan_mobile, loan_money, loan_limit, loan_status, 
     apply_time, customer_id, customer_name, manager_id, manager_name, pawn_add, remark, pauper_remark,
     create_time, update_time, create_per, update_per, loan_state, loan_purpose, loan_source, loan_operate,
-    examine_money examineMoney, examine_limit examineLimit, loan_notarization_time loanNotarizationTime,loan_opinion loanOpinion
+    examine_money examineMoney, examine_limit examineLimit, loan_notarization_time loanNotarizationTime,loan_opinion loanOpinion,bank_card bankCard,bank_name bankName,bank_user_name bankUserName
   </sql>
   
   <select id="getId" resultType="String">
@@ -314,7 +319,16 @@
       	manager_examine = #{managerExamine,jdbcType=TIMESTAMP},
       </if>
       <if test="pauperRemark != null">
-        pauper_remark=#{pauperRemark}
+        pauper_remark=#{pauperRemark},
+      </if>
+      <if test="bankCard != null">
+        bank_card=#{bankCard},
+      </if>
+      <if test="bankName != null">
+        bank_name=#{bankName},
+      </if>
+      <if test="bankUserName != null">
+        bank_user_name=#{bankUserName}
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -338,7 +352,10 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       create_per = #{createPer,jdbcType=VARCHAR},
       update_per = #{updatePer,jdbcType=VARCHAR},
-      pauper_remark=#{pauperRemark}
+      pauper_remark=#{pauperRemark},
+      bank_card=#{bankCard},
+      bank_name=#{bankName},
+      bank_user_name=#{bankUserName}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

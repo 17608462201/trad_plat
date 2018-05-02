@@ -65,7 +65,37 @@ public class Loan {
     
     private String loanOpinion;
     
-    public String getPauperRemark() {
+    private String bankCard;
+    
+    private String bankName;
+    
+    private String bankUserName;
+
+    public String getBankCard() {
+		return bankCard;
+	}
+
+	public void setBankCard(String bankCard) {
+		this.bankCard = bankCard;
+	}
+
+	public String getBankName() {
+		return bankName;
+	}
+
+	public void setBankName(String bankName) {
+		this.bankName = bankName;
+	}
+
+	public String getBankUserName() {
+		return bankUserName;
+	}
+
+	public void setBankUserName(String bankUserName) {
+		this.bankUserName = bankUserName;
+	}
+
+	public String getPauperRemark() {
 		return pauperRemark;
 	}
 
