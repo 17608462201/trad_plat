@@ -13,8 +13,15 @@
 <%@ include file="/pages/common/header.jsp"%>
 <form class="layui-form" action="#" method="post">
 	<hr>
-	<input type="hidden" name="type" id="type" value="${type }"> <input
-		type="hidden" name="id" id="id" value="${loan.id }">
+	<input type="hidden" name="type" id="type" value="${type }"> 
+	<input type="hidden" name="id" id="id" value="${loan.id }">
+	<div class="layui-form-item">
+		<label class="layui-form-label">借款金额：</label>
+		<div class="layui-input-block">
+			<input type="text" name="loanMoney" id="loanMoney" value="${loan.loanMoney }" placeholder=""
+				autocomplete="off" class="layui-input">
+		</div>
+	</div>
 	<div class="layui-form-item">
 		<label class="layui-form-label">房屋状况：</label>
 		<div class="layui-input-block">

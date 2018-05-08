@@ -48,9 +48,15 @@
 			l.loan_status &gt;=#{loanStatus}
 		</if>
 	</where>
+	limit #{page}, #{pageSize}
   </select>
   <select id="getCount" resultType="java.lang.Integer" parameterType="map">
   	select count(*) countx from t_loan_offer o LEFT JOIN t_loan l ON o.load_id=l.id
+  	<where>
+		<if test="loanStatus !=null">
+			l.loan_status &gt;=#{loanStatus}
+		</if>
+	</where>
   </select>
   
   <select id="selMobile" parameterType="String" resultType="String">

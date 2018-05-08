@@ -55,7 +55,11 @@ public class LoanPhaseFiveController {
 	public String getList(@RequestParam(value = "page", defaultValue = "0") int page,
 			@RequestParam(value = "limit", defaultValue = "4") int limit, HttpServletRequest request, Model model) {
 		Map<String, Object> map=new HashMap<>();
-		map.put("page", page-1);
+		page=page-1;
+		if (page!=0) {
+			page=page * Integer.parseInt(String.valueOf(limit));
+		}
+		map.put("page", page);
 		map.put("pageSize", limit);
 		map.put("loanStatus", 5);
 		List<Map<String, Object>> list = loanOfferService.getLoanOfferList(map);

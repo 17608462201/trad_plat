@@ -69,6 +69,9 @@
 			<th lay-data="{field:'receiptsMonthScale', width:155}">借款利率%（月）</th>
 			<th lay-data="{field:'receiptsOfferLimit', width:100}">放款期限</th>
 			<th lay-data="{field:'applyTime', width:110}">申请时间</th>
+			<th lay-data="{field:'loanCollection', width:110}">代收费用</th>
+			<th lay-data="{field:'loanExpenses', width:110}">其他费用</th>
+			<th lay-data="{field:'money', width:110}">总计费用</th>
 			<th lay-data="{width:170, toolbar: '#barDemo'}">操作</th>
 		</tr>
 	</thead>

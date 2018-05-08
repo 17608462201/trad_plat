@@ -69,7 +69,12 @@
   	limit #{page},#{pageSize}
   </select>
   <select id="getCount" resultType="java.lang.Integer">
-  	select count(*) countx from t_loan l
+  	select count(*) countx from t_loan l 
+  	<where>
+  		<if test="loanStatus!=null">
+  			l.loan_status &gt;=#{loanStatus}
+  		</if>
+  	</where>
   </select>
   <update id="upLoanStatus" parameterType="map">
   	update t_loan set 

@@ -153,6 +153,7 @@ layui.use('table', function(){
     	    		  var loanSource=body.find('input[name="loanSource"]').val();
     	    		  var loanOperate=body.find('input[name="loanOperate"]').val();
     	    		  var pauperRemark=body.find('input[name="pauperRemark"]').val();
+    	    		  var loanMoney=body.find('input[name="loanMoney"]').val();
     	    		  
     	    		  if(loanState!=''){
     	    			  if(loanState.length>=50){
@@ -194,7 +195,7 @@ layui.use('table', function(){
     	    			  return false;
     	    		  }
     	    		  
-          			  var jsonObj = {"id":id,"loanState":loanState,"loanPurpose":loanPurpose,"loanSource":loanSource,"loanOperate":loanOperate,"pauperRemark":pauperRemark};
+          			  var jsonObj = {"id":id,"loanState":loanState,"loanPurpose":loanPurpose,"loanSource":loanSource,"loanOperate":loanOperate,"pauperRemark":pauperRemark,"loanMoney":loanMoney};
     	    		  $.post("${ctx}/loanPhaseTow/upLoan",jsonObj,function(text){
     	          		  if(text=='200'){
     	          			layer.closeAll();
